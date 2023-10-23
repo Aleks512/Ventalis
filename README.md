@@ -1,0 +1,2 @@
+# Ventalis
+Django Ecommerce Project
