@@ -1,5 +1,6 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomUserManager(UserManager):
@@ -14,12 +15,15 @@ class CustomUserManager(UserManager):
         return user
 class CustomUser(AbstractUser):
     username = None
-    # Remplacer le champ de nom d'utilisateur par un champ d'adresse e-mail unique
-    email = models.EmailField(unique=True)
+    email = models.EmailField(_("email address"), unique=True)
+
     # Nouveaux champs personnalisés
     company = models.CharField(_("Société"), max_length=100)
     is_client = models.BooleanField(default=False)
     is_consultant = models.BooleanField(default=False)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
 
     # Utiliser le gestionnaire d'authentification personnalisé
     objects = CustomUserManager()
