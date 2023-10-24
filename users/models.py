@@ -6,7 +6,7 @@ class CustomUser(AbstractUser):
     # Remplacer le champ de nom d'utilisateur par un champ d'adresse e-mail unique
     email = models.EmailField(unique=True)
     # Nouveaux champs personnalisés
-    company = models.CharField(max_length=255)
+    company = models.CharField(_("Société"), max_length=100)
     is_client = models.BooleanField(default=False)
     is_consultant = models.BooleanField(default=False)
 
