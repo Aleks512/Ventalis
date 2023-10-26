@@ -12,7 +12,7 @@ from django.contrib.auth import password_validation
 class ConsultantCreationForm(forms.ModelForm):
     class Meta:
         model = Consultant
-        fields = ("user_name", "first_name", "last_name", "email", "company", "password", "is_active", "is_staff", "is_employee" )
+        fields = ("first_name", "last_name", "email", "company", "password", "is_active", "is_staff", "is_employee" )
         widgets = {
             'password': forms.PasswordInput(),
         }

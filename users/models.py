@@ -1,11 +1,8 @@
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 import random
 import string
-
 
 
 class CustomUserManager(UserManager):
@@ -37,38 +34,22 @@ class CustomUserManager(UserManager):
             raise ValueError('Superuser must have is_superuser=True')
         return self._create_user(email, password, **extra_fields)
 
-    # def create_consultant(self, email, password, **extra_fields):
-    #     """
-    #     Create and save a SuperUser with the given email and password.
-    #     """
-    #     extra_fields.setdefault('is_staff', True)
-    #     extra_fields.setdefault('is_active', True)
-    #     extra_fields.setdefault('is_consultant', True)
+    # def create_consultant(self, email, password, company, first_name, last_name, matricule, **extra_fields):
     #     extra_fields.setdefault('company', 'Ventalis')
-    #     extra_fields.setdefault('first_name', extra_fields.get('first_name', ''))
-    #     extra_fields.setdefault('last_name', extra_fields.get('last_name', ''))
     #     extra_fields.setdefault('matricule', generate_matricule())
-    #
-    #     if extra_fields.get('is_staff') is not True:
-    #         raise ValueError('Superuser must have is_staff=True')
-    #     return self._create_user(email, password, **extra_fields)
-
-    def create_consultant(self, email, password, company, first_name, last_name, matricule, **extra_fields):
-        extra_fields.setdefault('company', 'Ventalis')
-        extra_fields.setdefault('matricule', generate_matricule())
-        user = self._create_user(
-            email=email,
-            password=password,
-            company=company,
-            first_name=first_name,
-            last_name=last_name
-        )
-        user.matricule = matricule
-        user.is_consultant = True
-        user.is_staff = True
-        user.is_client = True
-        user.save(using=self._db)
-        return user
+    #     user = self._create_user(
+    #         email=email,
+    #         password=password,
+    #         company=company,
+    #         first_name=first_name,
+    #         last_name=last_name
+    #     )
+    #     user.matricule = matricule
+    #     user.is_consultant = True
+    #     user.is_staff = True
+    #     user.is_client = True
+    #     user.save(using=self._db)
+    #     return user
 
 
 class CustomUser(AbstractUser):
@@ -88,7 +69,7 @@ class CustomUser(AbstractUser):
 
     # Définir les champs supplémentaires dans la classe Meta
     class Meta:
-        db_table = 'custom_user'  # Nom de la table dans la base de données
+        db_table = 'custom_users'  # Nom de la table dans la base de données
 
     def __str__(self):
         return self.email
@@ -99,9 +80,11 @@ def generate_matricule():
     return ''.join(random.choices(string.digits + string.ascii_uppercase, k=6))
 
 class Consultant(CustomUser):
+
     matricule = models.CharField(max_length=6, unique=True)
 
     def save(self, *args, **kwargs):
+
         if not self.matricule:
             while True:
                 new_matricule = generate_matricule()
@@ -122,3 +105,31 @@ class Consultant(CustomUser):
         self.is_staff = True
 
         super().save(*args, **kwargs)
+
+        def get_clients_count(self):
+            return self.clients_set.count()
+
+
+class Client(CustomUser):
+    consultant_applied = models.ForeignKey('Consultant', on_delete=models.CASCADE, null=True,  related_name='clients')
+
+    class Meta:
+        db_table = "Clients"
+
+    @staticmethod
+    def create_client_with_consultant(user):
+        consultants = Consultant.objects.all()
+        min_clients = float('inf')
+        selected_consultant = None
+
+        for consultant in consultants:
+            num_clients = consultant.clients.count()
+            if num_clients < min_clients:
+                min_clients = num_clients
+                selected_consultant = consultant
+
+        client = Client.objects.create(
+            consultant_applied=selected_consultant,
+            # Autres champs du client
+        )
+        return client
