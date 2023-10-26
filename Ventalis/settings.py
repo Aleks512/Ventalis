@@ -9,25 +9,31 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+import environ
+
+from datetime import timedelta
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+# ----------------------fichier env----------------
 
+env = environ.Env()
+environ.Env.read_env()  # Charge les variables d'environnement depuis le fichier .env
+# ---------------------- FIN fichier env----------------
+
+SECRET_KEY = env("SECRET_KEY")
+DEBUG = env.bool("DEBUG")
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+DATABASES = {
+    'default': env.db('DATABASE_URL')
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-dp=o($x1ur3=k$iaujchupo)#a2890rd4(q(9=vr)tne2==)em'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -72,17 +78,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Ventalis.wsgi.application'
 
+#-------------Auth par email------------------
+AUTH_USER_MODEL = 'users.CustomUser'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'ventalis',          # Nom de la base de données
+#         'USER': 'ventalis_admin',    # Nom d'utilisateur
+#         'PASSWORD': 'ventalis_admin',  # Mot de passe de l'utilisateur
+#         'HOST': 'localhost',         # Hôte de la base de données (localhost si elle est sur la même machine)
+#         'PORT': '5432',              # Port PostgreSQL (par défaut : 5432)
+#     }
+# }
+#
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -125,5 +142,20 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.CustomUser'
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+
+# Bottom of the file
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+
+# Custom setting. To email
+RECIPIENT_ADDRESS = env('RECIPIENT_ADDRESS')
+
 

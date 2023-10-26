@@ -1,6 +1,11 @@
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+import random
+import string
+
 
 
 class CustomUserManager(UserManager):
@@ -9,10 +14,63 @@ class CustomUserManager(UserManager):
             raise ValueError('Le champ Email doit être renseigné')
         email = self.normalize_email(email)
         extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('first_name', extra_fields.get('first_name', ''))
+        extra_fields.setdefault('last_name', extra_fields.get('last_name', ''))
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
+
+    def create_superuser(self, email, password, **extra_fields):
+        """
+        Create and save a SuperUser with the given email and password.
+        """
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('company', 'Ventalis')
+        extra_fields.setdefault('first_name', extra_fields.get('first_name', ''))
+        extra_fields.setdefault('last_name', extra_fields.get('last_name', ''))
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True')
+        return self._create_user(email, password, **extra_fields)
+
+    # def create_consultant(self, email, password, **extra_fields):
+    #     """
+    #     Create and save a SuperUser with the given email and password.
+    #     """
+    #     extra_fields.setdefault('is_staff', True)
+    #     extra_fields.setdefault('is_active', True)
+    #     extra_fields.setdefault('is_consultant', True)
+    #     extra_fields.setdefault('company', 'Ventalis')
+    #     extra_fields.setdefault('first_name', extra_fields.get('first_name', ''))
+    #     extra_fields.setdefault('last_name', extra_fields.get('last_name', ''))
+    #     extra_fields.setdefault('matricule', generate_matricule())
+    #
+    #     if extra_fields.get('is_staff') is not True:
+    #         raise ValueError('Superuser must have is_staff=True')
+    #     return self._create_user(email, password, **extra_fields)
+
+    def create_consultant(self, email, password, company, first_name, last_name, matricule, **extra_fields):
+        extra_fields.setdefault('company', 'Ventalis')
+        extra_fields.setdefault('matricule', generate_matricule())
+        user = self._create_user(
+            email=email,
+            password=password,
+            company=company,
+            first_name=first_name,
+            last_name=last_name
+        )
+        user.matricule = matricule
+        user.is_consultant = True
+        user.is_staff = True
+        user.is_client = True
+        user.save(using=self._db)
+        return user
+
+
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(_("email address"), unique=True)
@@ -23,7 +81,7 @@ class CustomUser(AbstractUser):
     is_consultant = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS =[]
 
     # Utiliser le gestionnaire d'authentification personnalisé
     objects = CustomUserManager()
@@ -33,4 +91,34 @@ class CustomUser(AbstractUser):
         db_table = 'custom_user'  # Nom de la table dans la base de données
 
     def __str__(self):
-        return self.email  # Facultatif : représentation sous forme de chaîne de caractères de l'utilisateur
+        return self.email
+
+
+# Fonction pour générer un matricule aléatoire de 6 caractères
+def generate_matricule():
+    return ''.join(random.choices(string.digits + string.ascii_uppercase, k=6))
+
+class Consultant(CustomUser):
+    matricule = models.CharField(max_length=6, unique=True)
+
+    def save(self, *args, **kwargs):
+        if not self.matricule:
+            while True:
+                new_matricule = generate_matricule()
+                if not Consultant.objects.filter(matricule=new_matricule).exists():
+                    self.matricule = new_matricule
+                    break
+
+        if not self.email:
+            base_email = f"{self.first_name.lower()}.{self.last_name.lower()}"
+            email = base_email
+            count = 1
+            while Consultant.objects.filter(email=email).exists():
+                email = f"{base_email}{count}"
+                count += 1
+            self.email = f"{email}@ventalis.com"
+
+        self.is_consultant = True
+        self.is_staff = True
+
+        super().save(*args, **kwargs)
