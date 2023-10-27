@@ -79,27 +79,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Ventalis.wsgi.application'
 
 #-------------Auth par email------------------
-AUTH_USER_MODEL = 'users.CustomUser'
+
+AUTH_USER_MODEL = 'users.NewUser'
+
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'ventalis',          # Nom de la base de données
-#         'USER': 'ventalis_admin',    # Nom d'utilisateur
-#         'PASSWORD': 'ventalis_admin',  # Mot de passe de l'utilisateur
-#         'HOST': 'localhost',         # Hôte de la base de données (localhost si elle est sur la même machine)
-#         'PORT': '5432',              # Port PostgreSQL (par défaut : 5432)
-#     }
-# }
-#
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

@@ -1,135 +1,111 @@
-from django.contrib.auth.models import AbstractUser, UserManager
-from django.db import models
-from django.utils.translation import gettext_lazy as _
 import random
 import string
+from django.db import models
+from django.urls import reverse
+from django.utils import timezone
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.base_user import BaseUserManager
+from django.utils.translation import gettext_lazy as _
 
-
-class CustomUserManager(UserManager):
-    def _create_user(self, email, password, **extra_fields):
+class CustomAccountManager(BaseUserManager):
+    """
+    Custom user model manager where email is the unique identifiers
+    for authentication instead of usernames.
+    """
+    def _create_user(self, email, password = None, **extra_fields):
+        """
+        Create and save a user with the given email and password.
+        """
         if not email:
-            raise ValueError('Le champ Email doit être renseigné')
+            raise ValueError('The Email field must be set')
+
         email = self.normalize_email(email)
-        extra_fields.setdefault('is_active', True)
-        extra_fields.setdefault('first_name', extra_fields.get('first_name', ''))
-        extra_fields.setdefault('last_name', extra_fields.get('last_name', ''))
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save(using=self._db)
+        user.save()
         return user
 
     def create_superuser(self, email, password, **extra_fields):
         """
         Create and save a SuperUser with the given email and password.
         """
+        extra_fields.setdefault("first_name", "Administrateur")
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('company', 'Ventalis')
-        extra_fields.setdefault('first_name', extra_fields.get('first_name', ''))
-        extra_fields.setdefault('last_name', extra_fields.get('last_name', ''))
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True')
         return self._create_user(email, password, **extra_fields)
 
-    # def create_consultant(self, email, password, company, first_name, last_name, matricule, **extra_fields):
-    #     extra_fields.setdefault('company', 'Ventalis')
-    #     extra_fields.setdefault('matricule', generate_matricule())
-    #     user = self._create_user(
-    #         email=email,
-    #         password=password,
-    #         company=company,
-    #         first_name=first_name,
-    #         last_name=last_name
-    #     )
-    #     user.matricule = matricule
-    #     user.is_consultant = True
-    #     user.is_staff = True
-    #     user.is_client = True
-    #     user.save(using=self._db)
-    #     return user
-
-
-class CustomUser(AbstractUser):
-    username = None
-    email = models.EmailField(_("email address"), unique=True)
-
-    # Nouveaux champs personnalisés
+class NewUser(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(_('Email'),unique=True, blank=False, max_length=255)
+    first_name = models.CharField(_("Prénom"), max_length=100)
+    last_name = models.CharField(_("Nom de famille"), max_length=50)
     company = models.CharField(_("Société"), max_length=100)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     is_client = models.BooleanField(default=False)
-    is_consultant = models.BooleanField(default=False)
+    is_employee = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=timezone.now)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS =[]
+    objects = CustomAccountManager()
 
-    # Utiliser le gestionnaire d'authentification personnalisé
-    objects = CustomUserManager()
-
-    # Définir les champs supplémentaires dans la classe Meta
-    class Meta:
-        db_table = 'custom_users'  # Nom de la table dans la base de données
-
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
     def __str__(self):
         return self.email
 
 
-# Fonction pour générer un matricule aléatoire de 6 caractères
-def generate_matricule():
-    return ''.join(random.choices(string.digits + string.ascii_uppercase, k=6))
+class Consultant(NewUser):
+    MATRICULE_LENGTH = 5
+    matricule = models.CharField(_("Matricule"),max_length=MATRICULE_LENGTH, unique=True)
 
-class Consultant(CustomUser):
 
-    matricule = models.CharField(max_length=6, unique=True)
+    def generate_random_matricule(self):
+        return ''.join(random.choices(string.ascii_uppercase + string.digits, k=self.MATRICULE_LENGTH))
+
+
+
 
     def save(self, *args, **kwargs):
-
         if not self.matricule:
             while True:
-                new_matricule = generate_matricule()
-                if not Consultant.objects.filter(matricule=new_matricule).exists():
-                    self.matricule = new_matricule
+                matricule = self.generate_random_matricule()
+                if not Consultant.objects.filter(matricule=matricule).exists():
+                    self.matricule = matricule
                     break
-
-        if not self.email:
-            base_email = f"{self.first_name.lower()}.{self.last_name.lower()}"
-            email = base_email
-            count = 1
-            while Consultant.objects.filter(email=email).exists():
-                email = f"{base_email}{count}"
-                count += 1
-            self.email = f"{email}@ventalis.com"
-
-        self.is_consultant = True
-        self.is_staff = True
-
+        if not self.is_staff and self.is_employee:
+            self.is_staff = True
+            self.is_employee = True
         super().save(*args, **kwargs)
 
-        def get_clients_count(self):
-            return self.clients_set.count()
+    class Meta:
+        db_table = "consultants"
 
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
 
-class Client(CustomUser):
-    consultant_applied = models.ForeignKey('Consultant', on_delete=models.CASCADE, null=True,  related_name='clients')
+    def get_clients_count(self):
+        return self.clients.count()
+
+    def get_absolute_url(self):
+        return reverse('consultant-home', kwargs={'matricule': self.matricule})
+
+class Customer(NewUser):
+    consultant_applied = models.ForeignKey('Consultant', on_delete=models.CASCADE, null=True, related_name='clients')
 
     class Meta:
-        db_table = "Clients"
+        db_table = "customers"
 
     @staticmethod
-    def create_client_with_consultant(user):
-        consultants = Consultant.objects.all()
-        min_clients = float('inf')
-        selected_consultant = None
-
-        for consultant in consultants:
-            num_clients = consultant.clients.count()
-            if num_clients < min_clients:
-                min_clients = num_clients
-                selected_consultant = consultant
-
-        client = Client.objects.create(
-            consultant_applied=selected_consultant,
-            # Autres champs du client
-        )
-        return client
+    def assign_consultant_to_client(user):
+        if not user.customer:
+            consultant = Consultant.objects.annotate(num_clients=models.Count('clients')).order_by(
+                'num_clients').first()
+            Customer.objects.create(consultant_applied=user, consultant=consultant, company=user.company)
+            return consultant
+        return None
