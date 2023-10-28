@@ -66,21 +66,31 @@ class Consultant(NewUser):
 
 
     def generate_random_matricule(self):
-        return ''.join(random.choices(string.ascii_uppercase + string.digits, k=self.MATRICULE_LENGTH))
+        while True:
+            matricule = ''.join(random.choices(string.ascii_uppercase + string.digits, k=self.MATRICULE_LENGTH))
+            if not Consultant.objects.filter(matricule=matricule).exists():
+                return matricule
 
-
-
+    def generate_email(self):
+        base_email = f'{self.first_name.lower()}.{self.last_name.lower()}'
+        email = f'{base_email}@ventalis.com'
+        count = 1
+        while NewUser.objects.filter(email=email).exists():
+            email = f'{base_email}.{count}@ventalis.com'
+            count += 1
+        return email
 
     def save(self, *args, **kwargs):
         if not self.matricule:
-            while True:
-                matricule = self.generate_random_matricule()
-                if not Consultant.objects.filter(matricule=matricule).exists():
-                    self.matricule = matricule
-                    break
-        if not self.is_staff and self.is_employee:
+            self.matricule= self.generate_random_matricule()
+        if not self.email:
+            self.email= self.generate_email()
+        if not self.is_staff:
             self.is_staff = True
+        if not self.is_employee:
             self.is_employee = True
+        if not self.company:
+            self.company = 'Ventalis'
         super().save(*args, **kwargs)
 
     class Meta:
@@ -101,11 +111,25 @@ class Customer(NewUser):
     class Meta:
         db_table = "customers"
 
-    @staticmethod
-    def assign_consultant_to_client(user):
-        if not user.customer:
-            consultant = Consultant.objects.annotate(num_clients=models.Count('clients')).order_by(
-                'num_clients').first()
-            Customer.objects.create(consultant_applied=user, consultant=consultant, company=user.company)
+    # @staticmethod
+    # def assign_consultant_to_client(user):
+    #     if not user.customer:
+    #         consultant = Consultant.objects.annotate(num_clients=models.Count('clients')).order_by(
+    #             'num_clients').first()
+    #         Customer.objects.create(consultant_applied=user, consultant=consultant, company=user.company)
+    #         return consultant
+    #     return None
+
+    def assign_consultant_to_client(self):
+        if not self.consultant_applied:
+            consultant = Consultant.objects.annotate(num_clients=models.Count('clients')).order_by('num_clients').first()
+            self.consultant_applied = consultant
+            self.save()
             return consultant
-        return None
+
+    def save(self, *args, **kwargs):
+        if not self.is_client:
+            self.is_client = True
+        if not self.consultant_applied:
+            self.consultant_applied = self.assign_consultant_to_client()
+        super().save(*args, **kwargs)
