@@ -5,7 +5,7 @@
     <ul>
         {% for consultant in consultants %}
             <li>
-                {{ consultant.first_name }} - {{ consultant.last_name }} - {{ consultant.email }}
+                {{ consultant.first_name }} - {{ consultant.last_name }} - {{ consultant.email }} --- ''{{consultant.clients.count }}
                 <ul>
                     {% for client in consultant.clients.all %}
                         <li>{{ client.first_name }} - {{ client.last_name }} - {{ client.email }} - {{ client.company }}</li>

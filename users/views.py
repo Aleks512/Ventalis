@@ -1,3 +1,4 @@
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render, get_object_or_404
 
 from django.views.generic import ListView
@@ -57,6 +58,12 @@ class CustomerListView(ListView):
 class NewUserListView(ListView):
     model = NewUser
     context_object_name = "users"
+
+class WebAppLoginView(LoginView):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('home')  # Replace 'home' with your desired URL after login
+        return super().get(request, *args, **kwargs)
 
 
 

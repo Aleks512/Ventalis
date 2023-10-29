@@ -7,7 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Ventalis{% endblock %}</title>
     <!-- Add your CSS and JavaScript links here -->
+    <script src="https://unpkg.com/htmx.org@1.2.1"></script>
 </head>
+
+<header>
+        {% if user.is_authenticated %}
+        <p>Welcome, {{ user.email }}! <a href="{% url 'logout' %}">Logout</a></p>
+        {% else %}
+        <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'signup' %}">Sign up</a></p>
+        {% endif %}
+</header>
 
 <body>
 
