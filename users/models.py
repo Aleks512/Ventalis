@@ -111,15 +111,6 @@ class Customer(NewUser):
     class Meta:
         db_table = "customers"
 
-    # @staticmethod
-    # def assign_consultant_to_client(user):
-    #     if not user.customer:
-    #         consultant = Consultant.objects.annotate(num_clients=models.Count('clients')).order_by(
-    #             'num_clients').first()
-    #         Customer.objects.create(consultant_applied=user, consultant=consultant, company=user.company)
-    #         return consultant
-    #     return None
-
     def assign_consultant_to_client(self):
         if not self.consultant_applied:
             consultant = Consultant.objects.annotate(num_clients=models.Count('clients')).order_by('num_clients').first()

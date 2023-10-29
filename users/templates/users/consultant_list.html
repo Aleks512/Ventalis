@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block content %}
+    <h2>Consultants</h2>
+    <ul>
+        {% for consultant in consultants %}
+            <li>
+                {{ consultant.first_name }} - {{ consultant.last_name }} - {{ consultant.email }}
+                <ul>
+                    {% for client in consultant.clients.all %}
+                        <li>{{ client.first_name }} - {{ client.last_name }} - {{ client.email }} - {{ client.company }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+

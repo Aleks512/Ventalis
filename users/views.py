@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from django.views.generic import ListView
 from .models import Consultant,NewUser, Customer
@@ -41,6 +41,16 @@ def consultant_signup(request):
 class ConsultantListView(ListView):
     model = Consultant
     context_object_name = "consultants"
+
+    def get_queryset(self):
+        # Utilisez prefetch_related pour précharger les clients associés à chaque consultant
+        return Consultant.objects.prefetch_related("clients")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Consultants"
+        return context
+
 class CustomerListView(ListView):
     model = Customer
     context_object_name = "customers"
