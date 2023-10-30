@@ -1,9 +1,8 @@
-
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
-    #path('messages', include('themessages.urls')),
+    path('communication/', include('communication.urls')),  # Assurez-vous que le nom correspond à votre application.
 ]
