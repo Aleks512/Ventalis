@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Ventalis{% endblock %}</title>
     <!-- Add your CSS and JavaScript links here -->
-    <script src="https://unpkg.com/htmx.org@1.2.1"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap-5.0.2-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
 </head>
 
 <header>
@@ -28,6 +32,9 @@
     <footer>
         <!-- Add your footer content here -->
     </footer>
+    <script src="https://unpkg.com/htmx.org@1.2.1"></script>
+    <script src="{% static 'bootstrap-5.0.2-dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
 </body>
 
 </html>
