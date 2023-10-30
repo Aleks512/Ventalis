@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views import View
-from messages.forms import ThreadForm
+from messages.forms import ThreadForm, MessageForm
 from django.contrib.auth import get_user_model
 from messages.models import ThreadModel, MessageModel
 
@@ -55,3 +55,17 @@ class CreateMessage(View):
       )
       message.save()
       return redirect('thread', pk=pk)
+
+
+class ThreadView(View):
+  def get(self, request, pk, *args, **kwargs):
+    form = MessageForm()
+    thread = ThreadModel.objects.get(pk=pk)
+    message_list = MessageModel.objects.filter(thread__pk__contains=pk)
+    context = {
+      'thread': thread,
+      'form': form,
+      'message_list': message_list
+    }
+    return render(request, 'messages/thread.html', context)
+
