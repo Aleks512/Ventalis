@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from messages.forms import ThreadForm
 from django.contrib.auth import get_user_model
-from messages.models import ThreadModel
+from messages.models import ThreadModel, MessageModel
 
 User = get_user_model()
 class CreateThread(View):
@@ -38,4 +38,20 @@ class ListThreads(View):
     def get(self, request, *args, **kwargs):
         threads = ThreadModel.objects.filter(Q(user=request.user) | Q(receiver=request.user))
         context = {'threads': threads}
-        return render(request, 'social/inbox.html', context)
+        return render(request, 'messages/inbox.html', context)
+
+class CreateMessage(View):
+  def post(self, request, pk, *args, **kwargs):
+    thread = ThreadModel.objects.get(pk=pk)
+    if thread.receiver == request.user:
+      receiver = thread.user
+    else:
+      receiver = thread.receiver
+      message = MessageModel(
+        thread=thread,
+        sender_user=request.user,
+        receiver_user=receiver,
+        body=request.POST.get('message'),
+      )
+      message.save()
+      return redirect('thread', pk=pk)
