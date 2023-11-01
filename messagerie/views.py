@@ -21,9 +21,9 @@ class CreateThread(View):
     # handle creating the thread
     def post(self, request, *args, **kwargs):
         form = ThreadForm(request.POST)
-        email = request.POST.get('email')
+        username = request.POST.get('username')
         try:
-            receiver = NewUser.objects.get(email=email)
+            receiver = NewUser.objects.get(user_name=username)
             if ThreadModel.objects.filter(user=request.user, receiver=receiver).exists():
                 thread = ThreadModel.objects.filter(user=request.user, receiver=receiver)[0]
                 return redirect('thread', pk=thread.pk)

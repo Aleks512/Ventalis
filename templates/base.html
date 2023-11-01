@@ -1,122 +1,117 @@
 {% load static %}
-
-
+<!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Ventalis{% endblock %}</title>
-    <!-- Add your CSS and JavaScript links here -->
+
+    <!-- Liens vers vos fichiers CSS -->
     <link rel="stylesheet" href="{% static 'bootstrap-5.0.2-dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
-
 </head>
-
-<header>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar scroll</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarScroll">
-      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' %}">Accueil</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'presentation' %}">Présentation de l'entreprise</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Catalogue des prestations</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Produits
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-           {% if user.is_authenticated %}
-        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-            <li class="nav-item">
-              <a class="nav-link inbox-icon" href="{% url 'inbox' %}">Messagerie<i class="far fa-paper-plane"></i></a>
-            </li>
-
-          {% if user.is_superuser %}
-              <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Administration
-                </button>
-                <ul class="dropdown-menu dropdown-menu-dark">
-                  <li><a class="dropdown-item" href="{% url 'consultant-list' %}">Liste de consultants</a></li>
-                  <li><a class="dropdown-item" href="{% url 'customers-list' %}">Liste de clients</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="{% url 'consultant-add' %}">Ajouter un consultant dans la base</a></li>
-                </ul>
-              </div>
-              {% elif user.consultant %}
-                <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Intranet
-                </button>
-                <ul class="dropdown-menu dropdown-menu-dark">
-                  <li><a class="dropdown-item" href="{% url 'consultant-home' matricule=request.user.consultant.matricule %}">Ma page</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="{% url 'category-list' %}">Gestion de categories</a></li>
-                  <li><a class="dropdown-item" href="{% url 'category-create' %}">Créer une categories</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="{% url 'products-list-mng' %}">Gestion de produits</a></li>
-                  <li><a class="dropdown-item" href="{% url 'product-create' %}">Ajouter un produit</a></li>
-                </ul>
-              </div>
-              {% elif user.customer %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'customer-home' id=request.user.customer.id %}">Mon espace</a>
-                </li>
-              {% endif %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">Se déconnecter</a>
-              </li>
-            {% else %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'signup' %}">S'inscrire</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}">Se connecter</a>
-              </li>
-            {% endif %}
-    </div></ul></ul>
-  </div>
-
-</nav>
-
- {% if user.is_authenticated %}
-        <span>Welcome, {{ user.email }}! </span>
-    {% endif %}
-</header>
-
 <body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Navbar scroll</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarScroll">
+                    <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'presentation' %}">Présentation de l'entreprise</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Catalogue des prestations</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Produits
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link inbox-icon" href="{% url 'inbox' %}">Messagerie<i class="far fa-paper-plane"></i></a>
+                            </li>
+                            {% if user.is_superuser %}
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Administration
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li><a class="dropdown-item" href="{% url 'consultants' %}">Liste de consultants</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'customers' %}">Liste de clients</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="#">Ajouter un consultant dans la base</a></li>
+                                    </ul>
+                                </div>
+                            {% elif user.consultant %}
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Intranet
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li><a class="dropdown-item" href="{% url 'consultant-home' matricule=request.user.consultant.matricule %}">Ma page</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="{% url 'category-list' %}">Gestion de catégories</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'category-create' %}">Créer une catégorie</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="{% url 'products-list-mng' %}">Gestion de produits</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'product-create' %}">Ajouter un produit</a></li>
+                                    </ul>
+                                </div>
+                            {% elif user.customer %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'customer-home' id=request.user.customer.id %}">Mon espace</a>
+                                </li>
+                            {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}">Se déconnecter</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'signup' %}">S'inscrire</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}">Se connecter</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {% if user.is_authenticated %}
+            <span>Welcome, {{ user.email }}!</span>
+        {% endif %}
+    </header>
 
     <main>
         <div class="container">
-        {% block content %}
-        {% endblock %}
+            {% block content %}
+            {% endblock %}
         </div>
     </main>
 
     <footer>
-        <!-- Add your footer content here -->
+        <!-- Ajoutez ici le contenu de votre pied de page -->
     </footer>
+
+    <!-- Scripts JavaScript -->
     <script src="https://unpkg.com/htmx.org@1.2.1"></script>
     <script src="{% static 'bootstrap-5.0.2-dist/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
 </body>
-
 </html>
