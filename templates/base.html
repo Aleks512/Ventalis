@@ -15,8 +15,89 @@
 </head>
 
 <header>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar scroll</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Link
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Link</a>
+        </li>
+      </ul>
+    {% if user.is_authenticated %}
+<ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+              <div class="nav-item inbox-icon-container">
+                <a href="{% url 'inbox' %}" class="inbox-icon">Messagerie<i class="far fa-paper-plane"></i></a>
+              </div>
+
+              {% if user.is_superuser %}
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Administration
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="{% url 'consultant-list' %}">Liste de consultants</a></li>
+                  <li><a class="dropdown-item" href="{% url 'customers-list' %}">Liste de clients</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'consultant-add' %}">Ajouter un consultant dans la base</a></li>
+                </ul>
+              </div>
+              {% elif user.consultant %}
+                <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Intranet
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="{% url 'consultant-home' matricule=request.user.consultant.matricule %}">Ma page</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'category-list' %}">Gestion de categories</a></li>
+                  <li><a class="dropdown-item" href="{% url 'category-create' %}">Créer une categories</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'products-list-mng' %}">Gestion de produits</a></li>
+                  <li><a class="dropdown-item" href="{% url 'product-create' %}">Ajouter un produit</a></li>
+                </ul>
+              </div>
+              {% elif user.customer %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'customer-home' id=request.user.customer.id %}">Mon espace</a>
+                </li>
+              {% endif %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Se déconnecter</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'signup' %}">S'inscrire</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Se connecter</a>
+              </li>
+            {% endif %}
+    </div></ul>
+  </div>
+</nav>
         {% if user.is_authenticated %}
-        <p>Welcome, {{ user.email }}! <a href="{% url 'logout' %}">Logout</a></p>
+        <span>Welcome, {{ user.email }}! <a href="{% url 'logout' %}">Logout</a></span>
         {% else %}
         <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'signup' %}">Sign up</a></p>
         {% endif %}

@@ -1,6 +1,41 @@
 body{
-    background-color: #1e2125;
-    color: #0a53be;
+    background-color: springgreen;
+}
+.bg-dark {
+  background-color: black !important;
+}
+
+.navbar-dark .navbar-nav .nav-link.active, .navbar-dark .navbar-nav .show > .nav-link {
+  color: darkgreen;
+
+}
+.navbar-dark .navbar-nav .nav-link{
+    color: darkgreen; !important;
+  }
+.nav-link{
+  color: darkgreen; !important;
+}
+.navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover {
+  color: springgreen;
+
+}
+.dropdown-menu{
+  color:darkgreen;
+  background-color:black;
+}
+.dropdown-item{
+  color: darkgreen;
+}
+.dropdown-item:hover{
+  color: black;
+  background-color: springgreen;
+}
+.navbar-toggler-icon{
+  color: darkgreen;
+}
+.navbar-dark .navbar-toggler{
+  color: darkgreen;
+  border-color:darkgreen;
 }
 
 .inbox-icon-container {
