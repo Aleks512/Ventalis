@@ -1,7 +1,8 @@
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, get_object_or_404
 
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .models import Consultant,NewUser, Customer
 from django.shortcuts import render
 from django.contrib.auth import login, authenticate
@@ -10,6 +11,10 @@ from .forms import ConsultantCreationForm, CustomerCreationForm
 
 def home(request):
     return render(request, 'home.html')
+
+def presentation(request):
+
+    return render(request, "presentation.html")
 
 def signup(request):
     if request.method == 'POST':
@@ -64,6 +69,23 @@ class WebAppLoginView(LoginView):
         if request.user.is_authenticated:
             return redirect('home')  # Replace 'home' with your desired URL after login
         return super().get(request, *args, **kwargs)
+
+
+class CustomerHome(UserPassesTestMixin, DetailView):
+    model = Customer
+    template_name = "users/my_orders.html"
+    fields = '__all__'
+
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.customer
+
+    def get_object(self, queryset=None):
+        id = self.request.user.customer.id
+        return Customer.objects.get(id=id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        customer = self.get_object()
 
 
 

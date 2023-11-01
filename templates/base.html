@@ -24,14 +24,17 @@
     <div class="collapse navbar-collapse" id="navbarScroll">
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="#">Home</a>
+          <a class="nav-link" href="{% url 'home' %}">Accueil</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+          <a class="nav-link" href="{% url 'presentation' %}">Présentation de l'entreprise</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Catalogue des prestations</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Link
+            Produits
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
             <li><a class="dropdown-item" href="#">Action</a></li>
@@ -40,15 +43,14 @@
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
+           {% if user.is_authenticated %}
+        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+
         <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Link</a>
+          <a class="nav-link inbox-icon"" href="{% url 'inbox' %}"">Messagerie<i class="far fa-paper-plane"></i></a>
         </li>
       </ul>
-    {% if user.is_authenticated %}
-<ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-              <div class="nav-item inbox-icon-container">
-                <a href="{% url 'inbox' %}" class="inbox-icon">Messagerie<i class="far fa-paper-plane"></i></a>
-              </div>
+
 
               {% if user.is_superuser %}
               <div class="dropdown">
@@ -96,18 +98,19 @@
     </div></ul>
   </div>
 </nav>
-        {% if user.is_authenticated %}
-        <span>Welcome, {{ user.email }}! <a href="{% url 'logout' %}">Logout</a></span>
-        {% else %}
-        <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'signup' %}">Sign up</a></p>
-        {% endif %}
+
+ {% if user.is_authenticated %}
+        <span>Welcome, {{ user.email }}! </span>
+    {% endif %}
 </header>
 
 <body>
 
     <main>
+        <div class="container">
         {% block content %}
         {% endblock %}
+        </div>
     </main>
 
     <footer>
