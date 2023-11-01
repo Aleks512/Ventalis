@@ -45,14 +45,11 @@
         </li>
            {% if user.is_authenticated %}
         <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+            <li class="nav-item">
+              <a class="nav-link inbox-icon" href="{% url 'inbox' %}">Messagerie<i class="far fa-paper-plane"></i></a>
+            </li>
 
-        <li class="nav-item">
-          <a class="nav-link inbox-icon"" href="{% url 'inbox' %}"">Messagerie<i class="far fa-paper-plane"></i></a>
-        </li>
-      </ul>
-
-
-              {% if user.is_superuser %}
+          {% if user.is_superuser %}
               <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Administration
@@ -95,8 +92,9 @@
                 <a class="nav-link" href="{% url 'login' %}">Se connecter</a>
               </li>
             {% endif %}
-    </div></ul>
+    </div></ul></ul>
   </div>
+
 </nav>
 
  {% if user.is_authenticated %}
