@@ -1,11 +1,13 @@
 from django.urls import path
 
+from . import views
 from .views import ListThreads, \
                     CreateThread, \
                     ThreadView, \
                     CreateMessage
 
 urlpatterns = [
+    path('test/', views.test, name='test'),
     path('inbox/', ListThreads.as_view(), name='inbox'),
 
     path('inbox/create-thread/', CreateThread.as_view(), name='create-thread'),

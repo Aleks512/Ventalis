@@ -3,13 +3,20 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
-from messagerie.forms import ThreadForm, Register, MessageForm
+from messagerie.forms import ThreadForm, MessageForm
 from messagerie.models import ThreadModel, MessageModel
 from users.models import NewUser
 from django.contrib import messages
 
+def test(request):
+    form = ThreadForm()
+    context = {
+        'form': form
+    }
 
+    render(request, "messagerie/inbox_msg.html", context=context)
 # Create your views here.
+@method_decorator(login_required, name='dispatch')
 class CreateThread(View):
     # display the form to enter a user name
     def get(self, request, *args, **kwargs):
@@ -21,9 +28,9 @@ class CreateThread(View):
     # handle creating the thread
     def post(self, request, *args, **kwargs):
         form = ThreadForm(request.POST)
-        username = request.POST.get('username')
+        email = request.POST.get('email')
         try:
-            receiver = NewUser.objects.get(user_name=username)
+            receiver = NewUser.objects.get(email=email)
             if ThreadModel.objects.filter(user=request.user, receiver=receiver).exists():
                 thread = ThreadModel.objects.filter(user=request.user, receiver=receiver)[0]
                 return redirect('thread', pk=thread.pk)
@@ -40,30 +47,6 @@ class CreateThread(View):
             messages.error(request, "Cet utilisateur n'existe pas")
             return redirect('create-thread')
 @method_decorator(login_required, name='dispatch')
-class ListThreads(View):
-  def get(self, request, *args, **kwargs):
-    threads = ThreadModel.objects.filter(Q(user=request.user) | Q(receiver=request.user))
-    context = {
-    'threads': threads
-    }
-    return render(request, 'messagerie/inbox.html', context)
-
-class CreateMessage(View):
-  def post(self, request, pk, *args, **kwargs):
-    thread = ThreadModel.objects.get(pk=pk)
-    if thread.receiver == request.user:
-      receiver = thread.user
-    else:
-      receiver = thread.receiver
-      message = MessageModel(
-        thread=thread,
-        sender_user=request.user,
-        receiver_user=receiver,
-        body=request.POST.get('message'),
-      )
-      message.save()
-      return redirect('thread', pk=pk)
-
 class ThreadView(View):
   def get(self, request, pk, *args, **kwargs):
     form = MessageForm()
@@ -75,3 +58,39 @@ class ThreadView(View):
       'message_list': message_list
     }
     return render(request, 'messagerie/thread.html', context)
+
+
+@method_decorator(login_required, name='dispatch')
+class ListThreads(View):
+  def get(self, request, *args, **kwargs):
+    threads = ThreadModel.objects.filter(Q(user=request.user) | Q(receiver=request.user))
+    context = {
+    'threads': threads
+    }
+    return render(request, 'messagerie/inbox.html', context)
+
+@method_decorator(login_required, name='dispatch')
+class CreateMessage(View):
+  def post(self, request, pk, *args, **kwargs):
+    thread = ThreadModel.objects.get(pk=pk)
+    if thread.receiver == request.user: #qui est athentifié et recois le maessage
+      receiver = thread.receiver #qui est athentifié et recois le maessage
+      message = MessageModel(
+        thread=thread,
+        sender_user=request.user,
+        receiver_user=receiver,
+        body=request.POST.get('message'),
+      )
+      message.save()
+      return redirect('thread', pk=pk)
+    if thread.user == request.user: #qui est athentifié et recois le maessage
+      receiver = thread.user #qui est athentifié et recois le maessage
+      message = MessageModel(
+        thread=thread,
+        sender_user=request.user,
+        receiver_user=receiver,
+        body=request.POST.get('message'),
+      )
+      message.save()
+      return redirect('thread', pk=pk)
+
