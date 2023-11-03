@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
+
 
 class Category(models.Model):
     name = models.CharField(_("Nom"), max_length=255, unique=True)
@@ -11,10 +13,8 @@ class Category(models.Model):
     class Meta:
         verbose_name = _("Catégorie")
         verbose_name_plural = _("Categories")
-
     def __str__(self):
         return self.name
-
     def get_absolute_url(self):
         return f'/{self.slug}/'
 
@@ -26,7 +26,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     category = models.ForeignKey(Category, verbose_name=_("Catégorie"), on_delete=models.CASCADE)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(_("Nom"), max_length=255)
     description = models.TextField(_("Description"), blank=True)
     price = models.DecimalField(_("Prix"), max_digits=10, decimal_places=2)
@@ -38,20 +38,16 @@ class Product(models.Model):
         ordering = ("-created_at",)
         verbose_name = _("Produit")
         verbose_name_plural = _("Produits")
-
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
     def __str__(self):
         return self.name
 
-class Customer(models.Model):
-    user = models.OneToOneField(User, verbose_name=_("Utilisateur"), on_delete=models.CASCADE)
-    company = models.TextField(_("Société"))
-    phone_number = models.CharField(_("Numéro de téléphone"), max_length=15, blank=True)
-
-    def __str__(self):
-        return self.user.username
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, verbose_name=_("Client"), on_delete=models.CASCADE)
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Client"), on_delete=models.CASCADE)
     date_ordered = models.DateTimeField(_("Date de commande"), auto_now_add=True)
     complete = models.BooleanField(_("Commande complète"), default=False)
     transaction_id = models.CharField(_("ID de transaction"), max_length=100, blank=True)
@@ -69,7 +65,7 @@ class OrderItem(models.Model):
         return f"{self.quantity} x {self.product.name}"
 
 class ShippingAddress(models.Model):
-    customer = models.ForeignKey(Customer, verbose_name=_("Client"), on_delete=models.CASCADE)
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Client"), on_delete=models.CASCADE)
     order = models.ForeignKey(Order, verbose_name=_("Commande"), on_delete=models.CASCADE)
     address = models.TextField(_("Adresse de livraison"))
     city = models.CharField(_("Ville"), max_length=100)
