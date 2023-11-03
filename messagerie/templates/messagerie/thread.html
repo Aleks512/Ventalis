@@ -6,9 +6,9 @@
     <div class="row">
         <div class="card col-md-12 mt-5 p-3 shadow-sm">
             {% if thread.receiver == request.user %}
-                <h5>Message de : {{ thread.user }}</h5>
+                <h5>Message de : @{{ thread.user }}</h5>
             {% else %}
-                <h5>Message à {{ thread.receiver }}</h5>
+                <h5>Message à @{{ thread.receiver }}</h5>
             {% endif %}
         </div>
     </div>
@@ -25,7 +25,7 @@
                 <div class="col-md-12 my-1">
                     {% if message.sender_user == request.user %}
                         <div class="sent-message my-3">
-                            <p>{{ message.sender_user }} écrit <b>{{ message.body }}</b></p>
+                            <p>@{{ message.sender_user }} écrit <b>@{{ message.body }}</b></p>
                         </div>
                     {% else %}
                         <div class="received-message my-3">

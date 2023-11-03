@@ -10,6 +10,14 @@ from django.shortcuts import render, redirect
 from .forms import ConsultantCreationForm, CustomerCreationForm
 
 def home(request):
+    user_agent = request.META.get('HTTP_USER_AGENT')
+    print('user agent: ',user_agent)
+    ip_address = request.META.get('REMOTE_ADDR')
+    print('IP adresse',ip_address)
+    my_cookie_csrf = request.COOKIES.get('csrftoken')
+    print("MY COOKIE : ",my_cookie_csrf)
+    content_type=request.META['CONTENT_TYPE']
+    print("cintent-tyoe", content_type)
     return render(request, 'home.html')
 
 def presentation(request):

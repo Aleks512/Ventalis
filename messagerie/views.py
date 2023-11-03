@@ -83,8 +83,8 @@ class CreateMessage(View):
       )
       message.save()
       return redirect('thread', pk=pk)
-    if thread.user == request.user: #qui est athentifié et recois le maessage
-      receiver = thread.user #qui est athentifié et recois le maessage
+    if thread.user == request.user:
+      receiver = thread.user
       message = MessageModel(
         thread=thread,
         sender_user=request.user,
