@@ -1,6 +1,17 @@
-body{
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather&family=Montserrat&display=swap');
+
+
+
+html, body, h4, h5{
     background-color: springgreen;
+    font-family: 'Merriweather', serif;
 }
+
+h1, h2, h3{
+  font-family: 'Montserrat', sans-serif;
+}
+
 .bg-dark {
   background-color: black !important;
 }
