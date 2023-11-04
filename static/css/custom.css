@@ -1,7 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Merriweather&family=Montserrat&display=swap');
 
-
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --background-color: #f8f9fa;
+  --custom-button-bg: #009042;
+  --custom-button-text: #000000;
+  --custom-button-hover-bg: #000000;
+  --custom-button-hover-text: #009042;
+  /* Ajoutez d'autres variables de couleur selon vos besoins */
+}
 
 html, body, h4, h5{
     background-color: springgreen;
@@ -11,7 +20,11 @@ html, body, h4, h5{
 h1, h2, h3{
   font-family: 'Montserrat', sans-serif;
 }
-
+.button {
+  background-color: var(--primary-color);
+  color: white;
+}
+/*------------------------------------NAVIGATION--------------------------------------------*/
 .bg-dark {
   background-color: black !important;
 }
@@ -48,7 +61,19 @@ h1, h2, h3{
   color: darkgreen;
   border-color:darkgreen;
 }
+/*------------------------------------BTN--------------------------------------------*/
+.custom-button {
+  background-color: var(--custom-button-bg) !important;
+  color: var(--custom-button-text) !important;
+  border-color: var(--custom-button-bg) !important;
+}
 
+.custom-button:hover {
+  background-color: var(--custom-button-hover-bg) !important;
+  color: var(--custom-button-hover-text) !important;
+}
+
+/*------------------------------------MESSAGERIE--------------------------------------------*/
 .inbox-icon-container {
   margin-right: 15px;
 }
