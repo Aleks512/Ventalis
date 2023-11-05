@@ -5,5 +5,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
     #path('communication/', include('communication.urls')),
-    path('messagerie/', include('messagerie.urls')), # Assurez-vous que le nom correspond à votre application.
+    path('messagerie/', include('messagerie.urls')),
+    path('', include('store.urls')),
 ]

@@ -4,36 +4,30 @@
 
 
 {% block content %}
-<div class="container">
-  <div class="row mt-5">
-    <div class="col-md-3 col-sm-6">
-      <button type="button" class="btn btn-outline-success custom-button rounded">Boite de réception</button>
+<div class="row mt-5">
+    <div class="col">
+      <a href="{% url 'inbox' %}" class="btn btn-light">Accéder à la boîte de réception</a>
     </div>
-  </div>
-  <div class="row justify-content-center mt-5">
+
     <div class="col-md-5 col-sm-12">
-      <h5>Start a Conversation!</h5>
-    </div>
-  </div>
-  <div class="row justify-content-center mt-3 mb-5">
-    <div class="col-md-5 col-sm-12">
-                {% if messages %}
+        {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-danger">
                     {{ message }}
                 </div>
             {% endfor %}
         {% endif %}
+    <h4>Commencer la converstaion</h4>
       <form method="POST">
         {% csrf_token %}
-        <p>Enter the username for the person you would like to talk to.</p>
+        <p>Entrez le mail de la personne avec laquelle vous souhaitez parler</p>
         {{ form.as_p}}
         <div class="d-grid gap-2">
-        <button type="button" class="btn btn-outline-success custom-button">Continue</button>
+        <button type="submit" class="btn btn-outline-success custom-button rounded-pill">Continue</button>
         </div>
       </form>
-    </div>
   </div>
+
 </div>
 
 {% endblock %}

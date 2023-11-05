@@ -3,8 +3,9 @@
 
 :root {
   --primary-color: #007bff;
-  --secondary-color: #6c757d;
+  --secondary-color: #777;
   --background-color: #f8f9fa;
+
   --custom-button-bg: #009042;
   --custom-button-text: #000000;
   --custom-button-hover-bg: #000000;
@@ -13,16 +14,17 @@
 }
 
 html, body, h4, h5{
-    background-color: springgreen;
     font-family: 'Merriweather', serif;
+    color:var(--secondary-color);
+  background-color: #0c4128;
 }
 
 h1, h2, h3{
   font-family: 'Montserrat', sans-serif;
 }
-.button {
-  background-color: var(--primary-color);
-  color: white;
+
+.container{
+
 }
 /*------------------------------------NAVIGATION--------------------------------------------*/
 .bg-dark {

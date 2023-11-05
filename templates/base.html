@@ -1,5 +1,5 @@
 {% load static %}
-<!DOCTYPE html>
+
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,7 @@
     <!-- Liens vers vos fichiers CSS -->
     <link rel="stylesheet" href="{% static 'bootstrap-5.0.2-dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <title> Ventalis {{ page_title }}</title>
 </head>
 <body>
     <header>
@@ -99,7 +100,7 @@
     </header>
 
     <main>
-        <div class="container">
+        <div class="container mt-5">
             {% block content %}
             {% endblock %}
         </div>
