@@ -4,7 +4,7 @@
 :root {
   --primary-color: #007bff;
   --secondary-color: #777;
-  --background-color: #f8f9fa;
+  --background-color: lightgrey;
 
   --custom-button-bg: #009042;
   --custom-button-text: #000000;
@@ -16,7 +16,7 @@
 html, body, h4, h5{
     font-family: 'Merriweather', serif;
     color:var(--secondary-color);
-  background-color: #0c4128;
+    background-color:var(--background-color);
 }
 
 h1, h2, h3{

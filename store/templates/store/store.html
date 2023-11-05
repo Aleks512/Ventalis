@@ -1,5 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
 
-<h1>store</h1>
+{% block content %}
+    <h1>store</h1>
+    <p>hello</p>
 
-<img src="{% static images/cart.png %}" alt="cart">
+    <img src="{% static 'images/cart.png' %}">
+
+{% endblock %}
