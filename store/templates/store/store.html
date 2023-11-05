@@ -1,10 +1,54 @@
 {% extends "base.html" %}
 {% load static %}
 
+
 {% block content %}
-    <h1>store</h1>
-    <p>hello</p>
+<div class="row">
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{% static 'images/shop/big-product.png' %}">
+        <div class="box-element product" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h6><strong>Product</strong></h6>
+                <button class="btn btn-outline-secondary custom-button">Ajouter au panier</button>
+                <a class="btn btn-outline-success" href="#">Afficher</a>
+            </div>
+            <div>
+                <h6>Quantité</h6>
+                <h4><strong>1000 €</strong></h4>
+            </div>
+        </div>
+    </div>
 
-    <img src="{% static 'images/cart.png' %}">
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{% static 'images/shop/big-product.png' %}">
+        <div class="box-element product" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h6><strong>Product</strong></h6>
+                <button class="btn btn-outline-secondary custom-button">Ajouter au panier</button>
+                <a class="btn btn-outline-success" href="#">Afficher</a>
+            </div>
+            <div>
+                <h6>Quantité</h6>
+                <h4><strong>1000 €</strong></h4>
+            </div>
+        </div>
+    </div>
 
-{% endblock %}
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{% static 'images/shop/big-product.png' %}">
+        <div class="box-element product" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h6><strong>Product</strong></h6>
+                <button class="btn btn-outline-secondary custom-button">Ajouter au panier</button>
+                <a class="btn btn-outline-success" href="#">Afficher</a>
+            </div>
+            <div>
+                <h6>Quantité</h6>
+                <h4><strong>1000 €</strong></h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+

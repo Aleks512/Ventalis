@@ -30,7 +30,7 @@
                     <a class="nav-link" href="{% url 'presentation' %}">Présentation de l'entreprise</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Catalogue des prestations</a>
+                    <a class="nav-link" href="{% url 'store' %}">Catalogue des prestations</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -66,7 +66,7 @@
                         <a class="nav-link" href="{% url 'logout' %}">Se déconnecter</a>
                     </li>
 <!--                    CART-->
-                    <a href="{% url 'cart' %}"> <img  id="cart-icon" src="{% static 'images/cart.png' %}"></a>
+                    <a href="{% url 'cart' %}"> <img  id="cart-icon" src="{% static 'images/shop/cart.png' %}"></a>
     	            <p id="cart-total">0</p>
                 {% else %}
                     <li class="nav-item">
