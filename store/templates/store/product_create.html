@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid" style="height: 90vh;">
+  <div class="row justify-content-center align-items-center h-100">
+    <div class="col-md-5">
+      <div class="card border-0 shadow-lg" style="width: 100%;">
+        <div class="card-header" style="background-color: #000000; color: #27b547;">
+          <h4 class="text-center">Créer un nouveau produit</h4>
+        </div>
+        <div class="card-body">
+<form method="post">
+  {% csrf_token %}
+  {{ form.name.label }}: {{ form.name }}
+  {{ form.description.label }}: {{ form.description }}
+  {{ form.unit_price.label }}: {{ form.unit_price }}
+  {{ form.stock.label }}: {{ form.stock }}
+  {{ form.category.label }}: {{ form.category }}
+  {{ form.image.label }}: {{ form.image }}
+  <input type="submit" value="Enregistrer">
+</form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

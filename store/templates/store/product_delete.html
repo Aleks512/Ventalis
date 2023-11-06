@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% if messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+  <div class="container">
+    <h1 class="mb-4">Supprimer la produit "{{ object.name }}"</h1>
+    <p>Êtes-vous sûr de vouloir supprimer ce produit?</p>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <button type="submit" class="btn btn-danger">Supprimer</button>
+      <a href="{% url 'products-list-mng' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+  </div>
+{% endblock %}
