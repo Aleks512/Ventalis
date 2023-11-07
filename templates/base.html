@@ -86,11 +86,13 @@
         {% endif %}
     </header>
 
+
     <main>
-        <div class="container mt-5">
+        <div class="{% block container_class %}container{% endblock %} mt-3">
             {% block content %}
             {% endblock %}
         </div>
+
     </main>
 
     <footer>
@@ -100,6 +102,6 @@
     <!-- Scripts JavaScript -->
     <script src="https://unpkg.com/htmx.org@1.2.1"></script>
     <script src="{% static 'bootstrap-5.0.2-dist/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
 </body>
 </html>

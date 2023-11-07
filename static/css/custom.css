@@ -213,3 +213,18 @@ a {
 .hidden{
 	display: none!important;
 }
+/*------------------------------------container fluid--------------------------------------------*/
+.container-fluid{
+    width: 100%;
+    padding-right: 0;
+    padding-left: 0;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+}
+
+.presentation{
+    padding-right: 5rem;
+    padding-left: 5rem;
+    margin: 2rem;
+}
