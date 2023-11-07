@@ -25,7 +25,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     category = models.ForeignKey(Category, verbose_name=_("Catégorie"), on_delete=models.CASCADE)
-    created_by = models.ForeignKey('users.Consultant', on_delete=models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(_("Nom"), max_length=255)
     description = models.TextField(_("Description"), blank=True)
     price = models.DecimalField(_("Prix"), max_digits=10, decimal_places=2)
@@ -37,6 +37,13 @@ class Product(models.Model):
         ordering = ("-created_at",)
         verbose_name = _("Produit")
         verbose_name_plural = _("Produits")
+    @property
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except:
+            url= ''
+        return url
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
@@ -46,7 +53,7 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Client"), on_delete=models.CASCADE)
+    customer = models.ForeignKey('users.Customer', verbose_name=_("Client"), on_delete=models.CASCADE)
     comment = models.TextField(verbose_name=_("Commantaire sur commande"),blank=True, null=True)
     date_ordered = models.DateTimeField(_("Date de commande"), auto_now_add=True)
     complete = models.BooleanField(_("Commande complète"), default=False)
@@ -54,6 +61,18 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+    @property
+    def get_cart_total(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.get_total for item in orderitems])
+        return total
+
+    def get_cart_items(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.quantity for item in orderitems])
+        return total
+
 
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, verbose_name=_("Produit"), on_delete=models.SET_NULL, null=True)
@@ -64,6 +83,10 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
+    @property
+    def get_total(self):
+        total = self.product.price * self.quantity
+        return total
 
 class ShippingAddress(models.Model):
     customer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Client"), on_delete=models.CASCADE)

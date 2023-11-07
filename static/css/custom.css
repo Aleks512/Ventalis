@@ -111,7 +111,20 @@ h1, h2, h3{
   text-align: center;
 }
 
+.list-group-item.active {
+    z-index: 2;
+    color: var(--primary5-color);
+    background-color: var(--customblack-color);
+    border-color: var(--primary5-color);
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
 /*------------------------------------AUTRE--------------------------------------------*/
+
 .box-element{
 	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
 	background-color: #fff;
@@ -154,7 +167,7 @@ h1, h2, h3{
 }
 
 .btn{
-	border-radius: 0;
+	border-radius: 0%;
 }
 
 .row-image{

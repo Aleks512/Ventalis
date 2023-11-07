@@ -9,16 +9,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {% endif %}
-<div class="container">
-  <h1 class="my-5">Les produits</h1>
+
+  <h1 class="my-5">NOs produits</h1>
 
   {% for category in categories %}
-    <h2>{{ category }}</h2>
+    <h2 class="mt-5">{{ category }}</h2>
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       {% for product in products %}
         {% if product.category == category %}
-        <div class="col">
+        <div class="col box-element">
           <div class="card">
             {% if product.image %}
               <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top img-fluid" style="transition: transform 0.2s ease-in-out;">
@@ -26,13 +26,13 @@
             <div class="card-body">
               <h5 class="card-title">{{ product.name }}</h5>
               <p class="card-text">{{ product.description }}</p>
-              <a href="{{ product.get_absolute_url }}" class="btn btn-secondary custom-btn">Voir l'article</a>
+              <a href="{{ product.get_absolute_url }}" class="btn btn-secondary custom-button">Voir l'article</a>
 
-              <a href="{% url 'product-update' product.slug %}" class="btn btn-secondary >
-                <i class="bi bi-pencil-fill me-2"></i>Editer
+              <a href="{% url 'product-update' product.slug %}" class="btn btn-secondary custom-button">
+                Editer
               </a>
 
-              <a href="{% url 'product-delete' product.slug %}" class="btn btn-danger">
+              <a href="{% url 'product-delete' product.slug %}" class="btn btn-danger custom-button">
                 <i class="bi bi-trash-fill me-2"></i>Supprimer
               </a>
 
@@ -48,12 +48,11 @@
     </div>
   {% endfor %}
 
-</div>
 
 <script>
   document.querySelectorAll('.card-img-top').forEach(img => {
     img.addEventListener('mouseenter', () => {
-      img.style.transform = 'scale(1.05)';
+      img.style.transform = 'scale(1.09)';
     });
     img.addEventListener('mouseleave', () => {
       img.style.transform = 'scale(1)';

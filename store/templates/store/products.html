@@ -11,11 +11,10 @@
         </div>
     {% endif %}
 
-    <div class="container-fluid mt-5 ">
+
         <div class="row">
-            <div class="col-sm-2 ">
-                <h2 class="ml-4">Catégories</h2>
-                <ul class="list-group">
+            <div class="col-sm-2">
+                <ul class="list-group list-group-flush box-element">
                     <li class="list-group-item {% if not selected_category %}active{% endif %} custom-active">
                         <a class="categorie" href="{% url 'products' %}">Tous</a>
                     </li>
@@ -27,13 +26,14 @@
                 </ul>
             </div>
 
-            <div class="col-sm-10">
+            <div class="col-sm-10 ">
+                <h2>Nos produits</h2>
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
 
                     {% if selected_category %}
                         {% for product in products %}
                             {% if product.category.slug == selected_category %}
-                                <div class="col">
+                                <div class="col box-element">
                                     <div class="card">
                                         {% if product.image %}
                                             <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top img-fluid" style="transition: transform 0.2s ease-in-out;">
@@ -41,8 +41,11 @@
                                         <div class="card-body">
                                             <h5 class="card-title">{{ product.name }}</h5>
                                             <p class="card-text">{{ product.description }}</p>
-                                            <a href="{{ product.get_absolute_url }}" class="btn btn-success custom-btn"><i class="fa fa-eye" aria-hidden="true"></i> Voir l'article</a>
+                                            <a href="{{ product.get_absolute_url }}" class="btn btn-success custom-button"><i class="fa fa-eye" aria-hidden="true"></i> Voir l'article</a>
                                         </div>
+                                          <div class="card-footer">
+                                            <small class="text-muted">Last updated 3 mins ago</small>
+                                          </div>
                                     </div>
                                 </div>
                             {% endif %}
@@ -56,7 +59,8 @@
                         {% for product in products %}
 
                             <div class="col">
-                                <div class="card">
+
+                                <div class="card h-100">
                                     {% if product.image %}
                                         <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top img-fluid" style="transition: transform 0.2s ease-in-out;">
                                     {% endif %}
@@ -77,7 +81,7 @@
                 </div>
             </div>
       </div>
-    </div>
+
   </div>
 
 

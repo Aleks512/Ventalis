@@ -126,8 +126,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+# fichiers ajoutés de models
+MEDIA_URL = "/images/"
+MEDIA_ROOT = BASE_DIR / "static/images"
 
 
 # Default primary key field type
