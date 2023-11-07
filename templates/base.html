@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title> Ventalis {{ page_title }}</title>
-
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <!-- Liens vers vos fichiers CSS -->
     <link rel="stylesheet" href="{% static 'bootstrap-5.0.2-dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
@@ -88,7 +88,7 @@
 
 
     <main>
-        <div class="{% block container_class %}container{% endblock %} mt-3">
+        <div class="{% block container_class %}container{% endblock %}">
             {% block content %}
             {% endblock %}
         </div>

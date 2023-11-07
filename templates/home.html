@@ -1,17 +1,23 @@
 
 {% extends 'base.html' %}
 {% load static %}
-
+{% block container_class %}container-fluid{% endblock %}
 {% block content %}
-<html>
+
+
+<head>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
 
 
 <style>
-body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif;}
+
 body, html {
   height: 100%;
-  color: #777;
   line-height: 1.8;
 }
 
@@ -25,19 +31,19 @@ body, html {
 
 /* First image (Logo. Full height) */
 .bgimg-1 {
-  background-image: url("{% static 'css/kendal-hnys.jpg' %}");
+  background-image: url("{% static 'images/shop/kendal-hnys.jpg' %}");
   min-height: 100%;
 }
 
 /* Second image (Portfolio) */
 .bgimg-2 {
-  background-image: url("{% static 'css/boxed-water-is-better.jpg' %}");
+  background-image: url("{% static 'images/shop/boxed-water-is-better.jpg' %}");
   min-height: 400px;
 }
 
 /* Third image (Contact) */
 .bgimg-3 {
-  background-image: url("{% static 'css/passion.jpg' %}");
+  background-image: url("{% static 'images/shop/passion.jpg' %}");
   min-height: 400px;
 }
 
@@ -86,7 +92,7 @@ body, html {
  <div class="w3-row">
     <div class="w3-col m6 w3-center w3-padding-large">
       <p><b><i class="fa fa-user w3-margin-right"></i>My Name</b></p><br>
-      <img src="{% static 'css/portables.png' %}" class="w3-round w3-image w3-opacity w3-hover-opacity-off" alt="Photo of Me" width="500" height="333">
+      <img src="{% static 'images/shop/portables.png' %}" class="w3-round w3-image w3-opacity w3-hover-opacity-off" alt="Photo of Me" width="500" height="333">
     </div>
 
 
@@ -148,37 +154,37 @@ body, html {
   <!-- Responsive Grid. Four columns on tablets, laptops and desktops. Will stack on mobile devices/small screens (100% width) -->
   <div class="w3-row-padding w3-center">
     <div class="w3-col m3">
-      <img src="{% static 'css/ventes/Block_notes_personnalisés.jpg' %}" style="width:100%;"  class="w3-hover-opacity" alt="Meilleurs ventes 1">
+      <img src="{% static 'images/shop/Block_notes_personnalisés.jpg' %}" style="width:100%;"  class="w3-hover-opacity" alt="Meilleurs ventes 1">
     </div>
 
     <div class="w3-col m3">
-      <img src="{% static 'css/ventes/stylos_personnalisé_dcuf3hL.jpg'%}" style="width:100%; height: auto"  class="w3-hover-opacity" alt="autocollants">
+      <img src="{% static 'images/shop/stylos_personnalisé_dcuf3hL.jpg'%}" style="width:100%; height: auto"  class="w3-hover-opacity" alt="autocollants">
     </div>
 
     <div class="w3-col m3">
-      <img src="{% static 'css/ventes/Block_notes_personnalisés.jpg' %}" style="width:100%" class="w3-hover-opacity" alt="escursion">
+      <img src="{% static 'images/shop//Block_notes_personnalisés.jpg' %}" style="width:100%" class="w3-hover-opacity" alt="escursion">
     </div>
 
     <div class="w3-col m3">
-      <img src="{% static 'css/ventes/stylos_personnalisé_dcuf3hL.jpg' %}" style="width:100%"  class="w3-hover-opacity" alt="Meilleurs ventes 4">
+      <img src="{% static 'images/shop/stylos_personnalisé_dcuf3hL.jpg' %}" style="width:100%"  class="w3-hover-opacity" alt="Meilleurs ventes 4">
     </div>
   </div>
 
   <div class="w3-row-padding w3-center w3-section">
     <div class="w3-col m3">
-      <img src="{% static 'css/ventes/stylos_personnalisé_dcuf3hL.jpg' %}" style="width:100%" class="w3-hover-opacity" alt="Meilleurs ventes 5">
+      <img src="{% static 'images/shop/stylos_personnalisé_dcuf3hL.jpg' %}" style="width:100%" class="w3-hover-opacity" alt="Meilleurs ventes 5">
     </div>
 
     <div class="w3-col m3">
-      <img src="{% static 'css/ventes/Block_notes_personnalisés.jpg' %}" style="width:100%" class="w3-hover-opacity" alt="Meilleurs ventes 6">
+      <img src="{% static 'images/shop/Block_notes_personnalisés.jpg' %}" style="width:100%" class="w3-hover-opacity" alt="Meilleurs ventes 6">
     </div>
 
     <div class="w3-col m3">
-      <img src="{% static 'css/ventes/stylos_personnalisé_dcuf3hL.jpg' %}" style="width:100%"  class="w3-hover-opacity" alt="Meilleurs ventes 7">
+      <img src="{% static 'images/shop/stylos_personnalisé_dcuf3hL.jpg' %}" style="width:100%"  class="w3-hover-opacity" alt="Meilleurs ventes 7">
     </div>
 
     <div class="w3-col m3">
-      <img src="{% static 'css/ventes/Block_notes_personnalisés.jpg' %}" style="width:100%"  class="w3-hover-opacity" alt="Meilleurs ventes 8">
+      <img src="{% static 'images/shop/Block_notes_personnalisés.jpg' %}" style="width:100%"  class="w3-hover-opacity" alt="Meilleurs ventes 8">
     </div>
   </div>
 </div>
