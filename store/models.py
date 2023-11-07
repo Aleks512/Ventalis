@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
@@ -44,10 +45,15 @@ class Product(models.Model):
         except:
             url= ''
         return url
+
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("product", kwargs={"slug":self.slug})
     def __str__(self):
         return self.name
 

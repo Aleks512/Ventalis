@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
-
+from pprint import pprint
 from .forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm
 from .models import Category, Product, Order, OrderItem
+
 
 
 def store(request):
@@ -57,8 +58,10 @@ def products_list_mng(request):
     return render(request, "store/products_list_mng.html", context={"products":products, "categories": categories})
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug)
+    product_cat = product.category
+    related_products=product_cat.product_set.all()
 
-    return render(request, "store/product_detail.html", context={"product":product})
+    return render(request, "store/index.html", context={"product":product, 'related_products':related_products})
 
 @consultant_required
 def product_create_view(request):
