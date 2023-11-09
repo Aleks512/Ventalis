@@ -1,33 +1,31 @@
+import asyncio
+
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from pprint import pprint
+
+
 from .forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm
 from .models import Category, Product, Order, OrderItem
 
 
 
-def store(request):
-	products = Product.objects.all()
-	context = {'products':products}
-	return render(request, 'store/store.html', context)
-
 def products(request):
-    # if request.user.is_authenticated:
-    #     customer = request.user.customer
-    #     order, created = Order.objects.get_or_create(customer=customer, complete=False)
-    #     items = order.orderitem_set.all()
-    #     cartItems = order.get_cart_items()
-    # else:
-    #     items = []
-    #     order = {'get_cart_total':0, 'get_cart_items':0, 'shipping':False}
-    #     cartItems = order['get_cart_items']
-
     products = Product.objects.all()
     categories = Category.objects.all()
     selected_category = request.GET.get('category')  # Récupérer la catégorie sélectionnée
     context = {"products": products, "categories": categories, "selected_category": selected_category}
     return render(request, "store/products.html", context)
+
+@login_required()
+def add_to_cart(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    order_item, created = OrderItem.objects.get_or_create(
+        customer=request.user,
+        product=product,
+    )
+
 
 
 @login_required
@@ -106,3 +104,5 @@ def product_delete_view(request, slug):
         product.delete()
         return redirect('products-list-mng')
     return render(request, 'store/product_delete.html', {'form': form, 'product': product})
+
+

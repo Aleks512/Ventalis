@@ -88,12 +88,13 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
+    customer = models.ForeignKey('users.Customer', verbose_name=_("Client"), on_delete=models.CASCADE)
     product = models.ForeignKey(Product, verbose_name=_("Produit"), on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(Order, verbose_name=_("Commande"), on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(_("Quantité"), default=1000)
     comment = models.TextField(verbose_name=_("Commantaire sur articles"), blank=True, null=True)
     date_added = models.DateTimeField(_("Date d'ajout"), auto_now_add=True)
-
+    ordered = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
     @property
@@ -101,8 +102,8 @@ class OrderItem(models.Model):
         total = self.product.price * self.quantity
         return total
 
-class ShippingAddress(models.Model):
-    customer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Client"), on_delete=models.CASCADE)
+class Address(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Client"), on_delete=models.CASCADE)
     order = models.ForeignKey(Order, verbose_name=_("Commande"), on_delete=models.CASCADE)
     address = models.TextField(_("Adresse de livraison"))
     city = models.CharField(_("Ville"), max_length=100)

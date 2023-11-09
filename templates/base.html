@@ -30,7 +30,7 @@
                     <a class="nav-link" href="{% url 'presentation' %}">Présentation de l'entreprise</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'store' %}">Catalogue des prestations</a>
+                    <a class="nav-link" href="{% url 'products' %}">Catalogue des prestations</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -55,6 +55,9 @@
                         </div>
                     {% elif user.consultant %}
                         <div class="dropdown">
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'product-create' %}">Créer produit</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products-list-mng' %}">Gestion des produits</a></li>
                             <!-- ... Liens pour les consultants ... -->
                         </div>
                     {% elif user.customer %}
