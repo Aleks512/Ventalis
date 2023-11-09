@@ -84,8 +84,11 @@
     </div>
 </nav>
     </header>
-
-from django.contrib.sessions.models import Session
+        <main>
+        <div class="{% block container_class %}container{% endblock %}">
+            {% block content %}
+            {% endblock %}
+        </div>
 
     </main>
 
