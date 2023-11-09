@@ -12,33 +12,48 @@ def store(request):
 	context = {'products':products}
 	return render(request, 'store/store.html', context)
 
-def cart(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-    else:
-        items = []
-        order = {'get_cart_total':0, 'get_cart_items':0}
-    context = {'items': items, 'order':order}
-    return render(request, 'store/cart.html', context)
-
-def checkout(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-    else:
-        items = []
-        order = {'get_cart_total': 0, 'get_cart_items': 0}
-    context = {'items': items, 'order': order}
-    return render(request, 'store/checkout.html', context)
-
 def products(request):
+    # if request.user.is_authenticated:
+    #     customer = request.user.customer
+    #     order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    #     items = order.orderitem_set.all()
+    #     cartItems = order.get_cart_items()
+    # else:
+    #     items = []
+    #     order = {'get_cart_total':0, 'get_cart_items':0, 'shipping':False}
+    #     cartItems = order['get_cart_items']
+
     products = Product.objects.all()
     categories = Category.objects.all()
     selected_category = request.GET.get('category')  # Récupérer la catégorie sélectionnée
-    return render(request, "store/products.html", context={"products": products, "categories": categories, "selected_category": selected_category})
+    context = {"products": products, "categories": categories, "selected_category": selected_category}
+    return render(request, "store/products.html", context)
+
+
+@login_required
+def cart(request):
+    if request.user.is_client:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+        print(items)
+        cartItems = order.get_cart_items()
+        context = {'items': items, 'order': order, 'cartItems': cartItems}
+        return render(request, 'store/cart.html', context)
+    else:
+        return HttpResponseForbidden("You are not authorized to access this page.")
+@login_required
+def checkout(request):
+    if request.user.is_client:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+        print(items)
+        cartItems = order.get_cart_items()
+        context = {'items': items, 'order': order, 'cartItems': cartItems}
+        return render(request, 'store/cart.html', context)
+    else:
+        return HttpResponseForbidden("You are not authorized to access this page.")
 
 # Fonction de vérification pour s'assurer que l'utilisateur est un consultant
 def is_consultant(user):

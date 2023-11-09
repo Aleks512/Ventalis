@@ -47,7 +47,7 @@
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link inbox-icon" href="{% url 'inbox' %}">Messagerie<i class="far fa-paper-plane"></i></a>
+                        <a class="nav-link inbox-icon" href="{% url 'inbox' %}">Messagerie {{user.email}}<i class="far fa-paper-plane"></i></a>
                     </li>
                     {% if user.is_superuser %}
                         <div class="dropdown">
@@ -61,13 +61,16 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'customer-home' id=request.user.customer.id %}">Mon espace</a>
                         </li>
+                <!--CART-->
+                        <a href="{% url 'cart' %}"> <img  id="cart-icon" src="{% static 'images/shop/cart.png' %}"></a>
+                        <p id="cart-total">{{cartItems}}</p>
                     {% endif %}
+
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Se déconnecter</a>
                     </li>
-<!--                    CART-->
-                    <a href="{% url 'cart' %}"> <img  id="cart-icon" src="{% static 'images/shop/cart.png' %}"></a>
-    	            <p id="cart-total">0</p>
+
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'signup' %}">S'inscrire</a>
@@ -80,18 +83,9 @@
         </div>
     </div>
 </nav>
-
-        {% if user.is_authenticated %}
-            <span>Welcome, {{ user.email }}!</span>
-        {% endif %}
     </header>
 
-
-    <main>
-        <div class="{% block container_class %}container{% endblock %}">
-            {% block content %}
-            {% endblock %}
-        </div>
+from django.contrib.sessions.models import Session
 
     </main>
 

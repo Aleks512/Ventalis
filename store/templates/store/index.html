@@ -16,7 +16,7 @@
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{ product.image.url }}" alt="..." /></div>
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{ product.image.url }}" alt="{{ product.name }}" /></div>
             <div class="col-md-6">
                 <div class="small mb-1">{{ product.category }}</div>
                 <h1 class="display-5 fw-bolder">{{ product.name }}</h1>
@@ -27,7 +27,7 @@
                 <p class="lead">{{ product.description }}</p>
                 <div class="d-flex">
                     <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
-                    <button class="btn btn-outline-dark flex-shrink-0 custom-button" type="button">
+                    <button data-product="{{product.id}}" data-action="add" class="btn btn-outline-dark flex-shrink-0 custom-button rounded update-cart" type="button">
                         <i class="bi-cart-fill me-1"></i>
                         Ajouter au panier
                     </button>
@@ -58,7 +58,7 @@
                         </div>
                         <!-- Product actions-->
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ product.get_absolute_url }}">View details</a></div>
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ product.get_absolute_url }}">Afficher</a></div>
                         </div>
                     </div>
                 </div>

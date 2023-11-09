@@ -68,6 +68,9 @@
                                         <h5 class="card-title">{{ product.name }}</h5>
                                         <p class="card-text">{{ product.description }}</p>
                                         <a href="{{ product.get_absolute_url }}" class="btn btn-success custom-btn"><i class="fa fa-eye" aria-hidden="true"></i> Voir l'article</a>
+                                        <button data-product="{{product.id}}" data-action="add" class="btn btn-outline-dark flex-shrink-0 custom-button rounded update-cart" type="button">
+                                        <i class="bi-cart-fill me-1"></i>Ajouter au panier</button>
+
                                     </div>
                                 </div>
                             </div>

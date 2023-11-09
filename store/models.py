@@ -67,9 +67,16 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.id)
-
     @property
-    def get_cart_total(self):
+    def shipping(self):
+        shipping = False
+        orderitems = self.orderitem_set.all()
+        for orderitem in orderitems:
+            if orderitem.quantity >= 1000:
+                shipping = True
+        return shipping
+    @property
+    def get_cart_taotal(self):
         orderitems = self.orderitem_set.all()
         total = sum([item.get_total for item in orderitems])
         return total
@@ -83,7 +90,7 @@ class Order(models.Model):
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, verbose_name=_("Produit"), on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(Order, verbose_name=_("Commande"), on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(_("Quantité"), default=1)
+    quantity = models.PositiveIntegerField(_("Quantité"), default=1000)
     comment = models.TextField(verbose_name=_("Commantaire sur articles"), blank=True, null=True)
     date_added = models.DateTimeField(_("Date d'ajout"), auto_now_add=True)
 
