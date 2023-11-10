@@ -35,3 +35,18 @@ class ProductDeleteForm(forms.ModelForm):
         model = Product
         fields = []
 
+# ------------ Orders --------------------
+class OrderItemUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ('product', 'quantity')
+
+class OrderItemDeleteForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = '__all__'
+
+class OrderItemForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = '__all__'
