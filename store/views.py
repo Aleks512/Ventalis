@@ -116,6 +116,6 @@ def product_delete_view(request, slug):
     if request.method == 'POST':
         product.delete()
         return redirect('products-list-mng')
-    return render(request, 'store/product_delete.html', {'form': form, 'product': product})
+    return redirect('products-list-mng')
 
 
