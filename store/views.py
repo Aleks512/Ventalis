@@ -37,7 +37,7 @@ def add_to_cart(request, slug):
         order_item.save()
         messages.info(request, "La quantité du produit a été mise à jour.")
 
-    # Rediriger vers la page du panier
+    # Rediriger vers la page des produits
     return redirect('products')
 
 
@@ -62,7 +62,7 @@ def checkout(request):
         print(items)
         cartItems = order.get_cart_items()
         context = {'items': items, 'order': order, 'cartItems': cartItems}
-        return render(request, 'store/cart.html', context)
+        return render(request, 'store/checkout.html', context)
     else:
         return HttpResponseForbidden("You are not authorized to access this page.")
 
