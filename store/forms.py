@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, Product, Order
+from .models import Category, Product, Order, OrderItem
 class ProductCreateForm(forms.ModelForm):
     class Meta:
         model = Product
@@ -34,3 +34,4 @@ class ProductDeleteForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = []
+

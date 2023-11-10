@@ -1,3 +1,6 @@
+import random
+import string
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
@@ -49,7 +52,6 @@ class Product(models.Model):
             url= ''
         return url
 
-
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
@@ -59,8 +61,6 @@ class Product(models.Model):
         return reverse("product", kwargs={"slug":self.slug})
     def __str__(self):
         return self.name
-
-
 
 
 class Order(models.Model):
@@ -90,6 +90,13 @@ class Order(models.Model):
         total = sum([item.quantity for item in orderitems])
         return total
 
+    def get_transaction_id(self):
+        return ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+
+    def save(self, *args, **kwargs):
+        if not self.transactionId:
+            self.transactionId= self.get_transaction_id()
+        super().save(*args, **kwargs)
 class OrderItem(models.Model):
     customer = models.ForeignKey('users.Customer', verbose_name=_("Client"), on_delete=models.CASCADE)
     order = models.ForeignKey(Order, verbose_name=_("Commande"), on_delete=models.CASCADE)
