@@ -3,6 +3,7 @@ import asyncio
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from pprint import pprint
 
 
@@ -18,21 +19,33 @@ def products(request):
     context = {"products": products, "categories": categories, "selected_category": selected_category}
     return render(request, "store/products.html", context)
 
-@login_required()
 def add_to_cart(request, slug):
+    # Récupérer le produit en fonction du slug
     product = get_object_or_404(Product, slug=slug)
-    order_item, created = OrderItem.objects.get_or_create(
-        customer=request.user,
-        product=product,
-    )
 
+    # Récupérer ou créer le panier en cours pour l'utilisateur connecté
+    order, created = Order.objects.get_or_create(customer=request.user.customer, completed=False)
+
+    # Récupérer ou créer l'élément de commande pour le produit
+    order_item, created = OrderItem.objects.get_or_create(order=order, product=product, ordered=False)
+
+    # Mettre à jour la quantité et envoyer un message approprié
+    if created:
+        messages.success(request, "Produit ajouté au panier avec succès.")
+    else:
+        order_item.quantity += 1
+        order_item.save()
+        messages.info(request, "La quantité du produit a été mise à jour.")
+
+    # Rediriger vers la page du panier
+    return redirect('products')
 
 
 @login_required
 def cart(request):
     if request.user.is_client:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(customer=customer, completed=False)
         items = order.orderitem_set.all()
         print(items)
         cartItems = order.get_cart_items()
@@ -44,7 +57,7 @@ def cart(request):
 def checkout(request):
     if request.user.is_client:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(customer=customer, completed=False)
         items = order.orderitem_set.all()
         print(items)
         cartItems = order.get_cart_items()
@@ -74,7 +87,7 @@ def product_detail(request, slug):
     product_cat = product.category
     related_products=product_cat.product_set.all()
 
-    return render(request, "store/index.html", context={"product":product, 'related_products':related_products})
+    return render(request, "store/product_detail.html", context={"product":product, 'related_products':related_products})
 
 @consultant_required
 def product_create_view(request):

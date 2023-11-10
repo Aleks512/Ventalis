@@ -11,44 +11,64 @@
         </div>
     {% endif %}
 
-    <div class="container mt-4">
-         <div class="row justify-content-center align-items-center h-100">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header bg-black">
-                        <h4 class="mb-0">{{ product.name }}</h4>
-                    </div>
-                    <div class="card-body">
-                        {% for message in messages %}
-                            <div class="alert alert-info">{{ message }}</div>
-                        {% endfor %}
-                        <div class="row">
-                            <div class="col-md-6">
-                                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <h5>Prix unitaire:</h5>
-                                    <p>{{ product.unit_price }} €</p>
-                                    <p class="info-custom">Prix pour 1000 unités : {{ product.price_for_1000_units }}</p>
+
+<!-- Product section-->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{ product.image.url }}" alt="{{ product.name }}" /></div>
+            <div class="col-md-6">
+                <div class="small mb-1">{{ product.category }}</div>
+                <h1 class="display-5 fw-bolder">{{ product.name }}</h1>
+                <div class="fs-5 mb-5">
+                    <span class="text-decoration-line-through">$45.00</span>
+                    <span>{{ product.price }} €</span>
+                </div>
+                <p class="lead">{{ product.description }}</p>
+                <div class="d-flex">
+                    <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
+                    <button href="{% url 'add-to-cart' slug=product.slug %}" class="btn btn-outline-dark flex-shrink-0 custom-button rounded" type="submit">
+                        <i class="bi-cart-fill me-1"></i>
+                        Ajouter au panier
+                    </button>
+                            <div class="text-end">
+                                    <a href="{% url 'add-to-cart' product.slug %}" class="btn custom-btn" style="background-color: #27b547; border-color: #27b547;">Ajouter au panier</a>
                                 </div>
-                                <div class="mb-3">
-                                    <h5>Description:</h5>
-                                    <p>{{ product.description }}</p>
-                                </div>
-                                <div class="text-end">
-                                    <a href="#" class="btn custom-btn" style="background-color: #27b547; border-color: #27b547;">Ajouter au panier</a>
-                                    <p></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
-      </div>
+</section>
+<!-- Related items section-->
+<!-- Related items section -->
+<section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5 mt-5">
+        <h2 class="fw-bolder mb-4">Related products</h2>
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for product in related_products %}
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- Product image-->
+                        <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" />
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder">{{ product.name }}</h5>
+                                <!-- Product price-->
+                                {{ product.price }}
+                            </div>
+                        </div>
+                        <!-- Product actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ product.get_absolute_url }}">Afficher</a></div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
 {% endblock %}
-
-

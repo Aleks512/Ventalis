@@ -61,13 +61,14 @@ class Product(models.Model):
         return self.name
 
 
+
+
 class Order(models.Model):
     customer = models.ForeignKey('users.Customer', verbose_name=_("Client"), on_delete=models.CASCADE)
-    comment = models.TextField(verbose_name=_("Commantaire sur commande"),blank=True, null=True)
+    transactionId = models.CharField(max_length=20, blank=True, null=True)
     date_ordered = models.DateTimeField(_("Date de commande"), auto_now_add=True)
-    complete = models.BooleanField(_("Commande complète"), default=False)
-    transaction_id = models.CharField(_("ID de transaction"), max_length=100, blank=True)
-
+    completed = models.BooleanField(_("Commande complète"), default=False)
+    comment = models.TextField(verbose_name=_("Commantaire sur commande"), blank=True, null=True)
     def __str__(self):
         return str(self.id)
     @property
@@ -89,15 +90,14 @@ class Order(models.Model):
         total = sum([item.quantity for item in orderitems])
         return total
 
-
 class OrderItem(models.Model):
     customer = models.ForeignKey('users.Customer', verbose_name=_("Client"), on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, verbose_name=_("Produit"), on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(Order, verbose_name=_("Commande"), on_delete=models.CASCADE)
+    ordered = models.BooleanField(default=False)
+    product = models.ForeignKey(Product, verbose_name=_("Produit"), on_delete=models.CASCADE, null=True)
     quantity = models.PositiveIntegerField(_("Quantité"), default=1000)
     comment = models.TextField(verbose_name=_("Commantaire sur articles"), blank=True, null=True)
     date_added = models.DateTimeField(_("Date d'ajout"), auto_now_add=True)
-    ordered = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
     @property
