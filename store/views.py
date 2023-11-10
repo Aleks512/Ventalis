@@ -1,11 +1,12 @@
 import asyncio
 
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpResponseForbidden, HttpResponse
+from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from pprint import pprint
 
+from django.views.decorators.http import require_POST
 
 from .forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm
 from .models import Category, Product, Order, OrderItem
@@ -119,3 +120,24 @@ def product_delete_view(request, slug):
     return redirect('products-list-mng')
 
 
+@require_POST
+def update_cart_item_quantity(request, item_id, action):
+    item = get_object_or_404(OrderItem, id=item_id)
+
+    if action == 'increment':
+        item.quantity += 1
+    elif action == 'decrement':
+        if item.quantity > 1000:
+            item.quantity -= 1
+
+    item.save()
+
+    cart_total = item.order.get_cart_total()  # Update the cart's total
+    cart_items = item.order.get_cart_items()  # Update the total number of items in the cart
+
+    return JsonResponse({
+        'quantity': item.quantity,
+        'total': item.get_total,  # Pass the property directly
+        'cart_total': cart_total,
+        'cart_items': cart_items,
+    })

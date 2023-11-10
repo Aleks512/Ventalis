@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from .views import update_cart_item_quantity
 
 urlpatterns = [
 	#Leave as empty string for base url
@@ -14,5 +15,8 @@ urlpatterns = [
 	path('product/create/', views.product_create_view, name='product-create'),
 	path('product/<slug:slug>/update/', views.product_update_view, name='product-update'),
 	path('product/<slug:slug>/delete/', views.product_delete_view, name='product-delete'),
+	path('update_cart_item_quantity/<int:item_id>/<str:action>/', update_cart_item_quantity, name='update_cart_item_quantity'),
+
+
 
 ]

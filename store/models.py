@@ -79,11 +79,12 @@ class Order(models.Model):
             if orderitem.quantity >= 1000:
                 shipping = True
         return shipping
-    @property
-    def get_cart_taotal(self):
+
+    def get_cart_total(self):
         orderitems = self.orderitem_set.all()
         total = sum([item.get_total for item in orderitems])
         return total
+
 
     def get_cart_items(self):
         orderitems = self.orderitem_set.all()

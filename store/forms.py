@@ -38,15 +38,20 @@ class ProductDeleteForm(forms.ModelForm):
 # ------------ Orders --------------------
 class OrderItemUpdateForm(forms.ModelForm):
     class Meta:
-        model = Order
+        model = OrderItem
         fields = ('product', 'quantity')
 
 class OrderItemDeleteForm(forms.ModelForm):
     class Meta:
-        model = Order
+        model = OrderItem
         fields = '__all__'
 
 class OrderItemForm(forms.ModelForm):
     class Meta:
-        model = Order
+        model = OrderItem
         fields = '__all__'
+#
+# orders = Order.objects.all()
+# order_vide = Order.objects.filter(transactionId="")
+# oroder1= Order.objects.get(id=7)
+
