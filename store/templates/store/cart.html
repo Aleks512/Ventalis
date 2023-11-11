@@ -10,8 +10,8 @@
                 <br>
                 <table class="table">
                     <tr>
-                        <th><h5 class="cart-total">Articles: <strong>{{order.get_cart_items}}</strong></h5></th>
-                        <th><h5 class="cart-items">Total:<strong>{{order.get_cart_total}}</strong></h5></th>
+                        <th><h5 id="total-items">Articles: <strong>{{order.get_cart_items}}</strong></h5></th>
+                        <th><h5 id="total-cart">Total:<strong>{{order.get_cart_total}}</strong></h5></th>
                         <th>
                             <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'checkout' %}">Checkout</a>
                         </th>
@@ -79,10 +79,10 @@
                 document.getElementById(`total_${itemId}`).innerText = data.total;
 
                 // Update the total of the cart
-                document.getElementById('cart-total').innerText = data.cart_total;
+                document.getElementById('total-cart').innerText = data.cart_total;
 
                 // Update the total number of items in the cart
-                document.getElementById('cart-items').innerText = data.get_cart_items;
+                document.getElementById('total-items').innerText = data.cart_items;
             })
             .catch(error => console.error('Error:', error));
         }

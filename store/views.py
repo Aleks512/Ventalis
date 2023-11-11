@@ -28,7 +28,7 @@ def add_to_cart(request, slug):
     order, created = Order.objects.get_or_create(customer=request.user.customer, completed=False)
 
     # Récupérer ou créer l'élément de commande pour le produit
-    order_item, created = OrderItem.objects.get_or_create(order=order, product=product, ordered=False)
+    order_item, created = OrderItem.objects.get_or_create(customer=request.user.customer,order=order, product=product, ordered=False)
 
     # Mettre à jour la quantité et envoyer un message approprié
     if created:

@@ -50,7 +50,14 @@ class OrderItemForm(forms.ModelForm):
     class Meta:
         model = OrderItem
         fields = '__all__'
-#
+
+
+
+# order_items=OrderItem.objects.all()
+# for item in order_items:
+#     order = item.order
+#     prix = item.get_total
+#     customer= item.customer
 # orders = Order.objects.all()
 # order_vide = Order.objects.filter(transactionId="")
 # oroder1= Order.objects.get(id=7)
