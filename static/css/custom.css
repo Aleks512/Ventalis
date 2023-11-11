@@ -80,6 +80,26 @@ h1, h2, h3{
   color: var(--custom-button-hover-text) !important;
 }
 
+/*------------------------------------BTN--------------------------------------------*/
+.custom-button-delete-1 {
+  background-color: transparent;
+  color: var(--custom-button-text) !important;
+  border: none;
+}
+
+.custom-button-delete-1:hover {
+  background-color: var(--custom-button-hover-bg) !important;
+  color: var(--custom-button-hover-text) !important;
+}
+
+.\F78B {
+    /* Ajoutez vos styles personnalisés ici */
+    border: none;
+    background-color: transparent;
+    color: red;
+    /* Autres styles personnalisés... */
+}
+
 /*------------------------------------MESSAGERIE--------------------------------------------*/
 .inbox-icon-container {
   margin-right: 15px;
@@ -98,7 +118,7 @@ h1, h2, h3{
   width: 25%
 }
 .received-message {
-  background-color: rgb(1, 196, 255);
+  background-color: var(--primary-color);
   color: #fff;
   border-radius: 30px;
   padding: 10px 25px;
@@ -166,9 +186,6 @@ a {
 	margin-top: 10px;
 }
 
-.btn{
-	border-radius: 0%;
-}
 
 .row-image{
 	width: 100px;
@@ -300,3 +317,4 @@ a.categorie-plus:link{
 a.categorie-plus:hover {
   color: darkgreen !important;  /* Couleur de texte au survol */
 }
+/*  CART BUTTON*/

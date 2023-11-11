@@ -7,6 +7,7 @@ from django.contrib import messages
 from pprint import pprint
 
 from django.views.decorators.http import require_POST
+from django.views.generic import DeleteView
 
 from .forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm
 from .models import Category, Product, Order, OrderItem
@@ -40,6 +41,15 @@ def add_to_cart(request, slug):
 
     # Rediriger vers la page des produits
     return redirect('products')
+
+
+class OrderItemDeleteView(DeleteView):
+    model = OrderItem
+    template_name = "store/order_item_delete.html"
+    fields = '__all__'
+    def get_success_url(self):
+        return '/cart'
+
 
 
 @login_required

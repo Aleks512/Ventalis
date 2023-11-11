@@ -2,50 +2,91 @@
 {% load static %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="box-element">
-                <a class="btn btn-outline-dark" href="{% url 'products' %}">&#x2190; Continuer achats</a>
-                <br>
-                <br>
-                <table class="table">
-                    <tr>
-                        <th><h5 id="total-items">Articles: <strong>{{order.get_cart_items}}</strong></h5></th>
-                        <th><h5 id="total-cart">Total:<strong>{{order.get_cart_total}}</strong></h5></th>
-                        <th>
-                            <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'checkout' %}">Checkout</a>
-                        </th>
-                    </tr>
-                </table>
-            </div>
-            <br>
-            <div class="box-element">
-                <div class="cart-row">
-                    <div style="flex:2"></div>
-                    <div style="flex:2"><strong>Article</strong></div>
-                    <div style="flex:1"><strong>Prix</strong></div>
-                    <div style="flex:1"><strong>Quantité</strong></div>
-                    <div style="flex:1"><strong>Total</strong></div>
-                </div>
-                {% for item in items %}
-                    <div class="cart-row">
-    <div style="flex:2"><img class="row-image" src="{{item.product.imageURL}}"></div>
-    <div style="flex:2"><p>{{item.product.name}}</p></div>
-    <div style="flex:1"><p>{{item.product.price}} €</p></div>
-    <div style="flex:1">
-        <p class="quantity" id="quantity_{{item.id}}">{{item.quantity}}</p>
-        <div class="quantity">
-            <img class="chg-quantity" data-id="{{item.id}}" data-action="increment" src="{% static  'images/shop/arrow-up.png' %}">
-            <img class="chg-quantity" data-id="{{item.id}}" data-action="decrement" src="{% static  'images/shop/arrow-down.png' %}">
 
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box-element">
+            <a class="btn btn-outline-dark" href="{% url 'products' %}">&#x2190; Continuer achats</a>
+            <br>
+            <br>
+            <table class="table">
+                <tr>
+                    <th><h5 id="total-items">Articles: <strong>{{order.get_cart_items}}</strong></h5></th>
+                    <th><h5 id="total-cart">Total:<strong>{{order.get_cart_total}}</strong></h5></th>
+                    <th>
+                        <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'checkout' %}">Checkout</a>
+                    </th>
+                </tr>
+            </table>
         </div>
-    </div>
-    <div style="flex:1"><p id="total_{{item.id}}">{{item.get_total}} €</p></div>
-</div>
-                {% endfor %}
+        <br>
+        <div class="box-element">
+            <div class="cart-row">
+                <div style="flex:1"></div>
+                <div style="flex:2; text-align: center;"><strong>Article</strong></div>
+                <div style="flex:1; text-align: center;"><strong>Prix</strong></div>
+                <div style="flex:1; text-align: center;"><strong>Quantité</strong></div>
+                <div style="flex:1; text-align: center;"><strong>Total</strong></div>
+                <div style="flex:1"></div>
             </div>
+            {% for item in items %}
+            <div class="cart-row" style="display: flex; align-items: center;">
+                <div style="flex: 1;"><img class="row-image" src="{{item.product.imageURL}}"></div>
+                <div style="flex: 2; text-align: center;"><p>{{item.product.name}}</p></div>
+                <div style="flex: 1; text-align: center;"><p>{{item.product.price}} €</p></div>
+                <div style="flex: 1; text-align: center;">
+                    <p class="quantity" id="quantity_{{item.id}}">{{item.quantity}}</p>
+                    <div class="quantity">
+                        <img class="chg-quantity" data-id="{{item.id}}" data-action="increment"
+                            src="{% static 'images/shop/arrow-up.png' %}">
+                        <img class="chg-quantity" data-id="{{item.id}}" data-action="decrement"
+                            src="{% static 'images/shop/arrow-down.png' %}">
+                    </div>
+                </div>
+                <div style="flex: 1; text-align: center;">
+                    <p id="total_{{item.id}}">{{item.get_total}} €</p>
+                </div>
+                <div style="flex: 1; text-align: center;">
+                    <!-- Bouton pour ouvrir le modal -->
+                    <button class="btn custom-button-delete-1" data-bs-toggle="modal"
+                        data-bs-target="#deleteModal{{ item.product.id }}">
+                        <i class="bi bi-trash-fill me-2"></i> &#xF78B; Supprimer
+                    </button>
+
+                    <!-- Modal de confirmation -->
+                    <div class="modal fade" id="deleteModal{{ item.product.id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="deleteModalLabel{{ item.product.id }}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel{{ item.product.id }}">
+                                        Confirmation de suppression</h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Êtes-vous sûr de vouloir supprimer {{item.product.name}} du panier ?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Annuler</button>
+                                    <!-- Formulaire pour la suppression -->
+                                    <form method="post" action="{% url 'order-item-delete' item.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn \F78B">Supprimer</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
+</div>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

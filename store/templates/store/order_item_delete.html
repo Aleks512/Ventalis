@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% if messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+<div class="container-fluid text-light" style="background-color: #f8f9fa; height: 90vh; font-family: 'Lato', sans-serif; color: #777;">
+  <div class="row justify-content-center align-items-center h-100">
+    <div class="col-md-8">
+      <div class="card border-0 shadow-lg">
+        <div class="card-header" style="background-color: #000000; color: #27b547;">
+          <h4>Supprimer le produit "{{ order_item.name }}"</h4>
+        </div>
+        <div class="card-body">
+          <p>Êtes-vous sûr de vouloir supprimer cette commande?</p>
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            <button type="submit" class="btn btn-danger">Supprimer</button>
+            <a href="{% url 'cart' %}" class="btn btn-secondary">Annuler</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
