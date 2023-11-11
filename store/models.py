@@ -9,10 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
 
-ADDRESS_CHOICES = (
-    ('B', 'Billing'),
-    ('S', 'Shipping'),
-)
+
 class Category(models.Model):
     name = models.CharField(_("Nom"), max_length=255, unique=True)
     description = models.TextField(_("Description"), blank=True)
@@ -113,19 +110,4 @@ class OrderItem(models.Model):
         total = self.product.price * self.quantity
         return total
 
-class Address(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Client"), on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, verbose_name=_("Commande"), on_delete=models.CASCADE, blank=True, null=True)
-    address = models.TextField(_("Adresse"))
-    city = models.CharField(_("Ville"), max_length=100)
-    country = models.CharField(_("Pays"), max_length=100)
-    zipcode = models.CharField(_("Code postal"), max_length=20)
-    date_added = models.DateTimeField(_("Date d'ajout"), auto_now_add=True)
-    address_type = models.CharField(max_length=1, choices=ADDRESS_CHOICES)
-    default = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.address
-
-    class Meta:
-        verbose_name_plural = 'Addresses'

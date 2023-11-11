@@ -7,6 +7,10 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
+from Ventalis import settings
+from store.models import Order
+
+
 class CustomAccountManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers
@@ -40,6 +44,10 @@ class CustomAccountManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True')
         return self._create_user(email, password, **extra_fields)
 
+ADDRESS_CHOICES = (
+    ('B', 'Billing'),
+    ('S', 'Shipping'),
+)
 class NewUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('Email'),unique=True, blank=False, max_length=255)
     first_name = models.CharField(_("Prénom"), max_length=100)
@@ -124,3 +132,20 @@ class Customer(NewUser):
         if not self.consultant_applied:
             self.consultant_applied = self.assign_consultant_to_client()
         super().save(*args, **kwargs)
+
+class Address(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Client"), on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, verbose_name=_("Commande"), on_delete=models.CASCADE, blank=True, null=True)
+    address = models.TextField(_("Adresse"))
+    city = models.CharField(_("Ville"), max_length=100)
+    country = models.CharField(_("Pays"), max_length=100)
+    zipcode = models.CharField(_("Code postal"), max_length=20)
+    date_added = models.DateTimeField(_("Date d'ajout"), auto_now_add=True)
+    address_type = models.CharField(max_length=1, choices=ADDRESS_CHOICES)
+    default = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.address
+
+    class Meta:
+        verbose_name_plural = 'Addresses'

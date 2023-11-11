@@ -52,7 +52,6 @@ class OrderItemForm(forms.ModelForm):
         fields = '__all__'
 
 
-
 # order_items=OrderItem.objects.all()
 # for item in order_items:
 #     order = item.order
@@ -61,4 +60,5 @@ class OrderItemForm(forms.ModelForm):
 # orders = Order.objects.all()
 # order_vide = Order.objects.filter(transactionId="")
 # oroder1= Order.objects.get(id=7)
+
 
