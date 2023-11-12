@@ -1,6 +1,5 @@
 import random
 import string
-
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
@@ -8,7 +7,6 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
-from users.models import Address
 
 
 class Category(models.Model):
@@ -78,10 +76,11 @@ class Order(models.Model):
 
     @property
     def shipping(self):
-        # Vérifie si l'utilisateur a une adresse associée
+        from users.models import Address # # Import Address locally, not at the beginning of the file, if not circular import issue
+        # Check if the user has an associated address.
         has_address = Address.objects.filter(user=self.customer.user).exists()
 
-        # Si l'utilisateur a une adresse, retourne True, sinon utilise la logique des articles à haute quantité
+        # If the user has an address, and use the logic for high quantity items, return True.
         return has_address and self.has_high_quantity_items()
 
     def get_cart_total(self):

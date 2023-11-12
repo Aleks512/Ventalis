@@ -56,7 +56,7 @@ class OrderItemForm(forms.ModelForm):
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
-        fields = ['address', 'city', 'country', 'zipcode']
+        fields = ['street', 'city', 'country', 'zipcode']
 
 
 # order_items=OrderItem.objects.all()
