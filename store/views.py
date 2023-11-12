@@ -9,7 +9,7 @@ from pprint import pprint
 from django.views.decorators.http import require_POST
 from django.views.generic import DeleteView
 
-from .forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm
+from .forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm, AddressForm
 from .models import Category, Product, Order, OrderItem
 
 
@@ -70,9 +70,27 @@ def checkout(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, completed=False)
         items = order.orderitem_set.all()
-        print(items)
+
+        if request.method == 'POST':
+            form = AddressForm(request.POST)
+            if form.is_valid():
+                address = form.save(commit=False)
+                address.user = request.user
+                address.order = order
+                address.address_type = 'S'  # Assume 'S' for shipping, adjust as needed
+                address.default = True  # You might want to adjust this based on your logic
+                address.save()
+
+                # Continue with your checkout logic here
+
+                return redirect('checkout')  # Redirect to the checkout page or another page
+
+        else:
+            form = AddressForm()
+
+
         cartItems = order.get_cart_items()
-        context = {'items': items, 'order': order, 'cartItems': cartItems}
+        context = {'items': items, 'order': order, 'cartItems': cartItems, 'form': form}
         return render(request, 'store/checkout.html', context)
     else:
         return HttpResponseForbidden("You are not authorized to access this page.")

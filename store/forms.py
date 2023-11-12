@@ -1,4 +1,6 @@
 from django import forms
+
+from users.models import Address
 from .models import Category, Product, Order, OrderItem
 class ProductCreateForm(forms.ModelForm):
     class Meta:
@@ -50,6 +52,11 @@ class OrderItemForm(forms.ModelForm):
     class Meta:
         model = OrderItem
         fields = '__all__'
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ['address', 'city', 'country', 'zipcode']
 
 
 # order_items=OrderItem.objects.all()

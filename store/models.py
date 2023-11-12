@@ -8,6 +8,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
+from users.models import Address
 
 
 class Category(models.Model):
@@ -68,14 +69,20 @@ class Order(models.Model):
     comment = models.TextField(verbose_name=_("Commantaire sur commande"), blank=True, null=True)
     def __str__(self):
         return str(self.id)
-    @property
-    def shipping(self):
-        shipping = False
+    def has_high_quantity_items(self):
         orderitems = self.orderitem_set.all()
         for orderitem in orderitems:
             if orderitem.quantity >= 1000:
-                shipping = True
-        return shipping
+                return True
+        return False
+
+    @property
+    def shipping(self):
+        # Vérifie si l'utilisateur a une adresse associée
+        has_address = Address.objects.filter(user=self.customer.user).exists()
+
+        # Si l'utilisateur a une adresse, retourne True, sinon utilise la logique des articles à haute quantité
+        return has_address and self.has_high_quantity_items()
 
     def get_cart_total(self):
         orderitems = self.orderitem_set.all()
