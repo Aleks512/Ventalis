@@ -66,7 +66,7 @@ def cart(request):
         return HttpResponseForbidden("You are not authorized to access this page.")
 @login_required
 def checkout(request):
-    if request.user.is_client:
+    if request.user:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, completed=False)
         items = order.orderitem_set.all()

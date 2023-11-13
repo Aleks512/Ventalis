@@ -134,7 +134,7 @@ class Customer(NewUser):
         super().save(*args, **kwargs)
 
 class Address(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Client"), on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(Customer, verbose_name=_("Client"), on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(Order, verbose_name=_("Commande"), on_delete=models.CASCADE, blank=True, null=True)
     street = models.CharField(_("Street"), max_length=100)
     city = models.CharField(_("Ville"), max_length=100)
