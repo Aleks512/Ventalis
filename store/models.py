@@ -32,6 +32,7 @@ class Product(models.Model):
     name = models.CharField(_("Nom"), max_length=255)
     description = models.TextField(_("Description"), blank=True)
     price = models.DecimalField(_("Prix"), max_digits=10, decimal_places=2)
+    discount_price = models.DecimalField(_("Prix"), max_digits=10, decimal_places=2, blank=True, null=True)
     image = models.ImageField(_("Image"), upload_to='products/', null=True, blank=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True, editable=False)
     slug = models.SlugField(_("Slug"), unique=True, max_length=255)
@@ -115,6 +116,11 @@ class OrderItem(models.Model):
     @property
     def get_total(self):
         total = self.product.price * self.quantity
+        return total
+
+    @property
+    def get_total_discount_price(self):
+        total = self.product.discount_price * self.quantity
         return total
 
 
