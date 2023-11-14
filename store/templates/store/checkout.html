@@ -5,11 +5,10 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="box-element" id="form-wrapper">
-                {% if not order.has_already_address %}
                 <form method="POST" id="form">
                     {% csrf_token %}
                     <div id="user-info">
-                        <div id="shipping-info">
+                        <div id="shipping-info" {% if not need_shipping_address %} style="display:none"{% endif %}>
                             <hr>
                             <p>Shipping Information:</p>
                             <hr>
@@ -27,17 +26,20 @@
                             </div>
 
                             <hr>
-                            <input id="form-butt" class="btn btn-success btn-block" type="submit" value="Continue">
+                            <input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
                         </div>
+                        ADRESS:
+                        {{request.user.customer.company}}
+                        {{request.user.customer.address_set.street}}
                     </div>
                 </form>
-                {% endif %}
             </div>
             <br>
-            <div class="box-element" id="payment-info" {% if has_already_address %}style="display:none"{% endif %}>
+<!--            <div class="box-element" id="payment-info">-->
+            <div class="box-element" id="payment-info" {% if need_shipping_address %}style="display:none"{% endif %}>
                 <small> Paypal Options </small>
-                <button id="make-payment" {% if not has_already_address %}style="display:none"{% endif %}>Payer</button>
-                <p id="payment-message" {% if not has_already_address %}style="display:none"{% endif %}>Adresse soumise, étape suivante : le paiement</p>
+                <button id="make-payment">Payer</button>
+                <p id="payment-message">Adresse soumise, étape suivante : le paiement</p>
             </div>
         </div>
 
@@ -60,39 +62,6 @@
             </div>
         </div>
     </div>
-
-
-
-<!--var shipping = '{{order.has_already_address}}'-->
-
-<script>
-    window.onload = function() {
-        var  shipping= '{{order.need_shipping_address}}';
-        console.log('need desesperally address', shipping);
-
-        if (shipping === 'False') {
-            document.getElementById('shipping-info').innerHTML = '';
-        //     document.getElementById('form-wrapper').classList.add('hidden');
-        //     document.getElementById('payment-info').classList.remove('hidden');
-         }
-        //
-        // var form = document.getElementById('form');
-        // form.addEventListener('submit', function(e) {
-        //     // e.preventDefault();
-        //     console.log('Form Submitted...');
-        //     document.getElementById('form-butt').classList.add('hidden');
-        //     document.getElementById('payment-info').classList.remove('hidden');
-        // });
-        //
-        // document.getElementById('make-payment').addEventListener('click', function(e) {
-        //     submitFormData();
-        // });
-        //
-        // function submitFormData() {
-        //     console.log('Payment button clicked');
-        // }
-    };
-</script>
 
 
 {% endblock %}

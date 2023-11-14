@@ -85,12 +85,11 @@ def checkout(request):
                 address_form.address_type = 'S'
                 address_form.default = True
                 address_form.save()
-
                 # Continue with your checkout logic here
                 return redirect('checkout')  # Redirect to the checkout page or another page
-
         else:
             form = AddressForm()
+
 
 
         cartItems = order.get_cart_items()
