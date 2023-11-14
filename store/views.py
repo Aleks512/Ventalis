@@ -64,25 +64,29 @@ def cart(request):
         return render(request, 'store/cart.html', context)
     else:
         return HttpResponseForbidden("You are not authorized to access this page.")
-@login_required
+@login_required()
 def checkout(request):
     if request.user:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, completed=False)
         items = order.orderitem_set.all()
 
+
         if request.method == 'POST':
-            form = AddressForm(request.POST)
-            if form.is_valid():
-                address = form.save(commit=False)
-                address.user = request.user
+            address_form = AddressForm(request.POST)
+            if address_form.is_valid():
+                address = address_form.save(commit=False)
+                address.user = request.user.customer
                 address.order = order
-                address.address_type = 'S'  # Assume 'S' for shipping, adjust as needed
-                address.default = True  # You might want to adjust this based on your logic
+                address.city = request.POST.get('city')
+                address.street = request.POST.get('street')
+                address.country = request.POST.get('country')
+                address.zipcode = request.POST.get('zipcode')
+                address.address_type = 'S'
+                address.default = True
                 address.save()
 
                 # Continue with your checkout logic here
-
                 return redirect('checkout')  # Redirect to the checkout page or another page
 
         else:
@@ -95,7 +99,10 @@ def checkout(request):
     else:
         return HttpResponseForbidden("You are not authorized to access this page.")
 
-# Fonction de vérification pour s'assurer que l'utilisateur est un consultant
+# Fonction de vérification pour s'assurer que l'utilisateur est un consultant$
+
+
+
 def is_consultant(user):
     return user.is_authenticated and user.is_employee
 
