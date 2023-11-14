@@ -75,16 +75,16 @@ def checkout(request):
         if request.method == 'POST':
             address_form = AddressForm(request.POST)
             if address_form.is_valid():
-                address = address_form.save(commit=False)
-                address.user = request.user.customer
-                address.order = order
-                address.city = request.POST.get('city')
-                address.street = request.POST.get('street')
-                address.country = request.POST.get('country')
-                address.zipcode = request.POST.get('zipcode')
-                address.address_type = 'S'
-                address.default = True
-                address.save()
+                address_form = address_form.save(commit=False)
+                address_form.user = request.user.customer
+                address_form.order = order
+                address_form.city = request.POST.get('city')
+                address_form.street = request.POST.get('street')
+                address_form.country = request.POST.get('country')
+                address_form.zipcode = request.POST.get('zipcode')
+                address_form.address_type = 'S'
+                address_form.default = True
+                address_form.save()
 
                 # Continue with your checkout logic here
                 return redirect('checkout')  # Redirect to the checkout page or another page

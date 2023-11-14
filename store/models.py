@@ -79,10 +79,8 @@ class Order(models.Model):
     def need_shipping_address(self):
         from users.models import Address # # Import Address locally, not at the beginning of the file, if not circular import issue
         # Check if the user has an associated address.
-        if not Address.objects.filter(user=self.customer).exists():
-            return True
-        else :
-            return False
+        return not Address.objects.filter(user=self.customer).exists()
+
 
 
     def get_cart_total(self):
