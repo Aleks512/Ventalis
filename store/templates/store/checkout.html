@@ -2,74 +2,95 @@
 {% load static %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="box-element" id="form-wrapper">
+<div class="row">
+
+</div>
+
+<!-- Order Summary Section -->
+<div class="row mt-4">
+        <!-- Address Section -->
+    <div class="col-lg-6 mb-4 shadow">
+        <div class="card shadow">
+            <div class="card-body" id="form-wrapper">
                 {% if existing_address %}
                     <!-- Display existing address -->
-                    <p>Address</p>
-                    <h3>{{request.user.customer.company}}</h3>
-                    <p>{{ existing_address }}</p>
+                    <h4 class="card-title">Your last shipping address:</h4>
+                    <h5>{{ request.user.customer.company }}</h5>
+                    <p class="card-text">{{ existing_address }}</p>
                     <!-- Add Edit button to open modal /Trigger/Open The Modal -->
-                <button id="myBtn" class="custom-button">Modifier</button>
+                    <button id="myBtn" class="custom-button btn btn-primary">Edit</button>
+                <hr>
                 {% else %}
+                    <!-- Address Form -->
                     <form method="POST" id="form">
                         {% csrf_token %}
                         {% if address_form %}
                             <div id="user-info">
+                                <!-- Shipping Information -->
                                 <div id="shipping-info" {% if not order.need_shipping_address %} style="display:none"{% endif %}>
                                     <hr>
-                                    <h3>Adresse d'expedition :</h3>
+                                    <h4>Shipping Address:</h4>
+                                    <p>You haven't provided an address yet.</p>
                                     <hr>
                                     <div class="form-field">
-                                        <input class="form-control" type="text" name="street" placeholder="Rue..">
+                                        <input class="form-control" type="text" name="street" placeholder="Street..">
                                     </div>
                                     <div class="form-field">
-                                        <input class="form-control" type="text" name="city" placeholder="Ville..">
+                                        <input class="form-control" type="text" name="city" placeholder="City..">
                                     </div>
                                     <div class="form-field">
-                                        <input class="form-control" type="text" name="zipcode" placeholder="Code postale..">
+                                        <input class="form-control" type="text" name="zipcode" placeholder="Postal Code..">
                                     </div>
                                     <div class="form-field">
-                                        <input class="form-control" type="text" name="country" placeholder="Pays..">
+                                        <input class="form-control" type="text" name="country" placeholder="Country..">
                                     </div>
-
                                     <hr>
-                                    <button id="form-button" class="btn btn-success btn-block" type="submit">Enregistrer</button>
+                                    <button id="form-button" class="btn btn-success btn-block" type="submit">Save</button>
+                                    <hr>
                                 </div>
-
                             </div>
                         {% endif %}
                     </form>
                 {% endif %}
-                <br>
-                <div class="box-element" id="payment-info" {% if order.need_shipping_address %}style="display:none"{% endif %}>
-                    <h2> Paypal Options </h2>
-                    <button id="make-payment">Payer</button>
-                    <p id="payment-message">Adresse soumise, étape suivante : le paiement</p>
-                </div>
             </div>
         </div>
 
-        <div class="col-lg-6">
-            <div class="box-element">
+     <!-- Payment Section -->
+        <div class="card shadow mt-4 ">
+            <div class="card-body" id="payment-info" {% if order.need_shipping_address %}style="display:none"{% endif %}>
+                <h2 class="card-title">Paypal Options</h2>
+                <button id="make-payment" class="btn btn-primary custom-button">Pay</button>
+                <p class="card-text">Address submitted, next step: payment</p>
+                <hr>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow">
+            <div class="card-body">
                 <a class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
                 <hr>
-                <h3>Order Summary</h3>
+                <h4 class="card-title">Order Summary</h4>
                 <hr>
                 {% for item in items %}
                     <div class="cart-row">
                         <div style="flex:2"><img class="row-image" src="{{ item.product.imageURL }}"></div>
-                        <div style="flex:2"><p>{{ item.product.name }}</p></div>
-                        <div style="flex:1"><p>{{ item.product.price|floatformat:2 }} €</p></div>
-                        <div style="flex:1"><p>{{ item.quantity }}</p></div>
+                        <div style="flex:2"><p class="card-text">{{ item.product.name }}</p></div>
+                        <div style="flex:1"><p class="card-text">{{ item.product.price|floatformat:2 }} €</p></div>
+                        <div style="flex:1"><p class="card-text">{{ item.quantity }}</p></div>
                     </div>
                 {% endfor %}
-                <h5>Articles: {{ order.get_cart_items }}</h5>
-                <h5>Total:{{ order.get_cart_total }} € </h5>
+                <h5 class="card-text">Articles: {{ order.get_cart_items }}</h5>
+                <h5 class="card-text">Total:{{ order.get_cart_total }} € </h5>
             </div>
         </div>
     </div>
+</div>
+
+
 
 <!-- The Modal -->
 
@@ -82,14 +103,15 @@
 
     </div>
     <div class="modal-body">
-        <form method="post" action="{% url 'edit_address' existing_address.id %}">
+        <form method="post" action="{% if existing_address.id %}{% url 'edit_address' existing_address.id %}{% endif %}">
+
 
             {% csrf_token %}
 
             <div>
                 <div >
                     <hr>
-                    <p>Adresse d'expedition:</p>
+                    <p>Adresse d'expedition pour {{request.user.customer.company}}:</p>
                     <hr>
                              <!-- Utilisez les valeurs de l'adresse existante comme valeurs par défaut dans le formulaire -->
                     <div class="form-field">

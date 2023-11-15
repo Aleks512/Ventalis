@@ -18,6 +18,7 @@ urlpatterns = [
 	path('update_cart_item_quantity/<int:item_id>/<str:action>/', update_cart_item_quantity, name='update_cart_item_quantity'),
 	path('order-item/<pk>/delete', views.OrderItemDeleteView.as_view(), name='order-item-delete'),
 	path('edit_address/<int:address_id>/', views.edit_address, name='edit_address'),
+	path('process-order/', views.process_order(), name='process-order'),
 
 
 

@@ -78,7 +78,6 @@ def checkout(request):
         existing_address = None
         if user_addresses.exists():
             existing_address = user_addresses.first()
-
         if request.method == 'POST':
             address_form = AddressForm(request.POST, instance=existing_address)
             if address_form.is_valid():
@@ -93,7 +92,7 @@ def checkout(request):
                 # Continue with your checkout logic here
                 return redirect('checkout')  # Redirect to the checkout page or another page
         else:
-            address_form = AddressForm(instance=existing_address)
+            address_form = AddressForm()
 
         cartItems = order.get_cart_items()
         context = {'items': items, 'order': order, 'cartItems': cartItems, 'address_form': address_form, 'existing_address': existing_address}
@@ -166,7 +165,6 @@ def update_cart_item_quantity(request, item_id, action):
     elif action == 'decrement':
         if item.quantity > 1000:
             item.quantity -= 1
-
     item.save()
 
     cart_total = item.order.get_cart_total()  # Update the cart's total
@@ -192,3 +190,10 @@ def edit_address(request, address_id):
         form = AddressForm(instance=address)
 
     return render(request, 'store/edit_address.html', {'form': form})
+
+
+def process_order(request, slug):
+
+
+    return redirect('products')
+
