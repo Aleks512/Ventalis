@@ -193,7 +193,11 @@ def edit_address(request, address_id):
 
 
 def process_order(request, slug):
-
+    if request.user.is_authenticated:
+        customer = request.user.customer
+    order, created = Order.objects.get_or_create(customer=customer, completed=False)
+    order_item = OrderItem.objects.get_or_create(customer=customer)
+    items = order.orderitem_set.all()
 
     return redirect('products')
 

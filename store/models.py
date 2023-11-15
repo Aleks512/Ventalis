@@ -102,6 +102,21 @@ class Order(models.Model):
             self.transactionId= self.get_transaction_id()
         super().save(*args, **kwargs)
 class OrderItem(models.Model):
+    class Status(models.TextChoices):
+        PENDING = 'P', _('En attente')
+        PROCESSING = 'PR', _('En traitement')
+        SHIPPED = 'S', _('Expédié')
+        DELIVERED = 'D', _('Livré')
+        RETURNED = 'R', _('Retourné')
+        # Ajoutez d'autres statuts au besoin
+
+    status = models.CharField(
+        max_length=2,
+        choices=Status.choices,
+        default=Status.PENDING,
+        verbose_name=_("Statut de la commande"),
+    )
+
     customer = models.ForeignKey('users.Customer', verbose_name=_("Client"), on_delete=models.CASCADE)
     order = models.ForeignKey(Order, verbose_name=_("Commande"), on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
