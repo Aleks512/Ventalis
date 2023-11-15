@@ -55,15 +55,17 @@
             </div>
         </div>
 
-     <!-- Payment Section -->
+        <!-- Payment Section -->
         <div class="card shadow mt-4 ">
             <div class="card-body" id="payment-info" {% if order.need_shipping_address %}style="display:none"{% endif %}>
                 <h2 class="card-title">Paypal Options</h2>
-                <button id="make-payment" class="btn btn-primary custom-button">Pay</button>
+                <!-- Ajoutez le lien vers process_order sans slug -->
+                <a href="{% url 'process-order' %}" class="btn btn-primary custom-button">Payer</a>
                 <p class="card-text">Address submitted, next step: payment</p>
                 <hr>
             </div>
         </div>
+
 
     </div>
 
