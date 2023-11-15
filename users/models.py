@@ -145,7 +145,9 @@ class Address(models.Model):
     default = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.city
+        return f"{self.street}, {self.city}, {self.country} {self.zipcode}"
 
     class Meta:
         verbose_name_plural = 'Addresses'
+    def get_edit_url(self):
+        return reverse('edit_address', args=[str(self.id)])

@@ -9,6 +9,7 @@ from pprint import pprint
 from django.views.decorators.http import require_POST
 from django.views.generic import DeleteView
 
+from users.models import Address
 from .forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm, AddressForm
 from .models import Category, Product, Order, OrderItem
 
@@ -64,6 +65,7 @@ def cart(request):
         return render(request, 'store/cart.html', context)
     else:
         return HttpResponseForbidden("You are not authorized to access this page.")
+
 @login_required()
 def checkout(request):
     if request.user:
@@ -71,29 +73,30 @@ def checkout(request):
         order, created = Order.objects.get_or_create(customer=customer, completed=False)
         items = order.orderitem_set.all()
 
+        # Check if the user has an existing address
+        user_addresses = Address.objects.filter(user=customer)
+        existing_address = None
+        if user_addresses.exists():
+            existing_address = user_addresses.first()
 
         if request.method == 'POST':
-            address_form = AddressForm(request.POST)
+            address_form = AddressForm(request.POST, instance=existing_address)
             if address_form.is_valid():
-                address_form = address_form.save(commit=False)
-                address_form.user = request.user.customer
-                address_form.order = order
-                address_form.city = request.POST.get('city')
-                address_form.street = request.POST.get('street')
-                address_form.country = request.POST.get('country')
-                address_form.zipcode = request.POST.get('zipcode')
-                address_form.address_type = 'S'
-                address_form.default = True
-                address_form.save()
+                address_instance = address_form.save(commit=False)
+                address_instance.user = customer
+                address_instance.order = order
+                address_instance.address_type = 'S'
+                address_instance.default = True
+                address_instance.save()
+                print(address_form.has_changed())
+                print(address_form.is_bound)
                 # Continue with your checkout logic here
                 return redirect('checkout')  # Redirect to the checkout page or another page
         else:
-            form = AddressForm()
-
-
+            address_form = AddressForm(instance=existing_address)
 
         cartItems = order.get_cart_items()
-        context = {'items': items, 'order': order, 'cartItems': cartItems, 'form': form}
+        context = {'items': items, 'order': order, 'cartItems': cartItems, 'address_form': address_form, 'existing_address': existing_address}
         return render(request, 'store/checkout.html', context)
     else:
         return HttpResponseForbidden("You are not authorized to access this page.")
@@ -175,3 +178,17 @@ def update_cart_item_quantity(request, item_id, action):
         'cart_total': cart_total,
         'cart_items': cart_items,
     })
+
+@login_required
+def edit_address(request, address_id):
+    address = Address.objects.get(pk=address_id)
+
+    if request.method == 'POST':
+        form = AddressForm(request.POST, instance=address)
+        if form.is_valid():
+            form.save()
+            return redirect('checkout')  # Redirigez l'utilisateur vers la page de profil ou une autre page
+    else:
+        form = AddressForm(instance=address)
+
+    return render(request, 'store/edit_address.html', {'form': form})
