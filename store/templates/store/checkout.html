@@ -7,15 +7,11 @@
             <div class="box-element" id="form-wrapper">
                 {% if existing_address %}
                     <!-- Display existing address -->
-                    <p>Existing Address:</p>
+                    <p>Address</p>
+                    <h3>{{request.user.customer.company}}</h3>
                     <p>{{ existing_address }}</p>
-                    <!-- Add Edit button to open modal -->
-
-
-<!-- Trigger/Open The Modal -->
-<button id="myBtn" class="custom-button">Modifier</button>
-
-
+                    <!-- Add Edit button to open modal /Trigger/Open The Modal -->
+                <button id="myBtn" class="custom-button">Modifier</button>
                 {% else %}
                     <form method="POST" id="form">
                         {% csrf_token %}
@@ -23,7 +19,7 @@
                             <div id="user-info">
                                 <div id="shipping-info" {% if not order.need_shipping_address %} style="display:none"{% endif %}>
                                     <hr>
-                                    <p>Shipping Information:</p>
+                                    <h3>Adresse d'expedition :</h3>
                                     <hr>
                                     <div class="form-field">
                                         <input class="form-control" type="text" name="street" placeholder="Rue..">
@@ -39,17 +35,16 @@
                                     </div>
 
                                     <hr>
-                                    <button id="form-button" class="btn btn-success btn-block" type="submit">Continue</button>
+                                    <button id="form-button" class="btn btn-success btn-block" type="submit">Enregistrer</button>
                                 </div>
-                                Company:
-                                {{ request.user.customer.company }}
+
                             </div>
                         {% endif %}
                     </form>
                 {% endif %}
                 <br>
                 <div class="box-element" id="payment-info" {% if order.need_shipping_address %}style="display:none"{% endif %}>
-                    <small> Paypal Options </small>
+                    <h2> Paypal Options </h2>
                     <button id="make-payment">Payer</button>
                     <p id="payment-message">Adresse soumise, étape suivante : le paiement</p>
                 </div>
@@ -77,16 +72,53 @@
     </div>
 
 <!-- The Modal -->
+
 <div id="myModal" class="modal">
 
   <!-- Modal content -->
   <div class="modal-content">
-    <span class="close">&times;</span>
+    <div class="modal-header">
+      <span class="ferme">&times;</span>
+
+    </div>
+    <div class="modal-body">
         <form method="post" action="{% url 'edit_address' existing_address.id %}">
+
             {% csrf_token %}
-            {{ address_form.as_p }}
-            <button type="submit" class="btn btn-primary">Save Changes</button>
+
+            <div>
+                <div >
+                    <hr>
+                    <p>Adresse d'expedition:</p>
+                    <hr>
+                             <!-- Utilisez les valeurs de l'adresse existante comme valeurs par défaut dans le formulaire -->
+                    <div class="form-field">
+                        <label for="street">Rue:</label>
+                        <input class="form-control" type="text" name="street" placeholder="Rue.." value="{{ existing_address.street }}">
+                    </div>
+                    <div class="form-field">
+                        <label for="city">Ville:</label>
+                        <input class="form-control" type="text" name="city" placeholder="Ville.." value="{{ existing_address.city }}">
+                    </div>
+                    <div class="form-field">
+                        <label for="zipcode">Code postal:</label>
+                        <input class="form-control" type="text" name="zipcode" placeholder="Code postale.." value="{{ existing_address.zipcode }}">
+                    </div>
+                    <div class="form-field">
+                        <label for="country">Pays:</label>
+                        <input class="form-control" type="text" name="country" placeholder="Pays.." value="{{ existing_address.country }}">
+                    </div>
+
+                    <hr>
+                    <button class="btn btn-success btn-block custom-button" type="submit">Enregistrer</button>
+                </div>
+
+            </div>
         </form>
+    </div>
+    <div class="modal-footer">
+      <h3></h3>
+    </div>
   </div>
 
 </div>
@@ -101,7 +133,7 @@ var modal = document.getElementById("myModal");
 var btn = document.getElementById("myBtn");
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+var span = document.getElementsByClassName("ferme")[0];
 
 // When the user clicks the button, open the modal
 btn.onclick = function() {
