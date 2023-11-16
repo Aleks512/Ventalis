@@ -1,5 +1,7 @@
 import asyncio
-
+import datetime
+from datetime import timezone
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -70,9 +72,12 @@ def cart(request):
 def checkout(request):
     if request.user:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, completed=False)
-        items = order.orderitem_set.all()
+        # # Vérifier si une commande non complétée existe déjà pour le client
+        # order = Order.objects.filter(customer=customer, completed=False).first()
 
+        # Si aucune commande n'existe, créer une nouvelle commande
+        order, created = Order.objects.get_or_create(customer=customer, completed=False)
+        items = OrderItem.objects.filter(order=order)
         # Check if the user has an existing address
         user_addresses = Address.objects.filter(user=customer)
         existing_address = None
@@ -193,39 +198,41 @@ def edit_address(request, address_id):
 
 
 def process_order(request):
+    transaction_id = datetime.datetime.now().timestamp()
     if request.user.is_authenticated:
         customer = request.user.customer
+        # Vérifier si une commande non complétée existe déjà pour le client
+        order, created = Order.objects.get_or_create(customer=customer, completed=False)
+        order.transactionId=transaction_id
+        order.completed = True
+        order.ordered_date = timezone.now
+        order.save()
+        # Set the status of each OrderItem to 'En traitement'
+        items = order.orderitem_set.all()
+        for item in items:
+            item.status = OrderItem.Status.PROCESSING
+            item.ordered = True
+            item.save()
 
-    order, created = Order.objects.get_or_create(customer=customer, completed=False)
-    order_items = OrderItem.objects.filter(customer=customer, order=order, ordered=False)
 
-    # Set the status of each OrderItem to 'En traitement'
-
-    items = order.orderitem_set.all()
-    for item in order_items:
-        item.status = OrderItem.Status.PROCESSING
-        item.ordered = True
-        item.save()
-
-    order.completed = True
-    order.save()
-
-    # Perform any other necessary actions related to processing the order
-
+        order.completed = True
+        order.save()
+        # Perform any other necessary actions related to processing the order
+    messages.success(request, 'Votre commande a été passée avec succès. Merci!')
     # Redirect to the 'products' page or wherever you want to redirect after processing the order
     return redirect('products')
 
-
-def process_payment(request):
-    # Ici, vous pouvez intégrer le traitement du paiement avec votre passerelle de paiement
-    # Dans cet exemple, nous simulons un paiement réussi
-    # Assurez-vous d'ajouter une logique appropriée pour le traitement des paiements réels
-    order_id = request.GET.get('order_id')
-    order = Order.objects.get(id=order_id)
-
-    # Marquez la commande comme complète
-    order.completed = True
-    order.save()
-
-    return HttpResponse("Paiement réussi !")
+# @login_required()
+# def process_payment(request):
+#     # Ici, vous pouvez intégrer le traitement du paiement avec votre passerelle de paiement
+#     # Dans cet exemple, nous simulons un paiement réussi
+#     # Assurez-vous d'ajouter une logique appropriée pour le traitement des paiements réels
+#     order_id = request.GET.get('order_id')
+#     order = Order.objects.get(id=order_id)
+#
+#     # Marquez la commande comme complète
+#     order.completed = True
+#     order.save()
+#
+#     return HttpResponse("Paiement réussi !")
 

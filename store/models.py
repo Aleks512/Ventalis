@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
-
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -97,10 +97,6 @@ class Order(models.Model):
     def get_transaction_id(self):
         return ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
 
-    def save(self, *args, **kwargs):
-        if not self.transactionId:
-            self.transactionId= self.get_transaction_id()
-        super().save(*args, **kwargs)
 class OrderItem(models.Model):
     class Status(models.TextChoices):
         PENDING = 'P', _('En attente')
@@ -123,7 +119,7 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, verbose_name=_("Produit"), on_delete=models.CASCADE, null=True)
     quantity = models.PositiveIntegerField(_("Quantité"), default=1000)
     comment = models.TextField(verbose_name=_("Commantaire sur articles"), blank=True, null=True)
-    date_added = models.DateTimeField(_("Date d'ajout"), auto_now_add=True)
+    date_added = models.DateTimeField(auto_now=True)
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
     @property

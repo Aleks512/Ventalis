@@ -52,7 +52,7 @@ class OrderItemDeleteForm(forms.ModelForm):
 class OrderItemForm(forms.ModelForm):
     class Meta:
         model = OrderItem
-        fields = '__all__'
+        fields = ['status', 'comment']
 
 class AddressForm(forms.ModelForm):
     class Meta:
@@ -68,5 +68,10 @@ class AddressForm(forms.ModelForm):
 # orders = Order.objects.all()
 # order_vide = Order.objects.filter(transactionId="")
 # oroder1= Order.objects.get(id=7)
+
+# from store.models import Order, OrderItem
+# orders = Order.objects.all().delete()
+# orders_i = OrderItem.objects.all().delete()
+
 
 
