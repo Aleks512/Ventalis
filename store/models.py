@@ -2,11 +2,13 @@ import random
 import string
 from django.contrib.auth.models import User
 from django.db import models
+from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
+from django.db.models.signals import pre_save
 
 
 class Category(models.Model):
@@ -132,4 +134,37 @@ class OrderItem(models.Model):
         total = self.product.discount_price * self.quantity
         return total
 
+class OrderItemStatusHistory(models.Model):
+    order_item = models.ForeignKey('OrderItem', verbose_name=_("Article de commande"), on_delete=models.CASCADE)
+    consultant = models.ForeignKey('users.Consultant', verbose_name=_("Consultant"), on_delete=models.CASCADE)
+    customer = models.ForeignKey('users.Customer', verbose_name=_("Client"), on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=2,
+        choices=OrderItem.Status.choices,
+        verbose_name=_("Nouveau statut de la commande"),
+    )
+    comment = models.TextField(verbose_name=_("Commentaire sur la modification"), blank=True, null=True)
+    date_modified = models.DateTimeField(_("Date de modification"), auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.order_item} - {self.status}"
+
+    @receiver(pre_save, sender=OrderItem)
+    def create_order_item_status_history(sender, instance, **kwargs):
+        # Vérifier si l'objet OrderItem a déjà été enregistré en base de données (mise à jour plutôt que création)
+        if instance.pk is not None:
+            # Récupérer l'objet OrderItem enregistré en base de données pour comparer les changements
+            old_order_item = OrderItem.objects.get(pk=instance.pk)
+
+            # Vérifier si le statut ou le commentaire a changé
+            if (
+                    instance.status != old_order_item.status or
+                    instance.comment != old_order_item.comment
+            ):
+                # Enregistrer l'historique seulement si l'un des éléments a changé
+                OrderItemStatusHistory.objects.create(
+                    order_item=instance,
+                    customer=instance.customer,
+                    status=instance.status,
+                    comment=instance.comment
+                )
