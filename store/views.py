@@ -1,6 +1,8 @@
 import asyncio
 import datetime
 from datetime import timezone
+
+from django.db import transaction
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
@@ -28,11 +30,15 @@ def add_to_cart(request, slug):
     # Récupérer le produit en fonction du slug
     product = get_object_or_404(Product, slug=slug)
 
-    # Récupérer ou créer le panier en cours pour l'utilisateur connecté
-    order, created = Order.objects.get_or_create(customer=request.user.customer, completed=False)
+    # Récupérer la commande non complétée existante pour l'utilisateur
+    order = Order.objects.filter(customer=request.user.customer, completed=False).first()
+
+    # Si aucune commande non complétée n'existe, créez-en une nouvelle
+    if not order:
+        order = Order.objects.create(customer=request.user.customer, completed=False)
 
     # Récupérer ou créer l'élément de commande pour le produit
-    order_item, created = OrderItem.objects.get_or_create(customer=request.user.customer,order=order, product=product, ordered=False)
+    order_item, created = OrderItem.objects.get_or_create(customer=request.user.customer, order=order, product=product, ordered=False)
 
     # Mettre à jour la quantité et envoyer un message approprié
     if created:
@@ -197,24 +203,36 @@ def edit_address(request, address_id):
     return render(request, 'store/edit_address.html', {'form': form})
 
 
+@transaction.atomic
 def process_order(request):
     transaction_id = datetime.datetime.now().timestamp()
+
     if request.user.is_authenticated:
         customer = request.user.customer
-        # Vérifier si une commande non complétée existe déjà pour le client
-        order, created = Order.objects.get_or_create(customer=customer, completed=False)
-        order.transactionId=transaction_id
+
+        # Utilisez select_for_update pour verrouiller la commande pendant la transaction
+        order = Order.objects.select_for_update().filter(customer=customer, completed=False).first()
+
+        if not order:
+            # Si la commande n'existe pas, créez-en une nouvelle
+            order = Order.objects.create(customer=customer)
+
+        # Mettez à jour la commande avec la nouvelle transactionId et marquez-la comme complétée
+        order.transactionId = transaction_id
         order.completed = True
         order.save()
+
         # Set the status of each OrderItem to 'En traitement'
         items = order.orderitem_set.all()
         for item in items:
             item.status = OrderItem.Status.PROCESSING
             item.ordered = True
             item.save()
-        # Perform any other necessary actions related to processing the order
+
+        # Effectuez d'autres opérations nécessaires liées au traitement de la commande
+
     messages.success(request, 'Votre commande a été passée avec succès. Merci!')
-    # Redirect to the 'products' page or wherever you want to redirect after processing the order
+    # Redirigez vers la page 'products' ou l'endroit où vous souhaitez rediriger après le traitement de la commande
     return redirect('products')
 
 # @login_required()
