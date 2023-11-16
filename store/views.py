@@ -30,12 +30,12 @@ def add_to_cart(request, slug):
     # Récupérer le produit en fonction du slug
     product = get_object_or_404(Product, slug=slug)
 
-    # Récupérer la commande non complétée existante pour l'utilisateur
+    # Récupérer la commande en cours pour l'utilisateur connecté
     order = Order.objects.filter(customer=request.user.customer, completed=False).first()
 
-    # Si aucune commande non complétée n'existe, créez-en une nouvelle
+    # Si aucune commande n'existe, créer une nouvelle commande
     if not order:
-        order = Order.objects.create(customer=request.user.customer, completed=False)
+        order = Order.objects.create(customer=request.user.customer)
 
     # Récupérer ou créer l'élément de commande pour le produit
     order_item, created = OrderItem.objects.get_or_create(customer=request.user.customer, order=order, product=product, ordered=False)
@@ -50,7 +50,6 @@ def add_to_cart(request, slug):
 
     # Rediriger vers la page des produits
     return redirect('products')
-
 
 class OrderItemDeleteView(DeleteView):
     model = OrderItem

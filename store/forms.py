@@ -60,18 +60,6 @@ class AddressForm(forms.ModelForm):
         fields = ['street', 'city', 'country', 'zipcode']
 
 
-# order_items=OrderItem.objects.all()
-# for item in order_items:
-#     order = item.order
-#     prix = item.get_total
-#     customer= item.customer
-# orders = Order.objects.all()
-# order_vide = Order.objects.filter(transactionId="")
-# oroder1= Order.objects.get(id=7)
-
-from store.models import Order, OrderItem
-orders = Order.objects.all().delete()
-orders_i = OrderItem.objects.all().delete()
 
 
 
