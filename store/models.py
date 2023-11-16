@@ -157,14 +157,12 @@ class OrderItemStatusHistory(models.Model):
             old_order_item = OrderItem.objects.get(pk=instance.pk)
 
             # Vérifier si le statut ou le commentaire a changé
-            if (
-                    instance.status != old_order_item.status or
-                    instance.comment != old_order_item.comment
-            ):
-                # Enregistrer l'historique seulement si l'un des éléments a changé
+            if instance.status != old_order_item.status or instance.comment != old_order_item.comment:
+                # Enregistrer l'historique du statut
                 OrderItemStatusHistory.objects.create(
                     order_item=instance,
-                    customer=instance.customer,
+                    consultant=instance.consultant,
+                    customer=instance.customer,  # Utiliser le client associé à l'OrderItem
                     status=instance.status,
                     comment=instance.comment
                 )
