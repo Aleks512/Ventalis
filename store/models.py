@@ -68,6 +68,9 @@ class Order(models.Model):
     date_ordered = models.DateTimeField(_("Date de commande"), auto_now_add=True)
     completed = models.BooleanField(_("Commande complète"), default=False)
     comment = models.TextField(verbose_name=_("Commantaire sur commande"), blank=True, null=True)
+
+    class Meta:
+        ordering = ("-date_ordered",)
     def __str__(self):
         return str(self.id)
     def has_high_quantity_items(self):
@@ -122,6 +125,9 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(_("Quantité"), default=1000)
     comment = models.TextField(verbose_name=_("Commantaire sur articles"), blank=True, null=True)
     date_added = models.DateTimeField(auto_now=True)
+    class Meta:
+        ordering = ("-date_added",)
+
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
     @property
@@ -155,14 +161,19 @@ class OrderItemStatusHistory(models.Model):
         if instance.pk is not None:
             # Récupérer l'objet OrderItem enregistré en base de données pour comparer les changements
             old_order_item = OrderItem.objects.get(pk=instance.pk)
+            # Récupérer le client associé à l'OrderItem
+            customer = instance.customer
+
+            # Récupérer le consultant associé au client
+            consultant = customer.consultant_applied
 
             # Vérifier si le statut ou le commentaire a changé
             if instance.status != old_order_item.status or instance.comment != old_order_item.comment:
                 # Enregistrer l'historique du statut
                 OrderItemStatusHistory.objects.create(
                     order_item=instance,
-                    consultant=instance.consultant,
-                    customer=instance.customer,  # Utiliser le client associé à l'OrderItem
+                    consultant=consultant,
+                    customer=customer,  # Utiliser le client associé à l'OrderItem
                     status=instance.status,
                     comment=instance.comment
                 )

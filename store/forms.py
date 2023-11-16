@@ -69,9 +69,9 @@ class AddressForm(forms.ModelForm):
 # order_vide = Order.objects.filter(transactionId="")
 # oroder1= Order.objects.get(id=7)
 
-# from store.models import Order, OrderItem
-# orders = Order.objects.all().delete()
-# orders_i = OrderItem.objects.all().delete()
+from store.models import Order, OrderItem
+orders = Order.objects.all().delete()
+orders_i = OrderItem.objects.all().delete()
 
 
 

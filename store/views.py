@@ -205,7 +205,6 @@ def process_order(request):
         order, created = Order.objects.get_or_create(customer=customer, completed=False)
         order.transactionId=transaction_id
         order.completed = True
-        order.ordered_date = timezone.now
         order.save()
         # Set the status of each OrderItem to 'En traitement'
         items = order.orderitem_set.all()
@@ -213,10 +212,6 @@ def process_order(request):
             item.status = OrderItem.Status.PROCESSING
             item.ordered = True
             item.save()
-
-
-        order.completed = True
-        order.save()
         # Perform any other necessary actions related to processing the order
     messages.success(request, 'Votre commande a été passée avec succès. Merci!')
     # Redirect to the 'products' page or wherever you want to redirect after processing the order
