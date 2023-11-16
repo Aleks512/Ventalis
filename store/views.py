@@ -13,7 +13,7 @@ from pprint import pprint
 from django.views.decorators.http import require_POST
 from django.views.generic import DeleteView
 
-from users.models import Address
+from users.models import Address, Customer
 from .forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm, AddressForm
 from .models import Category, Product, Order, OrderItem
 
@@ -248,3 +248,13 @@ def process_order(request):
 #
 #     return HttpResponse("Paiement réussi !")
 
+@login_required()
+def consultant_profile(request):
+    consultant = request.user.consultant
+    customers = Customer.objects.filter(consultant_applied=consultant)
+    orders_items_ordered = OrderItem.objects.filter(customer__in=customers, ordered=True)
+    orders_items_not_ordered = OrderItem.objects.filter(customer__in=customers, ordered=False)
+    print(orders_items_ordered)
+    print(orders_items_not_ordered)
+
+    return render(request, "store/consultant_profile.html", context = {"customers":customers, 'orders_items_ordered': orders_items_ordered, "orders_items_not_ordered":orders_items_not_ordered})
