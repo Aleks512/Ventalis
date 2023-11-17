@@ -5,20 +5,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Ventalis {{ page_title }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <!-- Liens vers vos fichiers CSS -->
     <link rel="stylesheet" href="{% static 'bootstrap-5.0.2-dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{% url 'home' %}">Home</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <a class="navbar-brand" href="{% url 'home' %}"> <img src="{% static 'images/shop/logo.png' %}" alt="logo de Ventalis"></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                      <i class="fa-solid fa-bars" style="color: #009042"></i>
+                    </button>
                 <div class="collapse navbar-collapse" id="navbarScroll">
                     <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
                         <li class="nav-item">
@@ -91,8 +92,8 @@
         </div>
     </main>
     <!-- Footer-->
-    <footer class="py-5 bg-dark mt-2">
-        <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Ventalis 2023</p></div>
+    <footer class="py-5 bg-dark mt-2" >
+        <div class="container"><p class="m-0 text-center" style="color: #0d9c43">Copyright &copy; Ventalis 2023</p></div>
     </footer>
     <!-- Scripts JavaScript -->
     <script src="https://unpkg.com/htmx.org@1.2.1"></script>

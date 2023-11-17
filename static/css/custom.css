@@ -21,6 +21,9 @@
 html, body, h4, h5{
     font-family: 'Merriweather', serif;
     color:var(--secondary-color);
+    height: 100%;
+    line-height: 1.8;
+    margin: 0;
 
 }
 
@@ -29,8 +32,23 @@ h1, h2, h3{
 }
 
 .container{
-
+ background-color: #d1e7dd;
 }
+
+custom-card-header{
+    background-color: black;
+    color: #1AA845;
+}
+
+/*.page-specific {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}*/
 /*------------------------------------NAVIGATION--------------------------------------------*/
 .bg-dark {
   background-color: black !important;
@@ -67,6 +85,28 @@ h1, h2, h3{
 .navbar-dark .navbar-toggler{
   color: var(--primary-color);
   border-color:var(--primary-color);
+}
+
+.navbar-toggler{
+    color: #0c4128;
+}
+/* Custom CSS rules */
+.navbar-toggler-icon {
+  color: #0b5ed7;
+}
+
+/* Default Bootstrap CSS rules */
+.navbar-dark .navbar-toggler-icon {
+  color: #fff;
+}
+/* Custom CSS rules */
+.navbar-dark .navbar-toggler-icon {
+  color: #0b5ed7;
+}
+/*------------------------------------Logo--------------------------------------------*/
+.navbar-brand img {
+  max-width: 40%;
+  height: auto;
 }
 /*------------------------------------BTN--------------------------------------------*/
 .custom-button {
