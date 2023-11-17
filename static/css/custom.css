@@ -32,8 +32,9 @@ h1, h2, h3{
 }
 
 .container{
- background-color: #d1e7dd;
+ background-color: rgba(222, 241, 227, 0.13);
 }
+
 
 custom-card-header{
     background-color: black;
@@ -99,10 +100,7 @@ main {
 .navbar-dark .navbar-toggler-icon {
   color: #fff;
 }
-/* Custom CSS rules */
-.navbar-dark .navbar-toggler-icon {
-  color: #0b5ed7;
-}
+
 /*------------------------------------Logo--------------------------------------------*/
 .navbar-brand img {
   max-width: 40%;
@@ -335,10 +333,8 @@ a {
 .list-group-item.custom-active.active,
 .list-group-item.custom-active:active,
 .list-group-item.custom-active:focus {
-    background-color: #009042 !important;
+    background-color: transparent;
     color:black;
-
-
 }
 /*.list-group-item:hover{*/
 /*  background-color: black;*/
@@ -346,8 +342,15 @@ a {
 /*}*/
 
 a.categorie {
-  color: black;  /* Couleur de texte souhaitée */
+ /* Couleur de texte souhaitée */
+    color: var(--primary-color);
   text-decoration: none;
+}
+a{
+    color: #0d9c43;
+}
+a:hover{
+    text-decoration: none;
 }
 
 a.categorie-plus:link{
@@ -355,7 +358,18 @@ a.categorie-plus:link{
 }
 
 a.categorie-plus:hover {
-  color: darkgreen !important;  /* Couleur de texte au survol */
+  color: springgreen!important;  /* Couleur de texte au survol */
 }
 /*  CHECKOUT MODAL -----------------*/
 /* The Modal (background) */
+.list-group-item.active {
+    z-index: 2;
+    color: var(--primary5-color);
+    border: none;
+
+}
+
+.list-group, .list-group-item{
+    border-left: none;
+    border-right: none;
+}
