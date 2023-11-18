@@ -7,10 +7,13 @@ from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from pprint import pprint
+
+from django.views import View
 from django.views.decorators.http import require_POST
 from django.views.generic import DeleteView, UpdateView
 from users.models import Address, Customer
-from .forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm, AddressForm, OrderItemStatusForm
+from .forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm, AddressForm, OrderItemStatusForm, \
+    CategoryForm
 from .models import Category, Product, Order, OrderItem
 
 
@@ -271,3 +274,20 @@ class OrderUpdateConsultantView(LoginRequiredMixin, UpdateView):
 
         # Message de confirmation
         messages.success(self.request, "La commande a été mise à jour avec succès.")
+
+class CategoryCreateView(View):
+    template_name = 'store/categories.html'
+    form_class = CategoryForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        categories = Category.objects.all()
+        return render(request, self.template_name, {'form': form, 'categories': categories})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('category_create')
+        categories = Category.objects.all()
+        return render(request, self.template_name, {'form': form, 'categories': categories})

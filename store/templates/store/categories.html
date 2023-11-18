@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h2>Création de catégorie</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Créer</button>
+    </form>
+
+    <h2>Liste des catégories existantes</h2>
+    <ul>
+        {% for category in categories %}
+            <li>{{ category.name }} - {{ category.description }}</li>
+
+        {% endfor %}
+    </ul>
+
+{% endblock %}
