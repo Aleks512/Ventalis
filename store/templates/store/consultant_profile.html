@@ -1,89 +1,93 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-{% if messages %}
+  {% if messages %}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      {% for message in messages %}
+        {{ message }}
+      {% endfor %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-{% endif %}
+  {% endif %}
 
-{% for customer in customers %}
-        <div class="card">
-          <div class="card-header">
-            Featured
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-    <h3>{{ customer.company }} </h3>
-
+  {% for customer in customers %}
     {% if orders_items_ordered|length > 0 %}
-        <p>Articles commandés par {{ customer.first_name }} {{ customer.last_name }} {{ customer.email }}</p>
-        <table class="table table-responsive table-striped">
-            <thead>
-                <tr>
-                    <th>Nom du produit</th>
-                    <th>Quantité</th>
-                    <th>Prix</th>
-                    <th>Date de la commande</th>
-                    <th>Statut</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order_item in orders_items_ordered %}
-                    <tr>
-                        <td>{{ order_item.product.name }}</td>
-                        <td>{{ order_item.quantity }}</td>
-                        <td>{{ order_item.get_total |floatformat }} €</td>  {# Assuming get_total is a method that returns the total price #}
-                        <td>{{ order_item.date_added|date:"Y-m-d H:i:s" }}</td>  {# Format the date as per your requirement #}
-                        <td>{{ order_item.status }}</td>
-                        <td>
-                            {% if order_item.status %}
-                                {{ order_item.get_status_display }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="card">
+      <div class="card-header">
+        Info sur la société
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{customer.company}}</h5>
+        <p class="card-text">Articles commandés par <strong>{{ customer.first_name }} {{ customer.last_name }} {{ customer.email }}</strong></p>
+        <a href="https://www.infogreffe.fr/" class="btn btn-outline-success">Isformations financieres</a>
+      </div>
+    </div>
+    <h3>{{ customer.company }}</h3>
+
+
+      <p>Articles commandés par {{ customer.first_name }} {{ customer.last_name }} {{ customer.email }}</p>
+      <table class="table table-responsive table-striped">
+        <thead>
+          <tr>
+            <th>Nom du produit</th>
+            <th>Quantité</th>
+            <th>Prix</th>
+            <th>Date de la commande</th>
+            <th>Statut</th>
+            <th>Modiifier</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order_item in orders_items_ordered %}
+            <tr>
+              <td>{{ order_item.product.name }}</td>
+              <td>{{ order_item.quantity }}</td>
+              <td>{{ order_item.get_total |floatformat }} €</td>
+              <td>{{ order_item.date_added|date:"Y-m-d H:i:s" }}</td>
+              <td>
+                {% if order_item.status %}
+                  {{ order_item.get_status_display }}
+                {% endif %}
+              </td>
+              <td>
+                <a href="{% url 'consultant-order-update' pk=order_item.id %}">
+                  <i class="fas fa-pencil-alt" style="color: red;"></i></a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     {% else %}
-        <p>Pas d'articles commandés pour {{ customer.company }}</p>
+      <p>Pas d'articles commandés pour {{ customer.company }}</p>
     {% endif %}
 
     {% if orders_items_not_ordered|length > 0 %}
-        <h3>Articles en attente de commande pour {{ customer.company }}</h3>
-        <table class="table table-responsive table-striped">
-            <thead>
-                <tr>
-                    <th>Nom du produit</th>
-                    <th>Quantité</th>
-                    <th>Prix</th>
-                    <th>Date de la commande</th>
-                    <th>Statut</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order_item in orders_items_not_ordered %}
-                    <tr>
-                        <td>{{ order_item.product.name }}</td>
-                        <td>{{ order_item.quantity }}</td>
-                        <td>{{ order_item.get_total }}</td>  {# Assuming get_total is a method that returns the total price #}
-                        <td>{{ order_item.date_added|date:"Y-m-d H:i:s" }}</td>  {# Format the date as per your requirement #}
-                        <td>{{ order_item.status }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+      <h3>Articles en attente de commande pour {{ customer.company }}</h3>
+      <table class="table table-responsive table-striped">
+        <thead>
+          <tr>
+            <th>Nom du produit</th>
+            <th>Quantité</th>
+            <th>Prix</th>
+            <th>Date de la commande</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order_item in orders_items_not_ordered %}
+            <tr>
+              <td>{{ order_item.product.name }}</td>
+              <td>{{ order_item.quantity }}</td>
+              <td>{{ order_item.get_total }}</td>
+              <td>{{ order_item.date_added|date:"Y-m-d H:i:s" }}</td>
+              <td>{{ order_item.status }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     {% else %}
-        <p>Pas d'articles en attente de commande pour {{ customer.company }}</p>
-        <hr>
+      <p>Pas d'articles en attente de commande pour {{ customer.company }}</p>
+      <hr>
     {% endif %}
-{% endfor %}
-
+  {% endfor %}
 {% endblock %}

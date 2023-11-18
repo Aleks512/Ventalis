@@ -20,6 +20,7 @@ urlpatterns = [
 	path('edit_address/<int:address_id>/', views.edit_address, name='edit_address'),
 	path('process-order/', views.process_order, name='process-order'),
 	path('consultant-profile/', views.consultant_profile, name='consultant-profile'),
+	path('orders/<int:pk>/update/', views.OrderUpdateConsultantView.as_view(), name='consultant-order-update'),  # OK
 
 
 ]

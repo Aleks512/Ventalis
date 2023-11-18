@@ -140,6 +140,9 @@ class OrderItem(models.Model):
         total = self.product.discount_price * self.quantity
         return total
 
+    def get_absolute_url(self):
+        return reverse('change_order_itemr', args=[str(self.id)])
+
 class OrderItemStatusHistory(models.Model):
     order_item = models.ForeignKey('OrderItem', verbose_name=_("Article de commande"), on_delete=models.CASCADE)
     consultant = models.ForeignKey('users.Consultant', verbose_name=_("Consultant"), on_delete=models.CASCADE)

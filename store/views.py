@@ -1,20 +1,16 @@
-import asyncio
 import datetime
-from datetime import timezone
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
-from django.utils import timezone
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from pprint import pprint
-
 from django.views.decorators.http import require_POST
-from django.views.generic import DeleteView
-
+from django.views.generic import DeleteView, UpdateView
 from users.models import Address, Customer
-from .forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm, AddressForm
+from .forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm, AddressForm, OrderItemStatusForm
 from .models import Category, Product, Order, OrderItem
 
 
@@ -258,3 +254,20 @@ def consultant_profile(request):
     print(orders_items_not_ordered)
 
     return render(request, "store/consultant_profile.html", context = {"customers":customers, 'orders_items_ordered': orders_items_ordered, "orders_items_not_ordered":orders_items_not_ordered})
+
+# Order to be updated by consultant
+class OrderUpdateConsultantView(LoginRequiredMixin, UpdateView):
+    model = OrderItem
+    form_class = OrderItemStatusForm
+    template_name = "store/order_update_consultant.html"
+    success_url = reverse_lazy('consultant-profile')
+    context_object_name = 'my_order_item'
+
+    # On utilise une transaction atomique pour garantir la cohérence des données
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_update'] = True  # Afficher un message de mise à jour dans le template
+        return context
+
+        # Message de confirmation
+        messages.success(self.request, "La commande a été mise à jour avec succès.")

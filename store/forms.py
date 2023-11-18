@@ -59,6 +59,17 @@ class AddressForm(forms.ModelForm):
         model = Address
         fields = ['street', 'city', 'country', 'zipcode']
 
+class OrderItemStatusForm(forms.ModelForm):
+    class Meta:
+        model = OrderItem
+        fields = ['status', 'comment']
+
+    def __init__(self, *args, **kwargs):
+        super(OrderItemStatusForm, self).__init__(*args, **kwargs)
+        # Ajouter des attributs ou modifier les champs si nécessaire
+
+        self.fields['status'].widget.attrs.update({'class': 'form-control'})
+        self.fields['comment'].widget.attrs.update({'class': 'form-control', 'rows': 3})
 
 
 

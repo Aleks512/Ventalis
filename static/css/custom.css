@@ -373,3 +373,10 @@ a.categorie-plus:hover {
     border-left: none;
     border-right: none;
 }
+
+select option:hover {
+    background-color: var(--primary5-color) !important;
+}
+select option:checked {
+    background-color: var(--primary5-color) !important;
+}
