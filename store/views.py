@@ -7,10 +7,10 @@ from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from pprint import pprint
-
+from django.urls import reverse
 from django.views import View
 from django.views.decorators.http import require_POST
-from django.views.generic import DeleteView, UpdateView
+from django.views.generic import DeleteView, UpdateView, DetailView
 from users.models import Address, Customer
 from .forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm, AddressForm, OrderItemStatusForm, \
     CategoryForm
@@ -50,6 +50,7 @@ def add_to_cart(request, slug):
     # Rediriger vers la page des produits
     return redirect('products')
 
+ # From cart delete OrderItem
 class OrderItemDeleteView(DeleteView):
     model = OrderItem
     template_name = "store/order_item_delete.html"
@@ -65,7 +66,6 @@ def cart(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, completed=False)
         items = order.orderitem_set.all()
-        print(items)
         cartItems = order.get_cart_items()
         context = {'items': items, 'order': order, 'cartItems': cartItems}
         return render(request, 'store/cart.html', context)
@@ -74,7 +74,7 @@ def cart(request):
 
 @login_required()
 def checkout(request):
-    if request.user:
+    if request.user.is_client:
         customer = request.user.customer
         # # Vérifier si une commande non complétée existe déjà pour le client
         # order = Order.objects.filter(customer=customer, completed=False).first()
@@ -275,19 +275,96 @@ class OrderUpdateConsultantView(LoginRequiredMixin, UpdateView):
         # Message de confirmation
         messages.success(self.request, "La commande a été mise à jour avec succès.")
 
+# class CategoryCreateView(View):
+#     template_name = 'store/categories.html'
+#     form_class = CategoryForm
+#
+#     def get(self, request, *args, **kwargs):
+#         form = self.form_class()
+#         categories = Category.objects.all()
+#         return render(request, self.template_name, {'form': form, 'categories': categories})
+#
+#     def post(self, request, *args, **kwargs):
+#         form = self.form_class(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('category_create')
+#         categories = Category.objects.all()
+#         return render(request, self.template_name, {'form': form, 'categories': categories})
+#
+#     def update(self, request, pk):
+#         category = get_object_or_404(Category, pk=pk)
+#         if request.method == 'POST':
+#             form = self.form_class(request.POST, instance=category)
+#             if form.is_valid():
+#                 form.save()
+#                 return redirect('category_create')
+#         else:
+#             form = self.form_class(instance=category)
+#         categories = Category.objects.all()
+#         return render(request, self.template_name, {'form': form, 'categories': categories})
+#
+#     def delete(self, request, pk):
+#         category = get_object_or_404(Category, pk=pk)
+#         category.delete()
+#         return redirect('category_create')
+
+# def categorie(request):
+#     categories = Category.objects.all()
+#     for category in categories:
+#         category = get_object_or_404(Category, pk=pk)
+#         name = category.name
+#         description = category.description
+#         existing_category = None
+#         if category.exists():
+#             existing_category = category
+#         if request.method == 'POST':
+#             category_form = CategoryForm(request.POST, instance=existing_category)
+#             if category_form.is_valid():
+#                 category_instance = category_form.save(commit=False)
+#                 category_instance.name = name
+#                 category_instance.description = description
+#                 category_instance.save()
+#                 return redirect('categories')  # Redirect to the checkout page or another page
+#         else:
+#             category_form = CategoryForm
+#         context = {'categories':categories, 'category':category, 'category_form' : category_form, 'existing_category' :existing_category}
+#         return render(request, 'store/categories.html', context)
+
+
 class CategoryCreateView(View):
     template_name = 'store/categories.html'
     form_class = CategoryForm
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class()
         categories = Category.objects.all()
+        category_id = request.GET.get('pk')
+        form = self.form_class()
+
+        if category_id:
+            category = get_object_or_404(Category, pk=category_id)
+            form = self.form_class(instance=category)
+
         return render(request, self.template_name, {'form': form, 'categories': categories})
 
     def post(self, request, *args, **kwargs):
+        category_id = request.GET.get('pk')
+        categories = Category.objects.all()
         form = self.form_class(request.POST)
+
+        if category_id:
+            category = get_object_or_404(Category, pk=category_id)
+            form = self.form_class(request.POST, instance=category)
+
         if form.is_valid():
             form.save()
-            return redirect('category_create')
-        categories = Category.objects.all()
+            return redirect('categorie')
+
         return render(request, self.template_name, {'form': form, 'categories': categories})
+
+class CategoryeleteView(DeleteView):
+    model = Category
+    template_name = None
+    fields = '__all__'
+    def get_success_url(self):
+        return reverse('categorie')

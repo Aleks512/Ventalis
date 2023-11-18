@@ -380,3 +380,6 @@ select option:hover {
 select option:checked {
     background-color: var(--primary5-color) !important;
 }
+.center_my-text{
+    text-align: center;
+}

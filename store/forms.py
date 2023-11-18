@@ -74,11 +74,14 @@ class OrderItemStatusForm(forms.ModelForm):
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ['name', 'description']
+        fields = ['name',]
 
     def __init__(self, *args, **kwargs):
         super(CategoryForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'class': 'form-control'})
-        self.fields['description'].widget.attrs.update({'class': 'form-control'})
 
+class CategoryDeleteForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = []
 
