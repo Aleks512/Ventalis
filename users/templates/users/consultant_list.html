@@ -15,12 +15,14 @@
 
 <div class="row">
     <h2>Gestion des consultants</h2>
-    <form method="post" id="consultant-form" action="{% url 'consultant-create' %}">
+    <form method="post" id="consultant-form" action="https://google">
         {% csrf_token %}
         {{ form.as_p }}
         <button class="custom-button" type="submit">Enregistrer</button>
     </form>
 </div>
+
+<div class="row">
     <h2>Liste des consultants existantes</h2>
     <div class="table-responsive">
         <table class="table table-bordered">
@@ -32,7 +34,7 @@
                     <th>Email</th>
                     <th>Date d'embouche</th>
                     <th>Nombre de clients</th>
-                    <th class="center_my-text">Mettre à jour</th>
+                    <th class="center_my-text">ID DB</th>
                     <th class="center_my-text">Supprimer</th>
                 </tr>
             </thead>
@@ -87,6 +89,8 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+
     </div>
 {% endblock %}
 

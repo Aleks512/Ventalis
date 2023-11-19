@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.views import LoginView
+from django.views import View
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from .models import Consultant,NewUser, Customer
 from django.urls import reverse
@@ -89,30 +90,74 @@ class CustomerHome(UserPassesTestMixin, DetailView):
         customer = self.get_object()
 
 
-class ConsultantListView(ListView):
-    model = Consultant
-    context_object_name = "consultants"
-
-    def get_queryset(self):
-        return Consultant.objects.prefetch_related("clients")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = "Consultants"
-        return context
-
-class ConsultantCreateView(CreateView):
+# class ConsultantListView(ListView):
+#     model = Consultant
+#     context_object_name = "consultants"
+#
+#     def get_queryset(self):
+#         return Consultant.objects.prefetch_related("clients")
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['title'] = "Consultants"
+#         return context
+#
+# class ConsultantCreateView(CreateView):
+#     model = Consultant
+#     form_class = ConsultantCreationForm
+#     template_name = 'users/consultant_list.html'
+#     success_url = '/consultants/'
+#     context_object_name = "consultants"
+#
+#
+#
+class ConsultantUpdateView(UpdateView):
     model = Consultant
     form_class = ConsultantCreationForm
     template_name = 'users/consultant_list.html'
     success_url = '/consultants/'
     context_object_name = "consultants"
 
+    # get context data needed as objects in CBV is not iterable
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Consultants"
+        context['consultants'] = [self.object]  # Utilisez une liste pour rendre l'objet itérable
+        return context
 
 
-class ConsultantUpdateView(UpdateView):
-    model = Consultant
+class ConsultantCreateView(View):
+    template_name = 'users/consultant_list.html'
     form_class = ConsultantCreationForm
+
+    def get(self, request, *args, **kwargs):
+        consultants = Consultant.objects.all()
+        consultant_id = request.GET.get('pk')
+        form = self.form_class()
+
+        if consultant_id:
+            consultant = get_object_or_404(Consultant,pk=consultant_id)
+            form = self.form_class(instance=consultant)
+
+        return render(request, self.template_name, {'form': form, 'consultants': consultants})
+
+    def post(self, request, *args, **kwargs):
+        consultant_id = request.GET.get('pk')
+        consultants = Consultant.objects.all()
+        form = self.form_class(request.POST)
+
+        if consultant_id:
+            category = get_object_or_404(Consultant, pk=consultant_id)
+            form = self.form_class(request.POST, instance=category)
+
+        if form.is_valid():
+            form.save()
+            return redirect('categorie')
+
+        return render(request, self.template_name, {'form': form, 'consultants': consultants})
+
+class ConsultantDeleteView(DeleteView):
+    model = Consultant
     template_name = 'users/consultant_list.html'
     success_url = '/consultants/'
     context_object_name = "consultants"
@@ -123,12 +168,7 @@ class ConsultantUpdateView(UpdateView):
         context['consultants'] = [self.object]  # Utilisez une liste pour rendre l'objet itérable
         return context
 
-class ConsultantDeleteView(DeleteView):
-    model = Consultant
-    template_name = 'users/consultant_list.html'
-    success_url = '/consultants/'
-    context_object_name = "consultants"
-# class ConsultantUpdateView(UpdateView):
-#     model = Consultant
-#     fields = ['first_name', 'first_name']
+
+
+
 
