@@ -14,12 +14,15 @@
     {% if orders_items_ordered|length > 0 %}
     <div class="card">
       <div class="card-header">
-        Info sur la société
+          <h4>Commandes de <span class="badge rounded-pill bg-dark"> {{customer.company}}</span></h4>
+
       </div>
       <div class="card-body">
-        <h5 class="card-title">{{customer.company}}</h5>
-        <p class="card-text">Articles commandés par <strong>{{ customer.first_name }} {{ customer.last_name }} {{ customer.email }}</strong></p>
-        <a href="https://www.infogreffe.fr/" class="btn btn-outline-success">Isformations financieres</a>
+        <h5 class="card-title"><span class="badge rounded-pill bg-light text-dark"> {{customer.company}}</span></h5>
+        <p class="card-text">Articles commandés par <strong>{{ customer.first_name }} {{ customer.last_name }}</strong> <span class="badge rounded-pill bg-dark">{{ customer.email }}</span></p>
+        <span class="badge rounded-pill bg-light text-dark">
+        <a href="https://www.infogreffe.fr/"> Information sur la solvabilité</a>
+        </span>
       </div>
     </div>
       <table class="table table-responsive table-striped">
@@ -45,7 +48,7 @@
                   {{ order_item.get_status_display }}
                 {% endif %}
               </td>
-              <td>
+              <td class="center_my-text">
                 <a href="{% url 'consultant-order-update' pk=order_item.id %}">
                   <i class="fas fa-edit" style="color: green;"></i></a>
               </td>
@@ -58,7 +61,7 @@
     {% endif %}
 
     {% if orders_items_not_ordered|length > 0 %}
-      <h3>Articles en attente de commande pour {{ customer.company }}</h3>
+      <p><span class="badge rounded-pill bg-warning text-dark">Nouvels articles dans le panier</span> pour {{ customer.company }}</p>
       <table class="table table-responsive table-striped">
         <thead>
           <tr>
@@ -76,13 +79,17 @@
               <td>{{ order_item.quantity }}</td>
               <td>{{ order_item.get_total }}</td>
               <td>{{ order_item.date_added|date:"Y-m-d H:i:s" }}</td>
-              <td>{{ order_item.status }}</td>
+              <td>
+                {% if order_item.status %}
+                  {{ order_item.get_status_display }}
+                {% endif %}
+              </td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
     {% else %}
-      <p>Pas d'articles en attente de commande pour {{ customer.company }}</p>
+      <p>Pas d'articles dans le panier de {{ customer.company }}</p>
       <hr>
     {% endif %}
   {% endfor %}

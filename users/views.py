@@ -1,12 +1,10 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.views import LoginView
-from django.shortcuts import render, get_object_or_404
-
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from .models import Consultant,NewUser, Customer
-from django.shortcuts import render
+from django.urls import reverse
 from django.contrib.auth import login, authenticate
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ConsultantCreationForm, CustomerCreationForm
 
 def home(request):
@@ -44,33 +42,21 @@ def signup(request):
     else:
         form = CustomerCreationForm()
     return render(request, 'users/signup.html', {'form': form})
+#
+# def consultant_signup(request):
+#     if request.method == 'POST':
+#         form = ConsultantCreationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             email = form.cleaned_data.get('email')
+#             password = form.cleaned_data.get('password1')
+#             user = authenticate(email=email, password=password)
+#             login(request, user)
+#             return redirect('consultant-profile')
+#     else:
+#         form = ConsultantCreationForm()
+#     return render(request, 'users/consultant_list.html', {'form': form})
 
-def consultant_signup(request):
-    if request.method == 'POST':
-        form = ConsultantCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            email = form.cleaned_data.get('email')
-            password = form.cleaned_data.get('password1')
-            user = authenticate(email=email, password=password)
-            login(request, user)
-            return redirect('home')
-    else:
-        form = ConsultantCreationForm()
-    return render(request, 'users/consultant_create.html', {'form': form})
-
-class ConsultantListView(ListView):
-    model = Consultant
-    context_object_name = "consultants"
-
-    def get_queryset(self):
-        # Utilisez prefetch_related pour précharger les clients associés à chaque consultant
-        return Consultant.objects.prefetch_related("clients")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = "Consultants"
-        return context
 
 class CustomerListView(ListView):
     model = Customer
@@ -103,4 +89,46 @@ class CustomerHome(UserPassesTestMixin, DetailView):
         customer = self.get_object()
 
 
+class ConsultantListView(ListView):
+    model = Consultant
+    context_object_name = "consultants"
+
+    def get_queryset(self):
+        return Consultant.objects.prefetch_related("clients")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Consultants"
+        return context
+
+class ConsultantCreateView(CreateView):
+    model = Consultant
+    form_class = ConsultantCreationForm
+    template_name = 'users/consultant_list.html'
+    success_url = '/consultants/'
+    context_object_name = "consultants"
+
+
+
+class ConsultantUpdateView(UpdateView):
+    model = Consultant
+    form_class = ConsultantCreationForm
+    template_name = 'users/consultant_list.html'
+    success_url = '/consultants/'
+    context_object_name = "consultants"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Consultants"
+        context['consultants'] = [self.object]  # Utilisez une liste pour rendre l'objet itérable
+        return context
+
+class ConsultantDeleteView(DeleteView):
+    model = Consultant
+    template_name = 'users/consultant_list.html'
+    success_url = '/consultants/'
+    context_object_name = "consultants"
+# class ConsultantUpdateView(UpdateView):
+#     model = Consultant
+#     fields = ['first_name', 'first_name']
 

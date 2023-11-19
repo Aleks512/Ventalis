@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+
+from store.models import Category
 from .models import Consultant, Customer
 
 class ConsultantCreationForm(UserCreationForm):
@@ -14,6 +16,16 @@ class ConsultantCreationForm(UserCreationForm):
             'password1',
             'password2',
         ]
+
+    def __init__(self, *args, **kwargs):
+        super(ConsultantCreationForm, self).__init__(*args, **kwargs)
+
+        # Ajouter des attributs ou modifier les champs si nécessaire
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password1'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password2'].widget.attrs.update({'class': 'form-control'})
+
 
 class CustomerCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=True, label='Prénom')
