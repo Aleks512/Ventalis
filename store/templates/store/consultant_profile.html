@@ -22,10 +22,6 @@
         <a href="https://www.infogreffe.fr/" class="btn btn-outline-success">Isformations financieres</a>
       </div>
     </div>
-    <h3>{{ customer.company }}</h3>
-
-
-      <p>Articles commandés par {{ customer.first_name }} {{ customer.last_name }} {{ customer.email }}</p>
       <table class="table table-responsive table-striped">
         <thead>
           <tr>
@@ -34,7 +30,7 @@
             <th>Prix</th>
             <th>Date de la commande</th>
             <th>Statut</th>
-            <th>Modiifier</th>
+            <th class="center_my-text">Modiifier</th>
           </tr>
         </thead>
         <tbody>
@@ -51,7 +47,7 @@
               </td>
               <td>
                 <a href="{% url 'consultant-order-update' pk=order_item.id %}">
-                  <i class="fas fa-pencil-alt" style="color: red;"></i></a>
+                  <i class="fas fa-edit" style="color: green;"></i></a>
               </td>
             </tr>
           {% endfor %}

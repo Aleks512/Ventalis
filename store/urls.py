@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-from .views import update_cart_item_quantity, CategoryCreateView, CategoryeleteView
+from .views import update_cart_item_quantity, CategoryCreateView, CategoryDeleteView
 
 urlpatterns = [
 	#Leave as empty string for base url
@@ -21,7 +21,7 @@ urlpatterns = [
 	path('consultant-profile/', views.consultant_profile, name='consultant-profile'),
 	path('orders/<int:pk>/update/', views.OrderUpdateConsultantView.as_view(), name='consultant-order-update'),  # OK
 	path('category-display/', CategoryCreateView.as_view(), name='categorie'),
-	path('categories/delete/<int:pk>/', CategoryeleteView.as_view(), name='category-delete'),
+	path('categories/delete/<int:pk>/', CategoryDeleteView.as_view(), name='category-delete'),
     path('categories/update/<int:pk>/', CategoryCreateView.as_view(), name='category_update'),
 
 ]

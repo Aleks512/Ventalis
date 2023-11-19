@@ -26,15 +26,14 @@
             <div class="card-body">
               <h5 class="card-title">{{ product.name }}</h5>
               <p class="card-text">{{ product.description }}</p>
-              <a href="{{ product.get_absolute_url }}" class="btn btn-secondary custom-button">Voir l'article</a>
+              <a type="button" class="fas fa-eye custom-button" href="{{ product.get_absolute_url }}" >Voir</a>
 
-              <a href="{% url 'product-update' product.slug %}" class="btn btn-secondary custom-button">
-                Editer
-              </a>
+              <a type="button" href="{% url 'product-update' product.slug %}"><i class="fas fa-edit editer"></i>
+              Editer</a>
 
               <!-- Bouton pour ouvrir le modal -->
-              <button class="btn btn-danger custom-button" data-bs-toggle="modal" data-bs-target="#deleteModal{{ product.id }}">
-                <i class="bi bi-trash-fill me-2"></i>Supprimer
+              <button style="float:right " class="btn btn-danger modal-supprimer" data-bs-toggle="modal" data-bs-target="#deleteModal{{ product.id }}">
+                <i class="fas fa-trash"></i>
               </button>
 
               <!-- Modal de confirmation -->

@@ -57,8 +57,9 @@
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                                         <li><a class="dropdown-item" href="{% url 'consultant-profile' %}">Mon portefeuille de clients</a></li>
-                                        <li><a class="dropdown-item" href="{% url 'product-create' %}">Créer produit</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'categorie' %}">Gestion des catégories</a></li>
                                         <li><a class="dropdown-item" href="{% url 'products-list-mng' %}">Gestion des produits</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'product-create' %}">Créer produit</a></li>
                                     </ul>
                                 </li>
                             {% elif user.customer %}
@@ -85,14 +86,14 @@
             </div>
         </nav>
     </header>
-    <main>
-        <div class="{% block container_class %}container{% endblock %}">
-            {% block content %}
-            {% endblock %}
-        </div>
-    </main>
-    <!-- Footer-->
-    <!-- Contact -->
+<main>
+    <div class="{% block container_class %}container mt-5{% endblock %}">
+        {% block content %}
+        {% endblock %}
+    </div>
+</main>
+
+<!-- Contact -->
 <div class="w3-content w3-container w3-padding-64" id="contact">
   <h3 class="w3-center">ADRESSE POSTALE</h3>
     <div class=" w3-center m8">
@@ -104,7 +105,10 @@
       </div>
     </div>
 </div>
+
     <footer class="py-5 bg-dark mt-2" >
+            <!-- Footer-->
+    <!-- Contact -->
         <div class="container"><p class="m-0 text-center" style="color: #0d9c43">Copyright &copy; Ventalis 2023</p></div>
     </footer>
     <!-- Scripts JavaScript -->

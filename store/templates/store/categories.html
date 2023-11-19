@@ -2,14 +2,24 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% if messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
 {% block content %}
+<div class="row">
     <h2>Gestion des catégories</h2>
     <form method="post" id="category-form" action="{% url 'categorie' %}">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Enregistrer</button>
+        <button class="custom-button" type="submit">Enregistrer</button>
     </form>
-
+</div>
     <h2>Liste des catégories existantes</h2>
     <div class="table-responsive">
         <table class="table table-bordered">
@@ -25,15 +35,12 @@
                         <td>{{ category.name }}</td>
                         <td class="center_my-text">
                            <a href="{% url 'categorie' %}?pk={{ category.pk }}"><i class="fas fa-edit"></i></a>
+                                                                           <!-- Bouton pour ouvrir le modal -->
+                    <button class="btn modal-supprimer" data-bs-toggle="modal"  data-bs-target="#deleteModal{{ category.pk  }}">
+                        <i class="fas fa-trash"></i></button>
+                            <a href="{% url 'categorie' %}"><i class="fas fa-undo-alt"></i></a>
                         </td>
-                        <td>
-                                               <!-- Bouton pour ouvrir le modal -->
-                    <button class="btn custom-button-delete-1" data-bs-toggle="modal"
-                        data-bs-target="#deleteModal{{ category.pk  }}">
-                        <i class="bi bi-trash-fill me-2"></i> &#xF78B; Supprimer
-                    </button>
 
-                        </td>
                         <!-- Modal de confirmation -->
                     <div class="modal fade" id="deleteModal{{ category.pk  }}" tabindex="-1" role="dialog"
                         aria-labelledby="deleteModalLabel{{ category.pk  }}" aria-hidden="true">
@@ -47,7 +54,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <p>Êtes-vous sûr de vouloir supprimer {{category.name}} du panier ?</p>
+                                    <p>Êtes-vous sûr de vouloir supprimer {{category.name}} de la liste ?</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"

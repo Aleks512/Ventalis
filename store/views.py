@@ -233,20 +233,6 @@ def process_order(request):
     # Redirigez vers la page 'products' ou l'endroit où vous souhaitez rediriger après le traitement de la commande
     return redirect('products')
 
-# @login_required()
-# def process_payment(request):
-#     # Ici, vous pouvez intégrer le traitement du paiement avec votre passerelle de paiement
-#     # Dans cet exemple, nous simulons un paiement réussi
-#     # Assurez-vous d'ajouter une logique appropriée pour le traitement des paiements réels
-#     order_id = request.GET.get('order_id')
-#     order = Order.objects.get(id=order_id)
-#
-#     # Marquez la commande comme complète
-#     order.completed = True
-#     order.save()
-#
-#     return HttpResponse("Paiement réussi !")
-
 @login_required()
 def consultant_profile(request):
     consultant = request.user.consultant
@@ -275,61 +261,6 @@ class OrderUpdateConsultantView(LoginRequiredMixin, UpdateView):
         # Message de confirmation
         messages.success(self.request, "La commande a été mise à jour avec succès.")
 
-# class CategoryCreateView(View):
-#     template_name = 'store/categories.html'
-#     form_class = CategoryForm
-#
-#     def get(self, request, *args, **kwargs):
-#         form = self.form_class()
-#         categories = Category.objects.all()
-#         return render(request, self.template_name, {'form': form, 'categories': categories})
-#
-#     def post(self, request, *args, **kwargs):
-#         form = self.form_class(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('category_create')
-#         categories = Category.objects.all()
-#         return render(request, self.template_name, {'form': form, 'categories': categories})
-#
-#     def update(self, request, pk):
-#         category = get_object_or_404(Category, pk=pk)
-#         if request.method == 'POST':
-#             form = self.form_class(request.POST, instance=category)
-#             if form.is_valid():
-#                 form.save()
-#                 return redirect('category_create')
-#         else:
-#             form = self.form_class(instance=category)
-#         categories = Category.objects.all()
-#         return render(request, self.template_name, {'form': form, 'categories': categories})
-#
-#     def delete(self, request, pk):
-#         category = get_object_or_404(Category, pk=pk)
-#         category.delete()
-#         return redirect('category_create')
-
-# def categorie(request):
-#     categories = Category.objects.all()
-#     for category in categories:
-#         category = get_object_or_404(Category, pk=pk)
-#         name = category.name
-#         description = category.description
-#         existing_category = None
-#         if category.exists():
-#             existing_category = category
-#         if request.method == 'POST':
-#             category_form = CategoryForm(request.POST, instance=existing_category)
-#             if category_form.is_valid():
-#                 category_instance = category_form.save(commit=False)
-#                 category_instance.name = name
-#                 category_instance.description = description
-#                 category_instance.save()
-#                 return redirect('categories')  # Redirect to the checkout page or another page
-#         else:
-#             category_form = CategoryForm
-#         context = {'categories':categories, 'category':category, 'category_form' : category_form, 'existing_category' :existing_category}
-#         return render(request, 'store/categories.html', context)
 
 
 class CategoryCreateView(View):
@@ -362,7 +293,7 @@ class CategoryCreateView(View):
 
         return render(request, self.template_name, {'form': form, 'categories': categories})
 
-class CategoryeleteView(DeleteView):
+class CategoryDeleteView(DeleteView):
     model = Category
     template_name = None
     fields = '__all__'

@@ -111,11 +111,42 @@ main {
   background-color: var(--custom-button-bg) !important;
   color: var(--custom-button-text) !important;
   border-color: var(--custom-button-bg) !important;
+  margin: 1em;
+    float: right;
 }
 
 .custom-button:hover {
   background-color: var(--custom-button-hover-bg) !important;
   color: var(--custom-button-hover-text) !important;
+}
+
+.group-custom-button {
+  background-color: var(--custom-button-bg) !important;
+  color: var(--custom-button-text) !important;
+  border-color: var(--custom-button-bg) !important;
+  margin-right: 0.2em;
+   margin-top: 0.3em;
+}
+
+.group-custom-button:hover {
+  background-color: var(--custom-button-hover-bg) !important;
+  color: var(--custom-button-hover-text) !important;
+}
+
+.modal-supprimer{
+    border:none;
+    color:red;
+    background-color: transparent;
+    text-decoration: none;
+    margin:1em;
+
+}
+.editer{
+    border:none;
+    color:var(--primary4-color);
+    background-color: transparent;
+    text-decoration: none;
+    margin:1em;
 }
 
 /*------------------------------------BTN--------------------------------------------*/
@@ -351,6 +382,7 @@ a{
 }
 a:hover{
     text-decoration: none;
+    color:black;!important;
 }
 
 a.categorie-plus:link{
