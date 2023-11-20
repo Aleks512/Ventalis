@@ -1,11 +1,30 @@
+
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Clients</h2>
-    <ul>
-        {% for customer in customers %}
-            <li>{{ customer.first_name }}</li>
-            <li>{{ customer.consultant_applied}}</li>
-        {% endfor %}
-    </ul>
+
+  <div class="container mt-5">
+    <h1 class="mb-4">Consultants et leurs clients</h1>
+
+    {% for consultant, clients in consultant_clients %}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h2 class="mb-0">{{ consultant.get_full_name }} (Matricule: {{ consultant.matricule }})</h2>
+        </div>
+        <div class="card-body">
+          {% if clients %}
+            <ol class="list-group">
+              {% for client in clients %}
+                <li class="list-group-item">{{ client.company }} {{ client.first_name }} {{ client.last_name }} {{ client.email }}</li>
+              {% endfor %}
+            </ol>
+          {% else %}
+            <p>No clients assigned to this consultant.</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+
 {% endblock %}

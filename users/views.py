@@ -62,6 +62,19 @@ def signup(request):
 class CustomerListView(ListView):
     model = Customer
     context_object_name = "customers"
+
+
+def customers_relations(request):
+    employees = Consultant.objects.all().order_by('-date_joined')
+    consultant_clients = []  # Create a list to store clients for each consultant
+
+    for employee in employees:
+        clients = Customer.objects.filter(consultant_applied=employee)
+        consultant_clients.append((employee, clients))  # Append a tuple of (consultant, clients) to the list
+
+    customers = Customer.objects.all()
+    return render(request, 'users/customer_list.html', context={'consultant_clients': consultant_clients, 'customers': customers})
+
 class NewUserListView(ListView):
     model = NewUser
     context_object_name = "users"

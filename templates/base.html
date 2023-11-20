@@ -31,36 +31,36 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'products' %}">Catalogue des prestations</a>
                         </li>
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Produits
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                                <li><a class="dropdown-item" href="{% url 'products' %}">Produits par catégorie</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                            </ul>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link inbox-icon" href="{% url 'inbox' %}">Messagerie {{user.email}}<i class="far fa-paper-plane"></i></a>
+                                <a class="nav-link inbox-icon" href="{% url 'inbox' %}">{{user.email}}</a>
                             </li>
                             {% if user.is_superuser %}
-                                <div class="dropdown">
-                                    <!-- ... Vos liens d'administration ... -->
-                                </div>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Administration
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                                      <li><a class="dropdown-item" href="{% url 'consultants' %}">Gestion de consultants</a></li>
+                                      <li><a class="dropdown-item" href="{% url 'customers' %}">Liste de clients</a></li>
+                                    </ul>
+                                </li>
+
                             {% elif user.consultant %}
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Consultant
+                                        Ma page
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                                        <li><a class="dropdown-item" href="{% url 'consultant-profile' %}">Mon portefeuille de clients</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'consultant-profile' %}">Gestion de mon portefeuille de clients</a></li>
                                         <li><a class="dropdown-item" href="{% url 'categorie' %}">Gestion des catégories</a></li>
                                         <li><a class="dropdown-item" href="{% url 'products-list-mng' %}">Gestion des produits</a></li>
-                                        <li><a class="dropdown-item" href="{% url 'product-create' %}">Créer produit</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'product-create' %}">Création de produit</a></li>
                                     </ul>
                                 </li>
                             {% elif user.customer %}
