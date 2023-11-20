@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from django.contrib.auth.views import LoginView, LogoutView,PasswordResetView, PasswordResetDoneView, PasswordResetCompleteView, PasswordResetConfirmView
 
-from .views import ConsultantCreateView, ConsultantUpdateView, ConsultantDeleteView
+from .views import ConsultantCreateView,  ConsultantDeleteView
 
 urlpatterns=[
     path('', views.home, name="home"),
@@ -20,7 +20,7 @@ urlpatterns=[
     # path("consultants/", ConsultantListView.as_view(), name="consultants"),
     # path('consultant/create/', ConsultantCreateView.as_view(), name='consultant-create'),
     path('consultant/delete/<int:pk>/', ConsultantDeleteView.as_view(), name='consultant-delete'),
-    path('consultant/update/<int:pk>/', ConsultantUpdateView.as_view(), name='consultant-update'),
+    #path('consultant/update/<int:pk>/', ConsultantUpdateView.as_view(), name='consultant-update'),
 
 
 ]

@@ -21,10 +21,16 @@ class ConsultantCreationForm(UserCreationForm):
         super(ConsultantCreationForm, self).__init__(*args, **kwargs)
 
         # Ajouter des attributs ou modifier les champs si nécessaire
-        self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
-        self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
-        self.fields['password1'].widget.attrs.update({'class': 'form-control'})
-        self.fields['password2'].widget.attrs.update({'class': 'form-control'})
+        for field_name in ['first_name', 'last_name', 'password1', 'password2']:
+            self.fields[field_name].widget.attrs.update({'class': 'form-control'})
+
+        # Supprimer le help_text par défaut pour les mots de passe
+        self.fields['password1'].help_text = None
+        self.fields['password2'].help_text = None
+
+        # Ajouter un message d'aide pour les mots de passe
+        # self.fields['password1'].widget.attrs.update({'placeholder': 'Entrez le mot de passe'})
+        # self.fields['password2'].widget.attrs.update({'placeholder': 'Confirmez le mot de passe'})
 
 
 class CustomerCreationForm(UserCreationForm):

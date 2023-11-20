@@ -14,16 +14,16 @@
 
 
 <div class="row">
-    <h2>Gestion des consultants</h2>
-    <form method="post" id="consultant-form" action="https://google">
+    <h2>Créer un consultant</h2>
+    <form method="post" id="consultant-form"  action="{% url 'consultants' %}">
         {% csrf_token %}
         {{ form.as_p }}
         <button class="custom-button" type="submit">Enregistrer</button>
     </form>
 </div>
-
+<hr>
 <div class="row">
-    <h2>Liste des consultants existantes</h2>
+    <h2>Gestion des consultants existants</h2>
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead>
@@ -49,7 +49,7 @@
                         <td>{{ consultant.clients.count }}</td>
                         <td class="align-items-center">{{consultant.pk}}</td>
                         <td class="center_my-text">
-                           <a href="{% url 'consultant-update' consultant.pk %}"><i class="fas fa-edit"></i></a>
+                           <a href="{% url 'consultants' %}?pk={{ consultant.pk }}"><i class="fas fa-edit"></i></a>
                                                                            <!-- Bouton pour ouvrir le modal -->
                         <button class="btn modal-supprimer" data-bs-toggle="modal"  data-bs-target="#deleteModal{{ consultant.pk  }}">
                         <i class="fas fa-trash"></i></button>
@@ -83,7 +83,6 @@
                             </div>
                         </div>
                     </div>
-
 <!--                        fin de modal-->
                     </tr>
                 {% endfor %}

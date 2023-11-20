@@ -111,19 +111,19 @@ class CustomerHome(UserPassesTestMixin, DetailView):
 #
 #
 #
-class ConsultantUpdateView(UpdateView):
-    model = Consultant
-    form_class = ConsultantCreationForm
-    template_name = 'users/consultant_list.html'
-    success_url = '/consultants/'
-    context_object_name = "consultants"
-
-    # get context data needed as objects in CBV is not iterable
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = "Consultants"
-        context['consultants'] = [self.object]  # Utilisez une liste pour rendre l'objet itérable
-        return context
+# class ConsultantUpdateView(UpdateView):
+#     model = Consultant
+#     form_class = ConsultantCreationForm
+#     template_name = 'users/consultant_list.html'
+#     success_url = '/consultants/'
+#     context_object_name = "consultants"
+#
+#     # get context data needed as objects in CBV is not iterable
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['title'] = "Consultants"
+#         context['consultants'] = [self.object]  # Utilisez une liste pour rendre l'objet itérable
+#         return context
 
 
 class ConsultantCreateView(View):
@@ -152,7 +152,7 @@ class ConsultantCreateView(View):
 
         if form.is_valid():
             form.save()
-            return redirect('categorie')
+            return redirect('consultants')
 
         return render(request, self.template_name, {'form': form, 'consultants': consultants})
 
