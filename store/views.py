@@ -237,13 +237,15 @@ def process_order(request):
 def consultant_profile(request):
     consultant = request.user.consultant
     customers = Customer.objects.filter(consultant_applied=consultant)
-    orders_items_ordered = OrderItem.objects.filter(customer__in=customers, ordered=True)
-    orders_items_not_ordered = OrderItem.objects.filter(customer__in=customers, ordered=False)
-    print(orders_items_ordered)
-    print(orders_items_not_ordered)
 
-    return render(request, "store/consultant_profile.html", context = {"customers":customers, 'orders_items_ordered': orders_items_ordered, "orders_items_not_ordered":orders_items_not_ordered})
+    consultant_clients = []
 
+    for customer in customers:
+        ordered_items = OrderItem.objects.filter(customer=customer, ordered=True)
+        not_ordered_items = OrderItem.objects.filter(customer=customer, ordered=False)
+        consultant_clients.append((customer, ordered_items, not_ordered_items))
+
+    return render(request, "store/consultant_profile.html", context={"consultant_clients": consultant_clients})
 # Order to be updated by consultant
 class OrderUpdateConsultantView(LoginRequiredMixin, UpdateView):
     model = OrderItem

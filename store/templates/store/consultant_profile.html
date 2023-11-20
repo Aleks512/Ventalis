@@ -1,3 +1,5 @@
+<!-- users/consultant_profile.html -->
+
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
@@ -10,21 +12,21 @@
     </div>
   {% endif %}
 
-  {% for customer in customers %}
-    {% if orders_items_ordered|length > 0 %}
+  {% for customer, orders_items_ordered, orders_items_not_ordered in consultant_clients %}
     <div class="card">
       <div class="card-header">
-          <h4>Commandes de <span class="badge rounded-pill bg-dark"> {{customer.company}}</span></h4>
-
+        <h4>Commandes de <span class="badge rounded-pill bg-dark"> {{ customer.company }}</span></h4>
       </div>
       <div class="card-body">
-        <h5 class="card-title"><span class="badge rounded-pill bg-light text-dark"> {{customer.company}}</span></h5>
+        <h5 class="card-title"><span class="badge rounded-pill bg-light text-dark"> {{ customer.company }}</span></h5>
         <p class="card-text">Articles commandés par <strong>{{ customer.first_name }} {{ customer.last_name }}</strong> <span class="badge rounded-pill bg-dark">{{ customer.email }}</span></p>
         <span class="badge rounded-pill bg-light text-dark">
-        <a href="https://www.infogreffe.fr/"> Information sur la solvabilité</a>
+          <a href="https://www.infogreffe.fr/"> Information sur la solvabilité</a>
         </span>
       </div>
     </div>
+
+    {% if orders_items_ordered %}
       <table class="table table-responsive table-striped">
         <thead>
           <tr>
@@ -33,7 +35,7 @@
             <th>Prix</th>
             <th>Date de la commande</th>
             <th>Statut</th>
-            <th class="center_my-text">Modiifier</th>
+            <th class="center_my-text">Modifier</th>
           </tr>
         </thead>
         <tbody>
@@ -41,8 +43,8 @@
             <tr>
               <td>{{ order_item.product.name }}</td>
               <td>{{ order_item.quantity }}</td>
-              <td>{{ order_item.get_total |floatformat }} €</td>
-              <td>{{ order_item.date_added|date:"Y-m-d H:i:s" }}</td>
+              <td>{{ order_item.get_total | floatformat }} €</td>
+              <td>{{ order_item.date_added | date:"Y-m-d H:i:s" }}</td>
               <td>
                 {% if order_item.status %}
                   {{ order_item.get_status_display }}
@@ -60,8 +62,8 @@
       <p>Pas d'articles commandés pour {{ customer.company }}</p>
     {% endif %}
 
-    {% if orders_items_not_ordered|length > 0 %}
-      <p><span class="badge rounded-pill bg-warning text-dark">Nouvels articles dans le panier</span> pour {{ customer.company }}</p>
+    {% if orders_items_not_ordered %}
+      <p><span class="badge rounded-pill bg-warning text-dark">Nouveaux articles dans le panier</span> pour {{ customer.company }}</p>
       <table class="table table-responsive table-striped">
         <thead>
           <tr>
@@ -78,7 +80,7 @@
               <td>{{ order_item.product.name }}</td>
               <td>{{ order_item.quantity }}</td>
               <td>{{ order_item.get_total }}</td>
-              <td>{{ order_item.date_added|date:"Y-m-d H:i:s" }}</td>
+              <td>{{ order_item.date_added | date:"Y-m-d H:i:s" }}</td>
               <td>
                 {% if order_item.status %}
                   {{ order_item.get_status_display }}
