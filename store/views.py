@@ -262,30 +262,31 @@ class OrderUpdateConsultantView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, "La commande a été mise à jour avec succès.")
 
 
-
-class CategoryCreateView(View):
+class CategoryCRUDView(View):
     template_name = 'store/categories.html'
     form_class = CategoryForm
 
     def get(self, request, *args, **kwargs):
         categories = Category.objects.all()
-        category_id = request.GET.get('pk')
-        form = self.form_class()
+        slug = request.GET.get('slug')
 
-        if category_id:
-            category = get_object_or_404(Category, pk=category_id)
+        if slug:
+            category = Category.objects.get(slug=slug)
             form = self.form_class(instance=category)
+        else:
+            form = self.form_class()
 
         return render(request, self.template_name, {'form': form, 'categories': categories})
 
     def post(self, request, *args, **kwargs):
-        category_id = request.GET.get('pk')
+        slug = request.POST.get('slug')
         categories = Category.objects.all()
-        form = self.form_class(request.POST)
 
-        if category_id:
-            category = get_object_or_404(Category, pk=category_id)
+        if slug:
+            category = Category.objects.get(slug=slug)
             form = self.form_class(request.POST, instance=category)
+        else:
+            form = self.form_class(request.POST)
 
         if form.is_valid():
             form.save()

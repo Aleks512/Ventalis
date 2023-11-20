@@ -9,12 +9,12 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
 from django.db.models.signals import pre_save
+from django.db import IntegrityError
 
 
 class Category(models.Model):
     name = models.CharField(_("Nom"), max_length=255, unique=True)
-    description = models.TextField(_("Description"), blank=True)
-    slug = models.SlugField(_("Slug"), unique=True, max_length=255)
+    slug = models.SlugField(_("Slug"), max_length=255, blank=True)
 
     class Meta:
         verbose_name = _("Catégorie")
@@ -23,10 +23,12 @@ class Category(models.Model):
         return self.name
     def get_absolute_url(self):
         return f'/{self.slug}/'
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
 
 class Product(models.Model):
     category = models.ForeignKey(Category, verbose_name=_("Catégorie"), on_delete=models.CASCADE)
