@@ -1,7 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.views import LoginView
 from django.views import View
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
+
+from store.models import OrderItem
 from .models import Consultant,NewUser, Customer
 from django.urls import reverse
 from django.contrib.auth import login, authenticate
@@ -85,22 +88,30 @@ class WebAppLoginView(LoginView):
             return redirect('home')  # Replace 'home' with your desired URL after login
         return super().get(request, *args, **kwargs)
 
+@login_required
+def customer_profile(request):
+    my_orders = OrderItem.objects.filter(customer=request.user.customer).order_by("status")
+    context = {"my_orders": my_orders}
+    return render(request, "users/customer_profile.html", context)
 
-class CustomerHome(UserPassesTestMixin, DetailView):
-    model = Customer
-    template_name = "users/my_orders.html"
-    fields = '__all__'
+# class CustomerHome(UserPassesTestMixin, DetailView):
+#     model = Customer
+#     template_name = "users/my_orders.html"
+#     fields = '__all__'
+#
+#     def test_func(self):
+#         return self.request.user.is_authenticated and self.request.user.customer
+#
+#     def get_object(self, queryset=None):
+#         id = self.request.user.customer.id
+#         return Customer.objects.get(id=id)
 
-    def test_func(self):
-        return self.request.user.is_authenticated and self.request.user.customer
-
-    def get_object(self, queryset=None):
-        id = self.request.user.customer.id
-        return Customer.objects.get(id=id)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        customer = self.get_object()
+    #
+    #
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     customer = self.get_object()
 
 
 # class ConsultantListView(ListView):

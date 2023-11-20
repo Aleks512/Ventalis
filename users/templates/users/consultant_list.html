@@ -14,7 +14,7 @@
 
 
 <div class="row">
-    <h2>Créer un consultant</h2>
+    <h2 class="text-success mt-2 mb-3">Créer un consultant</h2>
     <form method="post" id="consultant-form"  action="{% url 'consultants' %}">
         {% csrf_token %}
         {{ form.as_p }}
@@ -23,10 +23,10 @@
 </div>
 <hr>
 <div class="row">
-    <h2>Gestion des consultants existants</h2>
+    <h2 class="text-success mt-2 mb-3">Gestion des consultants existants</h2>
     <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead>
+        <table class="table table-bordered table-striped table-responsive text-secondary align-middle">
+            <thead class="thead-dark">
                 <tr>
                     <th>Matricule</th>
                     <th>Prénom</th>

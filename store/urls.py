@@ -26,4 +26,5 @@ urlpatterns = [
     # path('categorie/update/<slug:slug>/', CategoryUpdateView.as_view(), name='category-update'),
 	path('category-display/', CategoryCRUDView.as_view(), name='categorie'),
 
+
 ]

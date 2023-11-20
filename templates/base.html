@@ -65,7 +65,7 @@
                                 </li>
                             {% elif user.customer %}
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'customer-home' id=request.user.customer.id %}">Mon espace</a>
+                                    <a class="nav-link" href="{% url 'customer-profile' %}">Mon espace</a>
                                 </li>
                                 <!--CART-->
                                 <a href="{% url 'cart' %}"><img id="cart-icon" src="{% static 'images/shop/cart.png' %}"></a>

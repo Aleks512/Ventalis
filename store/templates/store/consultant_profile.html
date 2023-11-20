@@ -27,7 +27,7 @@
     </div>
 
     {% if orders_items_ordered %}
-      <table class="table table-responsive table-striped">
+      <table class="table table-bordered table-striped table-responsive  text-secondary align-middle">
         <thead>
           <tr>
             <th>Nom du produit</th>
@@ -64,7 +64,7 @@
 
     {% if orders_items_not_ordered %}
       <p><span class="badge rounded-pill bg-warning text-dark">Nouveaux articles dans le panier</span> pour {{ customer.company }}</p>
-      <table class="table table-responsive table-striped">
+      <table class="table table-responsive">
         <thead>
           <tr>
             <th>Nom du produit</th>

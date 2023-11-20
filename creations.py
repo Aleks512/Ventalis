@@ -299,3 +299,6 @@ for product in products_data:
 # from store.models import Order, OrderItem
 # orders = Order.objects.all().delete()
 # orders_i = OrderItem.objects.all().delete()
+
+ # <table class="table table-bordered table-striped table-responsive text-secondary align-middle">
+# <h2 class="text-success mt-2 mb-3">Gestion des consultants existants</h2>

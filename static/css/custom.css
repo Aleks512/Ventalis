@@ -31,6 +31,12 @@ h1, h2, h3{
   font-family: 'Montserrat', sans-serif;
 }
 
+h2 {
+    color: #0c4128;
+    margin-top: 2em;
+    margin-bottom: 2em;
+     }
+
 .container{
  background-color: rgba(222, 241, 227, 0.13);
 }
