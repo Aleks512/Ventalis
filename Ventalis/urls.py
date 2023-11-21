@@ -2,6 +2,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from api import views
 router = DefaultRouter()
@@ -17,6 +18,8 @@ urlpatterns = [
     path('messagerie/', include('messagerie.urls')),
     path('', include('store.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    #path('', include('api.urls')),
-    path("api/", include(router.urls))
+
+    path("api/", include(router.urls)),
+    path('api/schema/',SpectacularAPIView.as_view(), name='schema')
+
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) # to render the photos uploaded if not 404
