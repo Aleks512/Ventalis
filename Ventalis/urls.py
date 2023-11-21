@@ -6,6 +6,7 @@ from rest_framework.routers import DefaultRouter
 from api import views
 router = DefaultRouter()
 router.register(r'newusers', views.NewUserViewSet)
+router.register(r'orderitems', views.OrderItemViewSet)
 
 from Ventalis import settings
 
@@ -16,6 +17,6 @@ urlpatterns = [
     path('messagerie/', include('messagerie.urls')),
     path('', include('store.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('', include('api.urls')),
+    #path('', include('api.urls')),
     path("api/", include(router.urls))
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) # to render the photos uploaded if not 404
