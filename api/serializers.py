@@ -13,7 +13,7 @@ class CustomerSerializer(serializers.ModelSerializer):
         model = Customer
         fields = '__all__'
 
-class Consultant(serializers.ModelSerializer):
+class ConsultantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Consultant
         fields = '__all__'
