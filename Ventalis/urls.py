@@ -10,4 +10,6 @@ urlpatterns = [
     #path('communication/', include('communication.urls')),
     path('messagerie/', include('messagerie.urls')),
     path('', include('store.urls')),
+    path('api-auth/', include('rest_framework.urls')),
+    path('', include('api.urls')),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) # to render the photos uploaded if not 404
