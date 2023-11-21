@@ -90,8 +90,15 @@ class WebAppLoginView(LoginView):
 
 @login_required
 def customer_profile(request):
-    my_orders = OrderItem.objects.filter(customer=request.user.customer).order_by("status")
-    context = {"my_orders": my_orders}
+    # Assuming the user is authenticated, retrieve their customer profile
+    ordered_items = OrderItem.objects.filter(customer=request.user.customer, ordered=True).order_by("status")
+    not_ordered_items = OrderItem.objects.filter(customer=request.user.customer, ordered=False).order_by("status")
+
+    context = {
+        "ordered_items": ordered_items,
+        "not_ordered_items": not_ordered_items,
+    }
+
     return render(request, "users/customer_profile.html", context)
 
 # class CustomerHome(UserPassesTestMixin, DetailView):
