@@ -302,3 +302,31 @@ for product in products_data:
 
  # <table class="table table-bordered table-striped table-responsive text-secondary align-middle">
 # <h2 class="text-success mt-2 mb-3">Gestion des consultants existants</h2>
+
+
+
+
+
+
+
+#API
+# from users.models import NewUser, Consultant, Customer
+# consultants = Consultant.objects.all()
+# consultants
+# <QuerySet [<Consultant: mike.tyson@ventalis.com>, <Consultant: ali.baba@ventalis.com>, <Consultant: joe.black@ventalis.com>, <Consultant: clark.kent@ventalis.com>]>
+#
+# ali = Consultant.objects.get(email="ali.baba@ventalis.com")
+# ali
+# <Consultant: ali.baba@ventalis.com>
+# >>> ali.clients
+# <django.db.models.fields.related_descriptors.create_reverse_many_to_one_manager.<locals>.RelatedManager object at 0x000001987A9412D0>
+# ali.clients.all()
+# <QuerySet [<Customer: laura.d@email.com>, <Customer: john.d@email.com>]>
+#
+# clients = ali.clients.all()
+#     for client in clients:
+#         orders = client.orderitem_set.all()
+# orders
+# <QuerySet [<OrderItem: 1003 x Sacs fourre-tout personnalisÃ©s>, <OrderItem: 1002 x Calendriers d'entreprise>, <OrderItem: 1004 x Structures gonflables>]>
+
+
