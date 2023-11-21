@@ -6,7 +6,7 @@ info:
 paths:
   /api/newusers/:
     get:
-      operationId: api_newusers_retrieve
+      operationId: api_newusers_list
       description: A Simple Viewset for viewing all users
       tags:
       - api
@@ -15,10 +15,16 @@ paths:
       - basicAuth: []
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewUser'
+          description: ''
   /api/orderitems/:
     get:
-      operationId: api_orderitems_retrieve
+      operationId: api_orderitems_list
       description: A Simple Viewset for viewing all users
       tags:
       - api
@@ -27,8 +33,136 @@ paths:
       - basicAuth: []
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderItem'
+          description: ''
 components:
+  schemas:
+    NewUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          title: Mot de passe
+          maxLength: 128
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+          title: Dernière connexion
+        email:
+          type: string
+          format: email
+          title: Courriel
+          maxLength: 255
+        first_name:
+          type: string
+          title: Prénom
+          maxLength: 100
+        last_name:
+          type: string
+          title: Nom de famille
+          maxLength: 50
+        company:
+          type: string
+          title: Société
+          maxLength: 100
+        is_active:
+          type: boolean
+        is_staff:
+          type: boolean
+        is_client:
+          type: boolean
+        is_employee:
+          type: boolean
+        is_superuser:
+          type: boolean
+        date_joined:
+          type: string
+          format: date-time
+        groups:
+          type: array
+          items:
+            type: integer
+            title: Groupes
+          title: Groupes
+          description: Les groupes dont fait partie cet utilisateur. Celui-ci obtient
+            tous les droits de tous les groupes auxquels il appartient.
+        user_permissions:
+          type: array
+          items:
+            type: integer
+            title: Permissions de l’utilisateur
+          title: Permissions de l’utilisateur
+          description: Permissions spécifiques à cet utilisateur.
+      required:
+      - company
+      - email
+      - first_name
+      - id
+      - last_name
+      - password
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: Statut de la commande
+        ordered:
+          type: boolean
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Quantité
+        comment:
+          type: string
+          nullable: true
+          title: Commantaire sur articles
+        date_added:
+          type: string
+          format: date-time
+          readOnly: true
+        customer:
+          type: integer
+          title: Client
+        order:
+          type: integer
+          title: Commande
+        product:
+          type: integer
+          nullable: true
+          title: Produit
+      required:
+      - customer
+      - date_added
+      - id
+      - order
+    StatusEnum:
+      enum:
+      - P
+      - PR
+      - S
+      - D
+      - R
+      type: string
+      description: |-
+        * `P` - En attente
+        * `PR` - En traitement
+        * `S` - Expédié
+        * `D` - Livré
+        * `R` - Retourné
   securitySchemes:
     basicAuth:
       type: http
