@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'store',
     'api',
     'rest_framework',
+    'drf_spectacular',
 
 ]
 
@@ -97,7 +98,16 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Ventalis e-commerce API',
+    'DESCRIPTION': 'API for mobile extention of web project',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
 }
 
 

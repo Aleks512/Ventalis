@@ -1,0 +1,39 @@
+openapi: 3.0.3
+info:
+  title: Ventalis e-commerce API
+  version: 1.0.0
+  description: API for mobile extention of web project
+paths:
+  /api/newusers/:
+    get:
+      operationId: api_newusers_retrieve
+      description: A Simple Viewset for viewing all users
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/orderitems/:
+    get:
+      operationId: api_orderitems_retrieve
+      description: A Simple Viewset for viewing all users
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          description: No response body
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
