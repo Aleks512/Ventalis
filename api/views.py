@@ -2,6 +2,8 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
+
+from api.for_customer_serializers import PerClientOrderItemSerializer
 from api.serializers import NewUserSerializer, CustomerSerializer, ConsultantSerializer, OrderItemSerializer
 from users.models import NewUser, Consultant, Customer
 from store.models import Product, Order, OrderItem
@@ -27,4 +29,15 @@ class OrderItemViewSet(viewsets.ViewSet):
     @extend_schema(responses=OrderItemSerializer)
     def list(self, request):
         serializer = OrderItemSerializer(self.queryset, many=True)
+        return Response(serializer.data)
+
+class PerClientOrderItemViewSet(viewsets.ViewSet):
+    """
+    A Simple Viewset for viewing all users
+    """
+    queryset = OrderItem.objects.all()
+
+    @extend_schema(responses=OrderItemSerializer)
+    def list(self, request):
+        serializer = PerClientOrderItemSerializer(self.queryset, many=True)
         return Response(serializer.data)

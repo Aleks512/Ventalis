@@ -26,6 +26,19 @@ def products(request):
     return render(request, "store/products.html", context)
 
 def add_to_cart(request, slug):
+    user = request.user
+
+    if not user.is_authenticated:
+        messages.warning(request, "Veuillez vous connecter pour ajouter des produits au panier.", extra_tags='not_logged_in')
+        return redirect(reverse('login'))
+
+    if user.is_superuser or user.is_employee:
+        messages.warning(request, "Vous n'êtes pas autorisé à ajouter des produits au panier.", extra_tags='not_customer')
+        #return redirect(reverse('home'))
+
+    if not user.is_client:
+        messages.info(request, "Vous êtes identifié, mais vous n'êtes pas un client. Vous pouvez continuer à naviguer.", extra_tags='not_customer')
+        return redirect(reverse('product', kwargs={'slug': slug}))
     # Récupérer le produit en fonction du slug
     product = get_object_or_404(Product, slug=slug)
 

@@ -8,6 +8,7 @@ from api import views
 router = DefaultRouter()
 router.register(r'newusers', views.NewUserViewSet)
 router.register(r'orderitems', views.OrderItemViewSet)
+router.register(r'perclientorderitems', views.PerClientOrderItemViewSet)
 
 from Ventalis import settings
 
