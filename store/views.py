@@ -22,6 +22,12 @@ def products(request):
     products = Product.objects.all()
     categories = Category.objects.all()
     selected_category = request.GET.get('category')  # Récupérer la catégorie sélectionnée
+    if selected_category:
+        # Filtrer les produits en fonction de la catégorie sélectionnée
+        products = Product.objects.filter(category__slug=selected_category)
+    else:
+        # Si aucune catégorie n'est sélectionnée, afficher tous les produits
+        products = Product.objects.all()
     context = {"products": products, "categories": categories, "selected_category": selected_category}
     return render(request, "store/products.html", context)
 

@@ -85,7 +85,7 @@ class NewUserListView(ListView):
 class WebAppLoginView(LoginView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('home')  # Replace 'home' with your desired URL after login
+            return redirect('home')
         return super().get(request, *args, **kwargs)
 
 @login_required

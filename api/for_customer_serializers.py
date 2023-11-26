@@ -13,7 +13,7 @@ class PerClientOrderSerializer(serializers.ModelSerializer):
     customer=CustomerSerializer(many=False)
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ['status', 'comment']
 
 class PerClientOrderItemSerializer(serializers.ModelSerializer):
     customer=CustomerSerializer(many=False)

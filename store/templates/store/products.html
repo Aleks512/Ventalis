@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block container_class %}{% endblock %}
+{% block no_margin_class %}container-fluid{% endblock %}
 {% block content %}
   {% if messages %}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -24,21 +26,40 @@
   </div>
 
   <h1 class="my-5">Nos produits</h1>
+  {% if selected_category %}
+    <p class="mb-5">Catégorie: <strong>{{ selected_category }}</strong></p>
+  {% endif %}
 
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     {% for product in products %}
-      <div class="col box-element">
-        <div class="card">
-          {% if product.image %}
-            <img src="{{ product.imageURL }}" alt="{{ product.name }}" class="card-img-top img-fluid" style="transition: transform 0.2s ease-in-out;">
-          {% endif %}
-          <div class="card-body">
-            <h5 class="card-title">{{ product.name }}</h5>
-            <p class="card-text">Prix unitaire : {{ product.price }} €</p>
-            <a href="{{ product.get_absolute_url }}" class="btn btn-secondary custom-button">Voir l'article</a>
+      {% if selected_category and product.category.slug == selected_category %}
+        <div class="col box-element">
+          <div class="card">
+            {% if product.image %}
+              <img src="{{ product.imageURL }}" alt="{{ product.name }}" class="card-img-top img-fluid" style="transition: transform 0.2s ease-in-out;">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text">Prix unitaire : {{ product.price }} €</p>
+              <a href="{{ product.get_absolute_url }}" class="btn btn-secondary custom-button">Voir l'article</a>
+            </div>
           </div>
         </div>
-      </div>
+      {% elif not selected_category %}
+        <!-- Si aucune catégorie n'est sélectionnée, afficher tous les produits -->
+        <div class="col box-element">
+          <div class="card">
+            {% if product.image %}
+              <img src="{{ product.imageURL }}" alt="{{ product.name }}" class="card-img-top img-fluid" style="transition: transform 0.2s ease-in-out;">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text">Prix unitaire : {{ product.price }} €</p>
+              <a href="{{ product.get_absolute_url }}" class="btn btn-secondary custom-button">Voir l'article</a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
     {% empty %}
       <div class="col">
         <p>Nous sommes en rupture de stock pour les articles de cette catégorie</p>

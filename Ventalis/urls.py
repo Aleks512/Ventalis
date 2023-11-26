@@ -3,23 +3,24 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from api import views, old_cus_views
 
-from api import views
 router = DefaultRouter()
 router.register(r'newusers', views.NewUserViewSet)
 router.register(r'orderitems', views.OrderItemViewSet)
 router.register(r'perclientorderitems', views.PerClientOrderItemViewSet)
+router.register(r'votre-viewset', old_cus_views.YourViewSetName, basename='votre-viewset')
 
 from Ventalis import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
-    #path('communication/', include('communication.urls')),
     path('messagerie/', include('messagerie.urls')),
     path('', include('store.urls')),
-    path('api-auth/', include('rest_framework.urls')),
+    path('', include('api.urls')),
 
+    path('api-auth/', include('rest_framework.urls')),
     path("api/", include(router.urls)),
     path('api/schema/',SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/docs/',SpectacularSwaggerView.as_view(url_name='schema')),

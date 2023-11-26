@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  {% if clients %}
+    <div class="container mt-5 text-light" style="background-color: #f8f9fa; height: 90vh;">
+      <div class="row justify-content-center align-items-center h-100">
+        <div class="col-ms-8">
+          <div class="card border-0 shadow-lg">
+            <div class="card-header" style="background-color: #000000; color: #27b547;">
+              <h4>Liste des commandes des clients (par société)</h4>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Société</th>
+                    <th>Commande</th>
+                    <th>Prenom</th>
+                    <th>Nom de famille</th>
+                    <th>Email</th>
+                    <th>Total</th>
+                    <th class="d-sm-table-cell">Statut</th>
+                    <th class="d-sm-table-cell">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for client in clients %}
+                    {% for item in client.order_set.all %}
+                      <tr>
+                        {% if forloop.first %}
+                          <td rowspan="{{ client.order_set.count }}">{{ client.company }}</td>
+                        {% endif %}
+                        <td><a href="{% url 'order-detail' pk=item.id %}" class="categorie-plus">{{ item }}</a></td>
+                        <td>{{ client.first_name }}</td>
+                        <td>{{ client.last_name }}</td>
+                        <td>{{ client.email }}</td>
+                        <td>{{ item.price }} €</td>
+                        <td class="d-sm-table-cell">
+                          {% if item.ordered %}
+                            Commandé
+                          {% else %}
+                            En attente
+                          {% endif %}
+                        </td>
+                        <td class="d-sm-table-cell">
+                          <a href="{% url 'consultant-order-update' item.id %}" class="btn custom-btn">
+                            <i class="bi bi-pencil-fill me-2"></i>Editer
+                          </a>
+                        </td>
+                      </tr>
+                    {% empty %}
+                      <tr>
+                        {% if forloop.first %}
+                          <td rowspan="{{ client.order_set.count }}">{{ client.company }}</td>
+                        {% endif %}
+                      </tr>
+                    {% endfor %}
+                  {% empty %}
+                    <tr>
+                      <td colspan="7">Aucun client pour le moment</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div>
+      Aucun client pour le moment
+    </div>
+  {% endif %}
+{% endblock %}
+
+
+
+
