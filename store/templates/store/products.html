@@ -1,7 +1,45 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block container_class %}{% endblock %}
 {% block no_margin_class %}container-fluid{% endblock %}
+{% block title %}Produits{% endblock %}
+
+{% block extra_css %}
+  <style>
+    .box-element {
+      transition: transform 0.2s ease-in-out;
+    }
+    .box-element:hover {
+      transform: scale(1.05);
+    }
+    .custom-active {
+      background-color: #e9ecef;
+    }
+    .custom-button {
+      background-color: #343a40;
+      border-color: #343a40;
+    }
+    .custom-button:hover {
+      background-color: #23272b;
+      border-color: #23272b;
+    }
+    .custom-button:focus {
+      box-shadow: 0 0 0 0.25rem rgba(52, 58, 64, 0.5);
+    }
+    .categorie {
+      text-decoration: none;
+      color: #343a40;
+    }
+    .categorie:hover {
+      text-decoration: none;
+      color: #343a40;
+    }
+  </style>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+{% endblock %}
+
 {% block content %}
   {% if messages %}
     <div class="alert alert-success alert-dismissible fade show" role="alert">

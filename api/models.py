@@ -7,7 +7,7 @@ class ApiMessage(models.Model):
     receiver = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='received_messages')
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    order = models.ForeignKey('store.Order', on_delete=models.CASCADE, related_name='order_messages')
+
 
     class Meta:
         ordering = ['-timestamp']
