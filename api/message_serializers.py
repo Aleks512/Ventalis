@@ -14,12 +14,18 @@ class ConsultantSerializer(serializers.ModelSerializer):
         model = Consultant
         fields = ['id', 'first_name', 'last_name', 'email', 'customers']
 
-class ApiMessageSerializer(serializers.ModelSerializer):
+class ApiForCustomerMessageSerializer(serializers.ModelSerializer):
     sender = ConsultantSerializer(read_only=True)
     receiver = CustomerSerializer(read_only=True)
-    order = serializers.PrimaryKeyRelatedField(queryset=Order.objects.all())
 
     class Meta:
         model = ApiMessage
-        fields = ['id', 'sender', 'receiver', 'content', 'timestamp', 'order']
+        fields = ['id', 'sender', 'receiver', 'content', 'timestamp']
 
+class ApiForConsultantMessageSerializer(serializers.ModelSerializer):
+    sender = ConsultantSerializer()
+    receiver = CustomerSerializer(read_only=True)
+
+    class Meta:
+        model = ApiMessage
+        fields = ['id', 'sender', 'receiver', 'content', 'timestamp']

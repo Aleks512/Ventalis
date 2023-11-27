@@ -6,24 +6,18 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from users.models import Customer
 from .models import ApiMessage
-from .message_serializers import ApiMessageSerializer
+from .message_serializers import ApiForCustomerMessageSerializer, ApiForConsultantMessageSerializer
 
-class IsConsultantOrReadOnly(permissions.BasePermission):
-    """
-    Permission personnalisée pour autoriser uniquement les consultants à effectuer des modifications.
-    """
+class IsAuthenticatedAndConsultant(permissions.BasePermission):
     def has_permission(self, request, view):
-        # Les utilisateurs non authentifiés sont autorisés à lire
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        # Les utilisateurs authentifiés doivent être des consultants pour effectuer des modifications
-        return request.user and request.user.is_authenticated and request.user.is_consultant
+        # Vérifie si l'utilisateur est authentifié et est un consultant
+        return request.user.is_authenticated and hasattr(request.user, 'consultant')
 
-class ApiMessageViewSet(viewsets.ModelViewSet):
+class ConsultantApiMessageViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedAndConsultant]
     queryset = ApiMessage.objects.all()
-    serializer_class = ApiMessageSerializer
+    serializer_class = ApiForConsultantMessageSerializer
 
     def perform_create(self, serializer):
         # Set the sender of the ApiMessage as the current user (consultant)
@@ -62,12 +56,17 @@ class ApiMessageViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_404_NOT_FOUND)
 
 
+class IsAuthenticatedAndCustomer(permissions.BasePermission):
+    def has_permission(self, request, view):
+        # Vérifie si l'utilisateur est authentifié et est un client
+        return request.user.is_authenticated and hasattr(request.user, 'customer')
+
 class CustomerApiMessageViewSet(viewsets.ReadOnlyModelViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-    serializer_class = ApiMessageSerializer
+    permission_classes = [IsAuthenticatedAndCustomer]
+    serializer_class = ApiForCustomerMessageSerializer
 
     def get_queryset(self):
-        # Récupère tous les ApiMessages écrits par le consultant du client actuellement connecté
-        return ApiMessage.objects.filter(receiver=self.request.user.customer)
+
+        return ApiForCustomerMessageSerializer.objects.filter(receiver=self.request.user.customer)
 

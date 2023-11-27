@@ -4,14 +4,14 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from api import views, old_cus_views, message_views
-from api.message_views import ApiMessageViewSet,CustomerApiMessageViewSet
+from api.message_views import ConsultantApiMessageViewSet,CustomerApiMessageViewSet
 
 router = DefaultRouter()
 router.register(r'newusers', views.NewUserViewSet)
 router.register(r'orderitems', views.OrderItemViewSet)
 router.register(r'perclientorderitems', views.PerClientOrderItemViewSet)
 #router.register(r'votre-viewset', old_cus_views.YourViewSetName, basename='votre-viewset')
-router.register(r'messages', ApiMessageViewSet, basename='message')
+router.register(r'consultant-messages', ConsultantApiMessageViewSet, basename='consultant-message')
 router.register(r'customer-messages', CustomerApiMessageViewSet, basename='customer-message')
 
 from Ventalis import settings
