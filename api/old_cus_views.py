@@ -27,6 +27,14 @@ class YourViewSetName(viewsets.ViewSet):
         serializer = OrderItemSerializerForCustomer(queryset, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['PATCH'])
+    def order_for_update(self, request):
+        user = request.user.consultant
+
+        queryset = OrderItem.objects.filter(customer__consultant_applied=user)
+        serializer = OrderItemSerializerForCustomer(queryset, many=True)
+        return Response(serializer.data)
+
     @action(detail=True, methods=['GET'])
     def order_detail(self, request, pk=None):
         queryset = OrderItem.objects.all()

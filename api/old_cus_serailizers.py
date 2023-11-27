@@ -24,3 +24,4 @@ class ConsultantSerializerForCustomer(serializers.ModelSerializer):
     class Meta:
         model = Consultant
         fields = ['id', 'matricule', 'email', 'first_name', 'last_name',]
+
