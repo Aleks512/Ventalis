@@ -7,10 +7,6 @@ class CustomerSerializer(serializers.ModelSerializer):
         model = Customer
         fields = ['id', 'first_name', 'last_name', 'email','company']  # Ajoutez d'autres champs si nécessaire
 
-class CustomerReceiverSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Customer
-        fields = ['email']
 
 class ConsultantSerializer(serializers.ModelSerializer):
     customers = CustomerSerializer(many=True, read_only=True)
@@ -122,3 +118,21 @@ class ApiMessageSerializer(serializers.ModelSerializer):
                 {'receiver_email': 'The recipient with the specified email address does not exist.'})
 
         return ApiMessage.objects.create(receiver=receiver, **validated_data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# class CustomerReceiverSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Customer
+#         fields = ['email']

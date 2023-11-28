@@ -15,33 +15,6 @@ class IsAuthenticatedAndConsultant(permissions.BasePermission):
         """Vérifie si l'utilisateur est authentifié et est un consultant"""
         return request.user.is_authenticated and request.user.is_employee
 
-# class ConsultantApiMessageViewSet(viewsets.ModelViewSet):
-#     authentication_classes = [JWTAuthentication]
-#     permission_classes = [IsAuthenticatedAndConsultant]
-#     queryset = ApiMessage.objects.all()
-#     serializer_class = ApiForConsultantMessageSerializer
-#
-#     def get_queryset(self):
-#         """
-#         Récupère tous les messages écrits par le consultant actuellement connecté.
-#         """
-#         return ApiMessage.objects.filter(sender=self.request.user.consultant)
-#
-#     def perform_create(self, serializer):
-#         """
-#         Écrit un nouveau message avec le consultant actuellement connecté comme expéditeur.
-#         """
-#         serializer.save(sender=self.request.user.consultant)
-#
-#     @action(detail=False, methods=['GET'])
-#     def my_messages(self, request):
-#         """
-#         Récupère tous les messages écrits par le consultant actuellement connecté.
-#         """
-#         messages = self.get_queryset()
-#         serializer = self.get_serializer(messages, many=True)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-
 class IsAuthenticatedAndCustomer(permissions.BasePermission):
     def has_permission(self, request, view):
         # Vérifie si l'utilisateur est authentifié et est un client
@@ -53,8 +26,8 @@ class CustomerApiMessageViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ApiForCustomerMessageSerializer
 
     def get_queryset(self):
+        return ApiMessage.objects.filter(receiver=self.request.user.customer).order_by('-timestamp')
 
-        return ApiForCustomerMessageSerializer.objects.filter(receiver=self.request.user.customer)
 
 
 class ConsultantApiMessageViewSet(viewsets.ViewSet):
@@ -73,30 +46,6 @@ class ConsultantApiMessageViewSet(viewsets.ViewSet):
         serializer = MessageReadSerializer(messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # def create(self, request):
-    #     """Handles POST requests to create a new message"""
-    #     serializer = MessageCreateSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         receiver = serializer.validated_data['email']
-    #         content = serializer.validated_data['content']
-    #
-    #         try:
-    #             receiver = Customer.objects.get(email=receiver)
-    #         except Customer.DoesNotExist:
-    #             raise NotFound('The receiver email does not exist.')
-    #
-    #         # Ensure the user has a consultant profile
-    #         try:
-    #             sender = request.user.consultant
-    #         except Consultant.DoesNotExist:
-    #             raise PermissionDenied('The user is not a consultant.')
-    #
-    #         message = ApiMessage.objects.create(
-    #             sender=sender,
-    #             receiver=receiver,
-    #             content=content
-    #         )
-    #         return Response({'message': "Message sent successfully."}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
