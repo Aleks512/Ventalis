@@ -50,12 +50,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'rest_framework_simplejwt',
+    "corsheaders",
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # corsheaders
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -189,18 +191,17 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 RECIPIENT_ADDRESS = env('RECIPIENT_ADDRESS')
 
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
-    },
-}
+ALLOWED_HOSTS = ['localhost','127.0.0.1']  # Autoriser les demandes de localhost
 
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',  # Autoriser les origines sur le port 3000
+    'http://localhost:8080',  # Autoriser les origines sur le port 8080
+]
 
+CORS_ALLOWED_METHODS = [
+    'POST',  # Autoriser la méthode POST
+    'GET',   # Autoriser la méthode GET (si nécessaire)
+    'PUT',   # Autoriser la méthode PUT (si nécessaire)
+    'PATCH', # Autoriser la méthode PATCH (si nécessaire)
+    'DELETE',# Autoriser la méthode DELETE (si nécessaire)
+]
