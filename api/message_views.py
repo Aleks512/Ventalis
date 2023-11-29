@@ -9,16 +9,8 @@ from .models import ApiMessage
 from .message_serializers import ApiForCustomerMessageSerializer, ApiForConsultantMessageSerializer, \
     MessageReadSerializer, MessageCreateSerializer, ApiMessageSerializer
 from rest_framework import serializers
+from .autorisations import IsAuthenticatedAndConsultant, IsAuthenticatedAndCustomer
 
-class IsAuthenticatedAndConsultant(permissions.BasePermission):
-    def has_permission(self, request, view):
-        """Vérifie si l'utilisateur est authentifié et est un consultant"""
-        return request.user.is_authenticated and request.user.is_employee
-
-class IsAuthenticatedAndCustomer(permissions.BasePermission):
-    def has_permission(self, request, view):
-        # Vérifie si l'utilisateur est authentifié et est un client
-        return request.user.is_authenticated and hasattr(request.user, 'customer')
 
 class CustomerApiMessageViewSet(viewsets.ReadOnlyModelViewSet):
     authentication_classes = [JWTAuthentication]
@@ -27,8 +19,6 @@ class CustomerApiMessageViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return ApiMessage.objects.filter(receiver=self.request.user.customer).order_by('-timestamp')
-
-
 
 class ConsultantApiMessageViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
