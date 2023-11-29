@@ -18,7 +18,11 @@ class CustomerApiMessageViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ApiForCustomerMessageSerializer
 
     def get_queryset(self):
-        return ApiMessage.objects.filter(receiver=self.request.user.customer).order_by('-timestamp')
+        customer = self.request.user
+        if not isinstance(customer, Customer):
+            raise serializers.ValidationError("Vous n'êtes pas autorisés à accéder à ce jeu de données.")
+
+        return ApiMessage.objects.filter(receiver=customer).order_by('-timestamp')
 
 class ConsultantApiMessageViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]

@@ -14,7 +14,9 @@ from .customer_serializers import OrderItemSerializerForCustomer, ConsultantSeri
 @permission_classes([IsAuthenticatedAndCustomer])
 @authentication_classes([JWTAuthentication])
 def view_customer_consultant(request):
-    customer = request.user.customer
+    customer = request.user
+    if not isinstance(customer, Customer):
+        raise serializers.ValidationError("Vous n'êtes pas autorisés à acceder à ce jeu de données.")
     consultant = customer.consultant_applied
 
     serializer = ConsultantSerializerForCustomer(consultant)
@@ -28,7 +30,7 @@ class OrderItemListAPIView(generics.ListAPIView):
     serializer_class = OrderItemSerializerForCustomer
 
     def get_queryset(self):
-        user = self.request.user.customer  # Récupérer l'utilisateur actuellement authentifié
+        user = self.request.user # Récupérer l'utilisateur actuellement authentifié
         if not isinstance(user, Customer):
             raise serializers.ValidationError("Vous n'êtes pas autorisés à acceder à ce jeu de données.")
         return OrderItem.objects.filter(customer=user)
@@ -44,6 +46,8 @@ class OrderDetailAPIView(generics.RetrieveAPIView):
     lookup_field = 'id'  # Changer 'id' par le nom du champ utilisé pour la recherche d'une commande spécifique
 
     def get_queryset(self):
-        user = self.request.user  # Récupérer l'utilisateur actuellement authentifié
-        return OrderItem.objects.filter(customer=user)
+        customer = self.request.user # Récupérer l'utilisateur actuellement authentifié
+        if not isinstance(customer, Customer):
+            raise serializers.ValidationError("Vous n'êtes pas autorisés à acceder à ce jeu de données.")
+        return OrderItem.objects.filter(customer=customer)
 
