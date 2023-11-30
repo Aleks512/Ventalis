@@ -8,19 +8,23 @@ from users.models import Customer, Consultant
 from rest_framework.response import Response
 from .autorisations import IsAuthenticatedAndCustomer
 from .customer_serializers import OrderItemSerializerForCustomer, ConsultantSerializerForCustomer
-
+from rest_framework.generics import GenericAPIView
 # Display the consultant
-@api_view(['GET'])
-@permission_classes([IsAuthenticatedAndCustomer])
-@authentication_classes([JWTAuthentication])
-def view_customer_consultant(request):
-    customer = request.user
-    if not isinstance(customer, Customer):
-        raise serializers.ValidationError("Vous n'êtes pas autorisés à acceder à ce jeu de données.")
-    consultant = customer.consultant_applied
+class ViewCustomerConsultant(GenericAPIView):
+    serializer_class = ConsultantSerializerForCustomer
+    permission_classes = [IsAuthenticatedAndCustomer]
+    authentication_classes = [JWTAuthentication]
 
-    serializer = ConsultantSerializerForCustomer(consultant)
-    return Response(serializer.data)
+    def get_queryset(self):
+        customer = self.request.user
+        if not isinstance(customer, Customer):
+            raise serializers.ValidationError("Vous n'êtes pas autorisés à acceder à ce jeu de données.")
+        return Consultant.objects.filter(customers=customer)
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 # Display customer's orders
 class OrderItemListAPIView(generics.ListAPIView):

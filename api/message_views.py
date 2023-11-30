@@ -2,6 +2,7 @@ from rest_framework import viewsets, permissions, status, generics
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.exceptions import NotFound, PermissionDenied
 from users.models import Customer, NewUser, Consultant
@@ -12,6 +13,23 @@ from rest_framework import serializers
 from .autorisations import IsAuthenticatedAndConsultant, IsAuthenticatedAndCustomer
 
 
+class ConsultantApiMessageViewSet(viewsets.GenericViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticatedAndConsultant]
+    serializer_class = MessageReadSerializer
+
+    def get_queryset(self):
+        # Ensure the user has a consultant profile
+        consultant = self.request.user.consultant
+        if consultant is None:
+            raise PermissionDenied('The user is not a consultant.')
+
+        return ApiMessage.objects.filter(sender=consultant)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 class CustomerApiMessageViewSet(viewsets.ReadOnlyModelViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedAndCustomer]
@@ -24,24 +42,7 @@ class CustomerApiMessageViewSet(viewsets.ReadOnlyModelViewSet):
 
         return ApiMessage.objects.filter(receiver=customer).order_by('-timestamp')
 
-class ConsultantApiMessageViewSet(viewsets.ViewSet):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticatedAndConsultant]
 
-    def list(self, request):
-        """Handles GET requests to retrieve messages sent by the current consultant"""
-        # Ensure the user has a consultant profile
-        try:
-            consultant = request.user.consultant
-        except Consultant.DoesNotExist:
-            raise PermissionDenied('The user is not a consultant.')
-
-        messages = ApiMessage.objects.filter(sender=consultant)
-        serializer = MessageReadSerializer(messages, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ApiMessageCreateView(generics.CreateAPIView):
     serializer_class = ApiMessageSerializer

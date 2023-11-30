@@ -6,11 +6,12 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from api import consultant_views, customer_views
 from api.consultant_views import OrderItemUpdateView, ConsultantOrderItemsView
-from api.message_views import CustomerApiMessageViewSet, ApiMessageCreateView
+from api.customer_views import ViewCustomerConsultant
+from api.message_views import CustomerApiMessageViewSet, ApiMessageCreateView, ConsultantApiMessageViewSet
 
 router = DefaultRouter()
 # router.register(r'newusers', views.NewUserViewSet)
-router.register(r'customer-messages', CustomerApiMessageViewSet, basename='customer-message')
+#router.register(r'customer-messages', CustomerApiMessageViewSet, basename='customer-message')
 
 from Ventalis import settings
 
@@ -22,11 +23,14 @@ urlpatterns = [
     path('', include('api.urls')),
     # API patths
     path('consultant-create-message/', ApiMessageCreateView.as_view(), name='consultant-create-message'),
+    path('consultant-messages/', ConsultantApiMessageViewSet.as_view({'get': 'list'}), name='consultant-messages'),
     path('orderitem-update/<int:pk>/', OrderItemUpdateView.as_view(), name='orderitem_update'),
     path('consultant-orderitems/', ConsultantOrderItemsView.as_view(), name='consultant_orderitems'),
-    path('customer/consultant/', customer_views.view_customer_consultant, name='view_customer_consultant'),
+    path('customer-consultant/', ViewCustomerConsultant.as_view(), name='view-customer-consultant'),
     path('order/items/', customer_views.OrderItemListAPIView.as_view(), name='order_item_list'),
     path('order/items/<int:id>/', customer_views.OrderDetailAPIView.as_view(), name='order_detail'),
+    #path('customer-message/<int:id>/', CustomerApiMessageViewSet, basename='customer-message',
+    path('customer-messages/', CustomerApiMessageViewSet.as_view({'get': 'list'}), name='customer-messages'),
 
 
 
