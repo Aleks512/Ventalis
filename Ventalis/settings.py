@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'messagerie',
     'store',
     'api',
+    'contact',
     'rest_framework',
     'drf_spectacular',
     'rest_framework_simplejwt',

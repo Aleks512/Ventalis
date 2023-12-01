@@ -21,6 +21,7 @@ urlpatterns = [
     path('messagerie/', include('messagerie.urls')),
     path('', include('store.urls')),
     path('', include('api.urls')),
+    path('', include('contact.urls')),
     # API patths
     path('consultant-create-message/', ApiMessageCreateView.as_view(), name='consultant-create-message'),
     path('consultant-messages/', ConsultantApiMessageViewSet.as_view({'get': 'list'}), name='consultant-messages'),
