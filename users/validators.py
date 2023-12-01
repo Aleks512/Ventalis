@@ -20,7 +20,6 @@ class ContainsNumberValidator:
                 'Le mot de passe doit contenir un chiffre et avoir une longueur minimale de 12 caractères',
                 code='password_no_number_or_short'
             )
-
     def get_help_text(self):
         return 'Votre mot de passe doit contenir au moins un chiffre et avoir une longueur minimale de 12 caractères.'
 
@@ -32,6 +31,5 @@ class ContainsSpecialCharacterValidator:
                 'Le mot de passe doit contenir un caractère spécial et avoir une longueur minimale de 12 caractères',
                 code='password_no_special_characters_or_short'
             )
-
     def get_help_text(self):
         return 'Votre mot de passe doit contenir au moins un caractère spécial et avoir une longueur minimale de 12 caractères.'
