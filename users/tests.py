@@ -1,5 +1,9 @@
+from unittest.mock import patch
+
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.urls import reverse
+
 from .models import Consultant, Customer
 from faker import Faker
 
@@ -82,6 +86,20 @@ class ConsultantModelTest(TestCase):
             last_name='Doe',
         )
 
+    def test_generate_random_matricule(self):
+        consultant = Consultant()
+        matricule = consultant.generate_random_matricule()
+
+        # Vérifiez que le matricule a la longueur attendue
+        self.assertEqual(len(matricule), Consultant.MATRICULE_LENGTH)
+
+    def test_generate_email(self):
+        consultant = Consultant(first_name='John', last_name='Doe')
+        email = consultant.generate_email()
+
+        # Vérifiez que l'email a le format attendu
+        expected_email = f'john.doe@ventalis.com'
+        self.assertEqual(email, expected_email)
         # Sauvegarder le consultant
         consultant.save()
         # Récupérer le consultant de la base de données
@@ -101,6 +119,31 @@ class ConsultantModelTest(TestCase):
         self.assertTrue(created_consultant.is_staff)
         self.assertTrue(created_consultant.is_employee)
         self.assertTrue(created_consultant.company, 'Ventalis')
+    def test_save_method_defaults(self):
+        consultant = Consultant(first_name='John', last_name='Doe')
+        consultant.save()
+
+        # Vérifiez que les valeurs par défaut sont correctement attribuées
+        self.assertTrue(consultant.is_staff)
+        self.assertTrue(consultant.is_employee)
+        self.assertEqual(consultant.company, 'Ventalis')
+
+    def test_get_full_name(self):
+        consultant = Consultant(first_name='John', last_name='Doe')
+        full_name = consultant.get_full_name()
+
+        # Vérifiez que get_full_name retourne le nom complet attendu
+        expected_full_name = 'John Doe'
+        self.assertEqual(full_name, expected_full_name)
+
+
+    # def test_get_absolute_url(self):
+    #     consultant = Consultant(matricule='12345')
+    #     url = consultant.get_absolute_url()
+    #
+    #     # Vérifiez que get_absolute_url retourne l'URL attendue
+    #     expected_url = reverse('consultant-home', kwargs={'matricule': '12345'})
+    #     self.assertEqual(url, expected_url)
 
 
 

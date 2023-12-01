@@ -29,7 +29,6 @@ urlpatterns = [
     path('customer-consultant/', ViewCustomerConsultant.as_view(), name='view-customer-consultant'),
     path('order/items/', customer_views.OrderItemListAPIView.as_view(), name='order_item_list'),
     path('order/items/<int:id>/', customer_views.OrderDetailAPIView.as_view(), name='order_detail'),
-    #path('customer-message/<int:id>/', CustomerApiMessageViewSet, basename='customer-message',
     path('customer-messages/', CustomerApiMessageViewSet.as_view({'get': 'list'}), name='customer-messages'),
 
 

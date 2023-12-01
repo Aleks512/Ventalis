@@ -1,6 +1,6 @@
 ``python manage.py runserver``
 
-
+#### Create le schema file pour API REST
 ``python manage.py spectacular --file schema.yml
 ``
 #### Dump data from a specific app Model
@@ -44,6 +44,27 @@
 ``pip install -r requirements.txt``
 ### Créez un fichier .env à la racine du projet
 ``touch .env``
-###
+#COVERGE
+### Install coverage
+``pip install coverage``
+### Generate report
+``coverage run --source='.' manage.py test``
+``coverage report``
+### Generate html report
+``coverage html``
+### Generate xml report
+``coverage xml``
+### Generate annotate report
+``coverage annotate``
+### Generate erase report
+``coverage erase``
+### Generate run report dans le termina (list all files
+``coverage run -m pytest``
+
+### Mise à jour de coverage
+
+`` coverage run manage.py test``
+`` coverage report``
+`` coverage html``
 
 

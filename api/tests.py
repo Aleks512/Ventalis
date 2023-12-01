@@ -1,6 +1,6 @@
 from django.test import TestCase
 from store.models import Product, OrderItem
-from store.serializers import ProductSerializer, OrderItemSerializer, OrderItemUpdateSerializer
+from .serializers import ProductSerializer, OrderItemSerializer
 
 
 class ProductSerializerTest(TestCase):
@@ -8,6 +8,13 @@ class ProductSerializerTest(TestCase):
         self.product_attributes = {
             'name': 'Chaise',
             'description': 'Une chaise en bois classique.',
+            'price': '12.00',
+            'category_id': 1,
+            'image': 'https://picsum.photos/200/300',
+            'created_at': '2021-01-01T00:00:00Z',
+            'created_by_id': 3,
+            'slug': 'chaise',
+            'updated': '2021-01-01T00:00:00Z',
         }
 
         self.product = Product.objects.create(**self.product_attributes)
@@ -15,7 +22,7 @@ class ProductSerializerTest(TestCase):
 
     def test_contains_expected_fields(self):
         data = self.serializer.data
-        self.assertEqual(set(data.keys()), set(['id', 'name', 'description']))
+        self.assertEqual(set(data.keys()), set(['id', 'name', 'description', 'price', 'category', 'image', 'created_at', 'created_by', 'slug', 'updated', 'discount_price']))
 
     def test_name_field_content(self):
         data = self.serializer.data

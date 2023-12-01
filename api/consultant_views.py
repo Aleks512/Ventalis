@@ -9,6 +9,15 @@ from .serializers import OrderItemSerializer
 
 
 class ConsultantOrderItemsView(generics.ListAPIView):
+    """
+      get:
+      List all orders items for the authenticated consultant's customers.
+
+      This endpoint allows consultants to view the items their customers have ordered. It will only display items for customers who have listed the consultant as their applied consultant.
+
+      * Requires token authentication.
+      * Only accessible to authenticated consultants.
+      """
     serializer_class = OrderItemSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedAndConsultant]
@@ -19,6 +28,20 @@ class ConsultantOrderItemsView(generics.ListAPIView):
         return queryset
 
 class OrderItemUpdateView(generics.UpdateAPIView):
+    """
+    patch:
+    Update an order item.
+
+    This endpoint is used by consultants to update the details of an order item. The endpoint expects JSON payload with the fields that need to be updated.
+
+    put:
+    Replace an order item.
+
+    This endpoint is used by consultants to replace an existing order item with new details. The endpoint expects a full JSON representation of the order item.
+
+    * Requires token authentication.
+    * Only accessible to authenticated consultants with permissions on the order item's customer.
+    """
     serializer_class = OrderItemUpdateSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedAndConsultant]

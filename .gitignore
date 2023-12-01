@@ -156,7 +156,8 @@ staticfiles/
 antiseche.js
 dumps
 schema.yml
-
+.coverage
+htmlcov
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can

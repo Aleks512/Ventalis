@@ -14,6 +14,18 @@ from .autorisations import IsAuthenticatedAndConsultant, IsAuthenticatedAndCusto
 
 
 class ConsultantApiMessageViewSet(viewsets.GenericViewSet):
+    """
+    ViewSet for consultants to view their messages.
+
+    retrieve:
+    Return a list of all the messages sent by the authenticated consultant.
+
+    list:
+    Return a list of all messages.
+
+    * Requires token authentication.
+    * Only accessible to authenticated consultants.
+    """
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedAndConsultant]
     serializer_class = MessageReadSerializer
@@ -31,6 +43,18 @@ class ConsultantApiMessageViewSet(viewsets.GenericViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 class CustomerApiMessageViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ReadOnly view set for customers to view received messages.
+
+    list:
+    Returns a list of all received messages for the authenticated customer, ordered by the timestamp.
+
+    retrieve:
+    Return the given api message.
+
+    * Requires token authentication.
+    * Only accessible to authenticated customers.
+    """
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedAndCustomer]
     serializer_class = ApiForCustomerMessageSerializer
@@ -45,6 +69,14 @@ class CustomerApiMessageViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ApiMessageCreateView(generics.CreateAPIView):
+    """
+    API endpoint that allows messages to be created.
+
+    The authenticated consultant can send messages to customers using this endpoint.
+
+    * Requires token authentication.
+    * Only accessible to authenticated consultants.
+    """
     serializer_class = ApiMessageSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedAndConsultant]
