@@ -129,6 +129,18 @@ SPECTACULAR_SETTINGS = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
+        'NAME': 'users.validators.ContainsLetterValidator',
+    },
+    {
+        'NAME': 'users.validators.ContainsNumberValidator',
+    },
+    {
+        'NAME': 'users.validators.ContainsSpecialCharacterValidator',
+    },
+    {
+        'NAME': 'users.validators.MinimumLengthValidator',
+    },
+    {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {

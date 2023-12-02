@@ -67,4 +67,13 @@
 `` coverage report``
 `` coverage html``
 
+## Lancer les tests
+``pytest``
+##### Lancer les tests avec le coverage
+``coverage run -m pytest``
+##### Lancer les test avec les prints
+``pytest -s``
+``pytest -rP``
+
+
 
