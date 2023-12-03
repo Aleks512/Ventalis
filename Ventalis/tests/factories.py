@@ -1,5 +1,6 @@
 import factory
 from django.contrib.auth.hashers import make_password
+from django.utils import timezone
 from factory.faker import faker
 
 fake = faker.Faker('fr_FR')
@@ -68,6 +69,7 @@ class CategoryFactory(factory.django.DjangoModelFactory):
         model = Category
 
     name = factory.Faker('name')
+    slug = factory.LazyAttribute(lambda obj: slugify(obj.name))
 
 
 class ProductFactory(factory.django.DjangoModelFactory):
@@ -115,3 +117,19 @@ class OrderItemStatusHistoryFactory(factory.django.DjangoModelFactory):
     customer = factory.SubFactory(User)
     status = factory.Faker('random_element', elements=[s[0] for s in OrderItem.Status.choices])
     comment = factory.Faker('text', max_nb_chars=200)
+
+class AddressFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Address
+
+    user = factory.SubFactory(CustomerFactory)  # Assurez-vous d'avoir une factory pour le modèle Customer
+    order = factory.SubFactory(OrderFactory)  # Assurez-vous d'avoir une factory pour le modèle Order
+    street = fake.street_address()
+    city = fake.city()
+    country = fake.country()
+    zipcode = fake.postcode()
+    date_added = factory.LazyFunction(timezone.now)
+    address_type = factory.Iterator([choice[0] for choice in ADDRESS_CHOICES])
+    default = factory.Faker('boolean')
+
+    expected_str = f"{street}, {city}, {country} {zipcode}"

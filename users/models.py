@@ -72,7 +72,6 @@ class Consultant(NewUser):
     MATRICULE_LENGTH = 5
     matricule = models.CharField(_("Matricule"),max_length=MATRICULE_LENGTH, unique=True)
 
-
     def generate_random_matricule(self):
         while True:
             matricule = ''.join(random.choices(string.ascii_uppercase + string.digits, k=self.MATRICULE_LENGTH))
@@ -110,8 +109,8 @@ class Consultant(NewUser):
     def get_clients_count(self):
         return self.clients.count()
 
-    def get_absolute_url(self):
-        return reverse('consultant-home', kwargs={'matricule': self.matricule})
+    # def get_absolute_url(self):
+    #     return reverse('consultant-home', kwargs={'matricule': self.matricule})
 
 class Customer(NewUser):
     consultant_applied = models.ForeignKey('Consultant', on_delete=models.CASCADE, null=True, related_name='clients')
