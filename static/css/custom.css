@@ -21,7 +21,7 @@
 html, body, h4, h5{
     font-family: 'Merriweather', serif;
     color:var(--secondary-color);
-    height: 100%;
+
     line-height: 1.8;
     margin: 0;
 
