@@ -39,14 +39,6 @@ class CustomerCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=True, label='Prénom')
     last_name = forms.CharField(max_length=30, required=True, label='Nom de famille')
     company = forms.CharField(max_length=30, required=True, label='Société')
-    password = forms.CharField(
-        validators=[
-            MinimumLengthValidator(),
-            ContainsLetterValidator(),
-            ContainsNumberValidator(),
-            ContainsSpecialCharacterValidator(),
-        ],
-    )
 
     class Meta:
         model = Customer

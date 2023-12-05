@@ -5,7 +5,7 @@ from store.models import Category, Product, Order, OrderItem, OrderItemStatusHis
 
 @pytest.mark.django_db
 def test_new_product(product_factory):
-    product = product_factory.build()
+    product = product_factory()
     print(product.name)
     print(product.price)
     print(product.created_by)

@@ -67,6 +67,9 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+    class Meta:
+        ordering = ('-date_joined',)
+
 
 class Consultant(NewUser):
     MATRICULE_LENGTH = 5
@@ -102,6 +105,7 @@ class Consultant(NewUser):
 
     class Meta:
         db_table = "consultants"
+        ordering = ('-date_joined',)
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
@@ -117,6 +121,7 @@ class Customer(NewUser):
 
     class Meta:
         db_table = "customers"
+        ordering = ('-date_joined',)
 
     def assign_consultant_to_client(self):
         if not self.consultant_applied:
@@ -148,5 +153,6 @@ class Address(models.Model):
 
     class Meta:
         verbose_name_plural = 'Addresses'
-    def get_edit_url(self):
-        return reverse('edit_address', args=[str(self.id)])
+        ordering = ['-date_added']
+    # def get_edit_url(self):
+    #     return reverse('edit_address', args=[str(self.id)])

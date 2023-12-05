@@ -75,5 +75,44 @@
 ``pytest -s``
 ``pytest -rP``
 
+### Graphviz (les commandes)
+#### diagram avec les relations (pointillés)
+``python manage.py graph_models -a -g -o all_models.png``
+``python manage.py graph_models -a -o store_models.png``
+``python manage.py graph_models -e -g -o models-champs.png store``
+``python manage.py graph_models -e -g -o models-champs.png app1 app2 app3 ...
+``
+
+#### diagram avec les relations et les attributs et les cardinalités et les noms des attributs et les noms des tables
+``python manage.py graph_models -a --arrow-shape -g -o grouped_models3.png``
+``python manage.py graph_models -a --arrow-shape normal -g -o grouped_models3.png``
+``python manage.py graph_models -a --arrow-shape curve box diamond -g -o grouped_models3.png``
+``python manage.py graph_models -a --arrow-shape curve box diamond inv -g -o grouped_models3.png``
+``python manage.py graph_models -a --arrow-shape curve box diamond inv vee -g -o grouped_models3.png``
 
 
+#### New things
+
+``CREATE TABLE public.users_newuser (
+    id bigint NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    email character varying(255) NOT NULL,
+    first_name character varying(100) NOT NULL,
+    last_name character varying(50) NOT NULL,
+    company character varying(100) NOT NULL,
+    is_active boolean NOT NULL,
+    is_staff boolean NOT NULL,
+    is_client boolean NOT NULL,
+    is_employee boolean NOT NULL,
+    is_superuser boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL
+);``
+
+### Acceder aux attributs d'une istance
+``david_instance = User.objects.filter(first_name="David").first()``
+#### dir() renvoie une liste de tous les attributs et méthodes disponibles pour l'objet, y compris ceux hérités de ses classes parentes et ceux définis dans la classe elle-même.
+``print(dir(david_instance))``
+### Acceder aux dictionnaire des attributs d'une istance
+#### renvoie un dictionnaire contenant les attributs spécifiques à l'instance et leurs valeurs
+``david_instance.__dict__``
