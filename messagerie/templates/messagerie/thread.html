@@ -41,6 +41,7 @@
         <div class="card col-md-12 p-3 shadow-sm">
             <form method="POST" action="{% url 'create-message' thread.pk %}" enctype="multipart/form-data">
                 {% csrf_token %}
+
                 {{ form.as_p}}
 
                 <div class="d-grid gap-2 mt-3">

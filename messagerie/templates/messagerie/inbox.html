@@ -10,11 +10,11 @@
   <div class="row">
     <div class="col-md-12 p-5">
       <form method="GET" action="{% url 'create-thread' %}">
-        <button class="btn btn-outline-success custom-button rounded-pill" type="submit">Start a Conversation</button>
+        <button class="btn btn-outline-success group-custom-button rounded-pill" type="submit">Commencer le chat</button>
       </form>
     </div>
   </div>
-  <h4>Messages echangés entre :</h4>
+  <h4>Messages echangés avec :</h4>
   {% for thread in threads.all %}
   <div class="row mb-3">
     <div class="card col-md-12 p-5 shadow-sm">

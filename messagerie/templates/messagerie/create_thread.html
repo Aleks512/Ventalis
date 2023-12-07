@@ -1,15 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
-
 {% block content %}
-<div class="row mt-5">
-    <div class="col">
-      <a href="{% url 'inbox' %}" class="btn btn-light">Accéder à la boîte de réception</a>
+<div class="row col-lg-12 mt-7">
+    <div class="col-lg-2">
+        <a href="{% url 'inbox' %}" class="btn btn-light group-custom-button">Retout vers la boîte de réception</a>
     </div>
 
-    <div class="col-md-5 col-sm-12">
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-danger">
@@ -17,17 +14,29 @@
                 </div>
             {% endfor %}
         {% endif %}
-    <h4>Commencer la converstaion</h4>
-      <form method="POST">
-        {% csrf_token %}
-        <p>Entrez le mail de la personne avec laquelle vous souhaitez parler</p>
-        {{ form.as_p}}
-        <div class="d-grid gap-2">
-        <button type="submit" class="btn btn-outline-success custom-button rounded-pill">Continue</button>
-        </div>
-      </form>
-  </div>
 
+  <div class="row justify-content-center align-items-center h-100">
+    <div class="col-md-5">
+        <div class="card mt-3">
+            <div class="card border-0 shadow-lg">
+            <div class="card-body">
+                <h4 class="card-title">Commencer la conversation</h4>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Entrez l'e-mail de la personne avec laquelle vous souhaitez parler</label>
+                        <input type="text" name="email" class="form-control" maxlength="100" required="" id="id_email">
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-outline-success rounded-pill">Continue</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
+
