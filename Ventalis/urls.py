@@ -1,5 +1,7 @@
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, \
+    PasswordResetCompleteView
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
@@ -39,5 +41,17 @@ urlpatterns = [
     path('api/schema/',SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/docs/',SpectacularSwaggerView.as_view(url_name='schema')),
 
+    path('reset-password/',
+       PasswordResetView.as_view(template_name="registration/password_reset.html"),
+       name='reset_password'),
+    path('reset-password/done/',
+       PasswordResetDoneView.as_view(template_name='registration/password_reset_done1.html'),
+       name='password_reset_done'),
+    path('reset-password/confirm/<uidb64>/<token>/',
+       PasswordResetConfirmView.as_view(template_name='registration/password_reset_confirm1.html'),
+       name='password_reset_confirm'),
+    path('reset-password/complete/',
+       PasswordResetCompleteView.as_view(template_name='registration/password_reset_complete1.html'),
+                       name='password_reset_complete'),
 
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) # to render the photos uploaded if not 404
