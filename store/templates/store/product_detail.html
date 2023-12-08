@@ -18,7 +18,7 @@
         <div class="row gx-4 gx-lg-5 align-items-center">
             <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{ product.imageURL }}" alt="{{ product.name }}" /></div>
             <div class="col-md-6">
-                <div class="small mb-1">{{ product.category }}</div>
+                <div class="small mb-1"><span style="color: #0d9c43; font-weight: bold">{{ product.category }}</span></div>
                 <h1 class="display-5 fw-bolder">{{ product.name }}</h1>
                 <div class="fs-5 mb-5">
                     <span>Prix unitaire : {{ product.price }} €</span>
@@ -30,7 +30,7 @@
                 <p class="lead">{{ product.description }}</p>
                 <div class="d-flex">
                     <div class="text-end">
-                        <a href="{% url 'add-to-cart' product.slug %}" class="btn custom-button" style="background-color: #27b547; border-color: #27b547;">Ajouter au panier2</a>
+                        <a href="{% url 'add-to-cart' product.slug %}" class="btn custom-button">Ajouter au panier</a>
                     </div>
                 </div>
             </div>

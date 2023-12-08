@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% load humanize %}
 {% block content %}
 
 <div class="row">
@@ -11,8 +11,8 @@
             <br>
             <table class="table">
                 <tr>
-                    <th><h5 id="total-items">Articles: <strong>{{order.get_cart_items}}</strong></h5></th>
-                    <th><h5 id="total-cart">Total:<strong>{{order.get_cart_total}}</strong></h5></th>
+                    <th>Articles: <h5 id="total-items">{{order.get_cart_items}}</h5></th>
+                    <th>Total €:<h5 id="total-cart">{{order.get_cart_total | intcomma}}</h5></th>
                     <th>
                         <a style="float:right; margin:5px;" class="btn btn-success custom-button" href="{% url 'checkout' %}">Paiement</a>
                     </th>
@@ -35,11 +35,7 @@
                 <div style="flex: 2; text-align: center;"><p>{{item.product.name}}</p></div>
 
                 <div style="flex: 1; text-align: center;"><p>
-                    {% if item.product.discount_price %}
-                        {{item.product.discount_price}}
-                    {% else %}
-                        {{item.product.price}} €
-                    {% endif %}}</p></div>
+                        {{item.product.price}} € </p></div>
                 <div style="flex: 1; text-align: center;">
                     <p class="quantity" id="quantity_{{item.id}}">{{item.quantity}}</p>
                     <div class="quantity">
@@ -50,7 +46,7 @@
                     </div>
                 </div>
                 <div style="flex: 1; text-align: center;">
-                    <p id="total_{{item.id}}">{{item.get_total}} €</p>
+                    <p id="total_{{item.id}}">{{item.get_total | intcomma}} €</p>
                 </div>
                 <div style="flex: 1; text-align: center;">
 
