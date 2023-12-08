@@ -63,6 +63,10 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def display_1000_units_price(self):
+        return self.price * 1000
+
+
 
 class Order(models.Model):
     customer = models.ForeignKey('users.Customer', verbose_name=_("Client"), on_delete=models.CASCADE)

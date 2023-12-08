@@ -2,8 +2,7 @@
 {% load static %}
 {% block no_margin_class %}container-fluid{% endblock %}
 {% block title %}Produits{% endblock %}
-
-
+{% load humanize %}
 
 {% block content %}
   {% if messages %}
@@ -43,7 +42,7 @@
             {% endif %}
             <div class="card-body">
               <h5 class="card-title">{{ product.name }}</h5>
-              <p class="card-text">Prix unitaire : {{ product.price }} €</p>
+              <p class="card-text">Prix pour <span style="font-weight: bold">1 000 </span> unités: {{ product.display_1000_units_price | intcomma}} €</p>
               <a href="{{ product.get_absolute_url }}" class="btn btn-secondary custom-button">Voir l'article</a>
             </div>
           </div>
@@ -57,7 +56,7 @@
             {% endif %}
             <div class="card-body">
               <h5 class="card-title">{{ product.name }}</h5>
-              <p class="card-text">Prix unitaire : {{ product.price }} €</p>
+              <p class="card-text">Prix pour <span style="font-weight: bold">1 000 </span> unités: {{ product.display_1000_units_price | intcomma}} €</p>
               <a href="{{ product.get_absolute_url }}" class="btn btn-secondary custom-button">Voir l'article</a>
             </div>
           </div>
