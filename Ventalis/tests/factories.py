@@ -8,7 +8,7 @@ from users.models import NewUser, Consultant, Customer, Address, ADDRESS_CHOICES
 import factory
 import random
 
-
+from api.models import ApiMessage
 import string
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
@@ -53,7 +53,7 @@ class CustomerFactory(factory.django.DjangoModelFactory):
         model = Customer
         django_get_or_create = ('email',)
 
-    email = factory.Sequence(lambda n: f'user{n}@ventalis.com')
+    email = factory.Sequence(lambda n: f'user{n}@comany.com')
     first_name = fake.first_name()
     last_name = fake.last_name()
     company = fake.company()
@@ -68,7 +68,7 @@ class CategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Category
 
-    name = factory.Faker('name')
+    name = factory.Sequence(lambda n: "Category_%d" % n)
     slug = factory.LazyAttribute(lambda obj: slugify(obj.name))
 
 
@@ -76,13 +76,13 @@ class ProductFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Product
 
-    category = factory.SubFactory(CategoryFactory)
+    name = factory.Sequence(lambda n: "Product_%d" % n)
     created_by = factory.SubFactory(ConsultantFactory)
-    name = factory.Faker('name')
     description = factory.Faker('text', max_nb_chars=200)
     price = factory.Faker('pydecimal', min_value=1, max_value=1000, right_digits=2)
     discount_price = factory.LazyAttribute(lambda obj: obj.price if random.random() < 0.5 else None)
     slug = factory.LazyAttribute(lambda obj: slugify(obj.name))
+    category = factory.SubFactory(CategoryFactory)
 
 
 class OrderFactory(factory.django.DjangoModelFactory):
@@ -133,3 +133,13 @@ class AddressFactory(factory.django.DjangoModelFactory):
     default = factory.Faker('boolean')
 
     expected_str = f"{street}, {city}, {country} {zipcode}"
+
+
+class ApiMessageFactory(factory.django.DjangoModelFactory):
+    sender = factory.SubFactory(ConsultantFactory)
+    receiver = factory.SubFactory(CustomerFactory)
+    content = factory.Faker('paragraph')  # Utilisez Faker pour générer du contenu de paragraphe aléatoire
+    timestamp = factory.LazyFunction(timezone.now)
+    class Meta:
+        model = ApiMessage
+

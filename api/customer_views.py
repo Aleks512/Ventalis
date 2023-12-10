@@ -33,9 +33,8 @@ class ViewCustomerConsultant(GenericAPIView):
 
     def get_queryset(self):
         customer = self.request.user
-        if not isinstance(customer, Customer):
-            raise serializers.ValidationError("Vous n'êtes pas autorisés à acceder à ce jeu de données.")
-        return Consultant.objects.filter(customers=customer)
+        email = customer.email
+        return Consultant.objects.filter(clients__email=email)
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -61,13 +60,10 @@ class OrderItemListAPIView(generics.ListAPIView):
     """
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedAndCustomer]
-    #queryset = Order.objects.all() # tout le monde
     serializer_class = OrderItemSerializerForCustomer
 
     def get_queryset(self):
         user = self.request.user # Récupérer l'utilisateur actuellement authentifié
-        if not isinstance(user, Customer):
-            raise serializers.ValidationError("Vous n'êtes pas autorisés à acceder à ce jeu de données.")
         return OrderItem.objects.filter(customer=user)
 
 
@@ -97,7 +93,5 @@ class OrderDetailAPIView(generics.RetrieveAPIView):
 
     def get_queryset(self):
         customer = self.request.user # Récupérer l'utilisateur actuellement authentifié
-        if not isinstance(customer, Customer):
-            raise serializers.ValidationError("Vous n'êtes pas autorisés à acceder à ce jeu de données.")
         return OrderItem.objects.filter(customer=customer)
 

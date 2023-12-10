@@ -33,11 +33,11 @@ class ConsultantDetailView(RetrieveAPIView):
     queryset = Consultant.objects.all()
     serializer_class = AdminConsultantSerializer
 
-@authentication_classes([])
-@permission_classes([])
-class ConsultantUpdateView(RetrieveUpdateAPIView):
-    queryset = Consultant.objects.all()
-    serializer_class = AdminConsultantUpdateCreateSerializer
+# @authentication_classes([])
+# @permission_classes([])
+# class ConsultantUpdateView(RetrieveUpdateAPIView):
+#     queryset = Consultant.objects.all()
+#     serializer_class = AdminConsultantUpdateCreateSerializer
 
 @authentication_classes([])
 @permission_classes([])

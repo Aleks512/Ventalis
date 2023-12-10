@@ -33,9 +33,6 @@ class ConsultantApiMessageViewSet(viewsets.GenericViewSet):
     def get_queryset(self):
         # Ensure the user has a consultant profile
         consultant = self.request.user.consultant
-        if consultant is None:
-            raise PermissionDenied('The user is not a consultant.')
-
         return ApiMessage.objects.filter(sender=consultant)
 
     def list(self, request, *args, **kwargs):
@@ -57,13 +54,11 @@ class CustomerApiMessageViewSet(viewsets.ReadOnlyModelViewSet):
     """
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedAndCustomer]
-    serializer_class = ApiForCustomerMessageSerializer
+    serializer_class = MessageReadSerializer
+    #serializer_class = ApiForCustomerMessageSerializer
 
     def get_queryset(self):
         customer = self.request.user
-        if not isinstance(customer, Customer):
-            raise serializers.ValidationError("Vous n'êtes pas autorisés à accéder à ce jeu de données.")
-
         return ApiMessage.objects.filter(receiver=customer).order_by('-timestamp')
 
 

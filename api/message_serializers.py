@@ -5,8 +5,16 @@ from .models import ApiMessage
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id', 'first_name', 'last_name', 'email','company']  # Ajoutez d'autres champs si nécessaire
+        fields = ['id', 'first_name', 'last_name', 'email','company']  
 
+class CustomerEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ['email']
+class ConsultantEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Consultant
+        fields = ['email']
 
 class ConsultantSerializer(serializers.ModelSerializer):
     customers = CustomerSerializer(many=True, read_only=True)
@@ -16,8 +24,8 @@ class ConsultantSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name', 'last_name', 'email', 'customers']
 
 class ApiForCustomerMessageSerializer(serializers.ModelSerializer):
-    sender = ConsultantSerializer(read_only=True)
-    receiver = CustomerSerializer(read_only=True)
+    sender = ConsultantEmailSerializer(read_only=True)
+    receiver = CustomerEmailSerializer(read_only=True)
 
     class Meta:
         model = ApiMessage
@@ -25,19 +33,12 @@ class ApiForCustomerMessageSerializer(serializers.ModelSerializer):
 
 class ApiForConsultantMessageSerializer(serializers.ModelSerializer):
     sender = ConsultantSerializer(read_only=True)
-    receiver_email = serializers.EmailField(write_only=True)  # Utilisez un EmailField pour la validation
+    receiver_email = serializers.EmailField(write_only=True)  # Utiliser un EmailField pour la validation
 
     class Meta:
         model = ApiMessage
-        fields = ['id', 'sender', 'content', 'timestamp', 'receiver_email']  # Retirez 'receiver' de la liste
+        fields = ['id', 'sender', 'content', 'timestamp', 'receiver_email']  # Retirer 'receiver' de la liste
 
-    def validate_receiver_email(self, value):
-        """
-        Valide l'adresse e-mail du receiver et renvoie le customer associé s'il existe.
-        Sinon, renvoie une erreur.
-        """
-        # Votre logique de validation est bonne ici
-        # ...
 
     def create(self, validated_data):
         """
@@ -45,7 +46,7 @@ class ApiForConsultantMessageSerializer(serializers.ModelSerializer):
         """
         receiver_email = validated_data.get('receiver_email')
         receiver = self.validate_receiver_email(
-            receiver_email['email'])  # Assurez-vous que cette ligne renvoie bien un objet Customer
+            receiver_email['email'])  # Assurer que cette ligne renvoie bien un objet Customer
 
         validated_data['receiver'] = receiver
         return super().create(validated_data)
@@ -103,10 +104,11 @@ class MessageCreateSerializer(serializers.ModelSerializer):
 
 class ApiMessageSerializer(serializers.ModelSerializer):
     receiver_email = serializers.EmailField(write_only=True)
+    sender = ConsultantEmailSerializer(read_only=True)
 
     class Meta:
         model = ApiMessage
-        fields = ['receiver_email', 'content', 'timestamp']
+        fields = ['receiver_email', 'content', 'timestamp', 'sender']
 
     def create(self, validated_data):
         receiver_email = validated_data.pop('receiver_email', None)
@@ -118,21 +120,3 @@ class ApiMessageSerializer(serializers.ModelSerializer):
                 {'receiver_email': 'The recipient with the specified email address does not exist.'})
 
         return ApiMessage.objects.create(receiver=receiver, **validated_data)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# class CustomerReceiverSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Customer
-#         fields = ['email']

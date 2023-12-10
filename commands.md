@@ -69,7 +69,7 @@
 
 ## Lancer les tests
 ``pytest``
-##### Lancer les tests avec le coverage
+##### Lancer les tests avec le coverage et MISE A JOUR
 ``coverage run -m pytest``
 ##### Lancer les test avec les prints
 ``pytest -s``

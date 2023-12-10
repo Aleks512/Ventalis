@@ -27,8 +27,12 @@ class Order(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = '__all__'
-
+class CustomerForOrderItemsForConsultantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ['email']
 class OrderItemSerializer(serializers.ModelSerializer):
+    customer = CustomerForOrderItemsForConsultantSerializer()
     class Meta:
         model = OrderItem
         fields = '__all__'

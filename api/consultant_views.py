@@ -49,5 +49,5 @@ class OrderItemUpdateView(generics.UpdateAPIView):
 
     def get_queryset(self):
         authenticated_consultant = self.request.user
-        queryset = OrderItem.objects.filter(customer__in=Customer.objects.filter(consultant_applied=authenticated_consultant))
+        queryset = OrderItem.objects.filter(customer__in=Customer.objects.filter(consultant_applied=authenticated_consultant), ordered=True)
         return queryset
