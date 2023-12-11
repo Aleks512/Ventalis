@@ -7,8 +7,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.exceptions import NotFound, PermissionDenied
 from users.models import Customer, NewUser, Consultant
 from .models import ApiMessage
-from .message_serializers import ApiForCustomerMessageSerializer, ApiForConsultantMessageSerializer, \
-    MessageReadSerializer, MessageCreateSerializer, ApiMessageSerializer
+from .message_serializers import MessageReadSerializer, ApiMessageSerializer
 from rest_framework import serializers
 from .autorisations import IsAuthenticatedAndConsultant, IsAuthenticatedAndCustomer
 
@@ -87,7 +86,7 @@ class ApiMessageCreateView(generics.CreateAPIView):
         try:
             receiver = Customer.objects.get(email=receiver_email)
         except Customer.DoesNotExist:
-            raise serializers.ValidationError({'receiver_email': 'The recipient with the specified email address does not exist.'})
+            raise serializers.ValidationError({'receiver_email': 'Le destinataire avec l’adresse e-mail spécifiée n’existe pas'})
 
         # Update the created message with the sender and receiver
         serializer.save(sender=sender)

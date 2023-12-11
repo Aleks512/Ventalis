@@ -12,7 +12,7 @@ register(ProductFactory) # access with 'product_factory'
 register(OrderFactory) # access with 'order_factory'
 register(OrderItemFactory) # access with 'order_item_factory'
 register(AddressFactory) # access with 'adress_factory'
-register(ApiMessageFactory) # access with 'apimessage_factory'
+register(ApiMessageFactory) # access with 'api_message_factory'
 
 # @pytest.fixture
 # def api_client():

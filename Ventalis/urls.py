@@ -25,14 +25,19 @@ urlpatterns = [
     path('', include('api.urls')),
     path('', include('contact.urls')),
     # API patths
-    path('consultant-create-message/', ApiMessageCreateView.as_view(), name='consultant-create-message'),
-    path('consultant-messages/', ConsultantApiMessageViewSet.as_view({'get': 'list'}), name='consultant-messages'),
-    path('orderitem-update/<int:pk>/', OrderItemUpdateView.as_view(), name='orderitem_update'),
+
     path('consultant-orderitems/', ConsultantOrderItemsView.as_view(), name='consultant_orderitems'),
-    path('customer-consultant/', ViewCustomerConsultant.as_view(), name='view-customer-consultant'),
-    path('order/items/', customer_views.OrderItemListAPIView.as_view(), name='order_item_list'),
-    path('order/items/<int:id>/', customer_views.OrderDetailAPIView.as_view(), name='order_detail'),
+    path('consultant-orderitem-update/<int:pk>/', OrderItemUpdateView.as_view(), name='orderitem_update'),
+
+    path('consultant-create-message/', ApiMessageCreateView.as_view(), name='consultant-create-message'),
+    path('consultant-messages/', ConsultantApiMessageViewSet.as_view({'get': 'list'}),name='consultant-messages'),
+
     path('customer-messages/', CustomerApiMessageViewSet.as_view({'get': 'list'}), name='customer-messages'),
+    path('customer-consultant/', ViewCustomerConsultant.as_view(), name='view-customer-consultant'),
+
+    path('customer-orderitems/', customer_views.OrderItemListAPIView.as_view(), name='order_item_list'),
+    path('customer-orderitem/<int:id>/', customer_views.OrderDetailAPIView.as_view(), name='order_detail'),
+
 
 
 

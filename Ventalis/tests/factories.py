@@ -57,10 +57,9 @@ class CustomerFactory(factory.django.DjangoModelFactory):
     first_name = fake.first_name()
     last_name = fake.last_name()
     company = fake.company()
-    password = make_password('password')  # Vous pouvez modifier le mot de passe ici
+    password = make_password('password')
     is_active = True
     is_client = True
-
     consultant_applied = factory.SubFactory(ConsultantFactory)
 
 
@@ -106,12 +105,13 @@ class OrderItemFactory(factory.django.DjangoModelFactory):
     product = factory.SubFactory(ProductFactory)
     quantity = factory.Faker('random_int', min=1, max=1000)
     comment = factory.Faker('text', max_nb_chars=200)
+    ordered = factory.Faker('boolean')
 
 
 class OrderItemStatusHistoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = OrderItemStatusHistory
-
+    id= factory.Sequence(lambda n: n)
     order_item = factory.SubFactory(OrderItemFactory)
     consultant = factory.SubFactory(ConsultantFactory)
     customer = factory.SubFactory(User)
