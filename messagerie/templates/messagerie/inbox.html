@@ -2,26 +2,34 @@
 {% block content %}
 
 
-  <div class="row">
-    <div class="col-md-12 p-5">
-      <h3>Mes Conversations</h3>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12 p-5">
+    <div class="col-md-9 p-5">
       <form method="GET" action="{% url 'create-thread' %}">
-        <button class="btn btn-outline-success group-custom-button rounded-pill" type="submit">Commencer le chat</button>
+        <button class="btn btn-outline-success group-custom-button rounded-pill" type="submit">Nouveau chat</button>
       </form>
     </div>
-  </div>
-  <h4>Messages echangés avec :</h4>
-  {% for thread in threads.all %}
-  <div class="row mb-3">
-    <div class="card col-md-12 p-5 shadow-sm">
-      <h5><i class="far fa-envelope inbox-icon"></i> thread user: {{ thread.user }} - thread receiver: {{ thread.receiver }}</h5>
-      <a class="stretched-link" href="{% url 'thread' thread.pk %}"></a>
-    </div>
 
-  {% endfor %}
+<div class="row">
+  <div class="col-md-9">
+    <!-- Contenu de la boîte de réception -->
+    <div class="list-group">
+        {% for thread in threads %}
+        {% for message in messages %}
+            {% if message.thread == thread %}
+                <a href="{% url 'thread' thread.pk %}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1"><i class="fa-brands fa-rocketchat"></i> De: {{ thread.user }} - à - {{ thread.receiver }}</h5>
+                        <small>{{ message.date }}</small>
+                    </div>
+                    <p class="mb-1">{{ message.body|truncatechars:20 }}</p>
+                    <small>Le dernier message de <span style="color:green">{{ message.sender_user }}</span></small>
+                </a>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+    </div>
+  </div>
 </div>
+
+
 {% endblock %}

@@ -263,4 +263,4 @@ class CustomerAssignmentTest(TestCase):
 
 
         # # Vérifie que le consultant attribué est celui avec le moins de clients
-        # self.assertEqual(customer2.assigned_consultant, self.consultant3)
+        self.assertEqual(customer2.consultant_applied, self.consultant3)

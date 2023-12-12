@@ -122,8 +122,8 @@ class AddressFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Address
 
-    user = factory.SubFactory(CustomerFactory)  # Assurez-vous d'avoir une factory pour le modèle Customer
-    order = factory.SubFactory(OrderFactory)  # Assurez-vous d'avoir une factory pour le modèle Order
+    user = factory.SubFactory(CustomerFactory)
+    order = factory.SubFactory(OrderFactory)
     street = fake.street_address()
     city = fake.city()
     country = fake.country()

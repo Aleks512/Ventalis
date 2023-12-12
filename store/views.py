@@ -24,6 +24,7 @@ def products(request):
     selected_category = request.GET.get('category')  # Récupérer la catégorie sélectionnée
     if selected_category:
         # Filtrer les produits en fonction de la catégorie sélectionnée
+        selected_category = get_object_or_404(Category, slug=selected_category)
         products = Product.objects.filter(category__slug=selected_category)
     else:
         # Si aucune catégorie n'est sélectionnée, afficher tous les produits

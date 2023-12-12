@@ -46,8 +46,15 @@ class CreateThread(View):
 class ListThreads(View):
   def get(self, request, *args, **kwargs):
     threads = ThreadModel.objects.filter(Q(user=request.user) | Q(receiver=request.user))
+    messages = []
+
+    for thread in threads:
+        message = MessageModel.objects.filter(thread=thread).last()
+        messages.append(message)
+
     context = {
-    'threads': threads
+        'threads': threads,
+        'messages': messages,
     }
     return render(request, 'messagerie/inbox.html', context)
 @method_decorator(login_required, name='dispatch')

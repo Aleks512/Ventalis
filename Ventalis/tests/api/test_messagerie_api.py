@@ -88,29 +88,27 @@ class TestApiMessageCreateView:
             "receiver_email": customer.email,
             "content":  "Role Models"
         }
-
-
-        # Make a POST request to create the message
+        # Act
         response = api_client.post(self.endpoint, data=data, format='json')
 
-        # Check that the message creation was successful (201 Created status code)
+        # Assert
+            # Check that the message creation was successful (201 Created status code)
         assert response.status_code == status.HTTP_201_CREATED
-        # Check that the message has been created in the database using Factory Boy
         print(response.data)
 
-        # Check that the response data contains the expected fields
+            # Check that the response data contains the expected fields
         assert 'content' in response.data
         assert 'timestamp' in response.data
         created_message = ApiMessage.objects.get(content=response.data['content'])
         print(created_message)
 
-        # Ensure that the message fields match the provided data
+            # Ensure that the message fields match the provided data
         assert created_message.sender == consultant
         assert created_message.receiver == customer
         assert created_message.content == data['content']
 
-
-    def test_create_message_with_invalid_receiver_email(self, api_client, consultant_factory, api_message_factory, customer_factory):
+    def test_create_message_with_invalid_receiver_email(self, api_client, consultant_factory, api_message_factory,
+                                                        customer_factory):
         # Arrange: Set up data for an invalid message creation
         consultant = consultant_factory()
         api_client.force_authenticate(user=consultant)
@@ -123,10 +121,20 @@ class TestApiMessageCreateView:
         # Act: Make a POST request to create a message
         response = api_client.post(self.endpoint, invalid_data, format='json')
 
-        # Assert: Check that the response contains a validation error for receiver_email
+        # Assert: Check that the response status code is 400 Bad Request
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+        # Assert: Check that the response contains a validation error information for receiver_email
         assert 'receiver_email' in response.data
+        #assert 'error' in {'receiver_email': 'Le destinataire avec l’adresse e-mail spécifiée n’existe pas'}
+        assert 'receiver_email' in response.json()
         assert response.data['receiver_email'] == 'Le destinataire avec l’adresse e-mail spécifiée n’existe pas'
+
+        # Assert: Check that other fields are not present or have expected values
+        assert 'content' not in response.data  # Assuming content should not be present in case of error
+        assert 'timestamp' not in response.data  # Assuming timestamp should not be present in case of error
+
+
 
 
 
