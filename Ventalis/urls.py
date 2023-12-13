@@ -1,4 +1,6 @@
+from django.conf import settings # new
 from django.conf.urls.static import static
+
 from django.contrib import admin
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, \
     PasswordResetCompleteView
@@ -17,7 +19,7 @@ router = DefaultRouter()
 
 from Ventalis import settings
 
-urlpatterns = [
+urlpatterns = ([
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
     path('messagerie/', include('messagerie.urls')),
@@ -59,4 +61,11 @@ urlpatterns = [
        PasswordResetCompleteView.as_view(template_name='registration/password_reset_complete1.html'),
                        name='password_reset_complete'),
 
-] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) # to render the photos uploaded if not 404
+])
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) # to render the photos uploaded if not 404
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_URL)
+
+
+
