@@ -26,7 +26,7 @@
             {% endif %}
             <div class="card-body">
               <h5 class="card-title">{{ product.name }}</h5>
-              <p class="card-text">{{ product.description }}</p>
+              <p class="card-text">{{ product.description|truncatechars:90 }}</p>
               <a type="button" class="fas fa-eye custom-button" href="{{ product.get_absolute_url }}" >Voir</a>
 
               <a type="button" href="{% url 'product-update' product.slug %}"><i class="fas fa-edit editer"></i>

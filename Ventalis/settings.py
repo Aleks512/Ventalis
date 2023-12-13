@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     "corsheaders",
     'django_extensions',
     'django.contrib.humanize',
+    'storages',
+
 
 ]
 
@@ -168,9 +170,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Déterminer si on utilise S3 pour les fichiers médias
+#USE_S3 = env.bool('USE_S3', True)
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -178,6 +181,26 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # fichiers ajoutés de models
 MEDIA_URL = "/images/"
 MEDIA_ROOT = BASE_DIR / "static/images"
+
+# Utiliser S3 en production pour les fichiers médias
+
+# Configuration AWS S3
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
+AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN', default=None)
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_QUERYSTRING_AUTH = False
+
+# Configurations spécifiques pour les fichiers statiques et médias
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/' if AWS_S3_CUSTOM_DOMAIN else f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/'
+
 
 
 # Default primary key field type
@@ -190,7 +213,6 @@ LOGOUT_REDIRECT_URL = "home"
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
-#USE_THOUSAND_SEPARATOR = True
 #LOGIN_REDIRECT_URL = '/login/'
 
 
@@ -206,7 +228,7 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 RECIPIENT_ADDRESS = env('RECIPIENT_ADDRESS')
 
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1']  # Autoriser les demandes de localhost
+ALLOWED_HOSTS = ['*']  # Autoriser les demandes de localhost
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',  # Autoriser les origines sur le port 3000
@@ -218,5 +240,9 @@ CORS_ALLOWED_METHODS = [
     'GET',   # Autoriser la méthode GET (si nécessaire)
     'PUT',   # Autoriser la méthode PUT (si nécessaire)
     'PATCH', # Autoriser la méthode PATCH (si nécessaire)
-    'DELETE',# Autoriser la méthode DELETE (si nécessaire)
+    "OPTIONS",
+
+]
+CORS_ALLOW_HEADERS = [
+    '*',
 ]

@@ -19,19 +19,32 @@ from .models import Category, Product, Order, OrderItem
 
 
 def products(request):
+    # Récupère tous les produits et catégories
     products = Product.objects.all()
     categories = Category.objects.all()
-    selected_category = request.GET.get('category')  # Récupérer la catégorie sélectionnée
-    if selected_category:
-        # Filtrer les produits en fonction de la catégorie sélectionnée
-        selected_category = get_object_or_404(Category, slug=selected_category)
-        products = Product.objects.filter(category__slug=selected_category)
-    else:
-        # Si aucune catégorie n'est sélectionnée, afficher tous les produits
-        products = Product.objects.all()
-    context = {"products": products, "categories": categories, "selected_category": selected_category}
-    return render(request, "store/products.html", context)
 
+    # Récupérer le slug de la catégorie sélectionnée depuis l'URL
+    selected_category_slug = request.GET.get('category')
+    selected_category = None
+
+    if selected_category_slug:
+        # Récupère l'objet catégorie ou renvoie une erreur 404 si non trouvé
+        selected_category = get_object_or_404(Category, slug=selected_category_slug)
+
+        # Filtrer les produits en fonction de la catégorie sélectionnée
+        products = products.filter(category=selected_category)
+    else:
+        # Si aucune catégorie n'est sélectionnée, tous les produits sont déjà sélectionnés
+        pass
+
+    # Préparer le contexte pour le template
+    context = {
+        "products": products,
+        "categories": categories,
+        "selected_category": selected_category_slug  # Passer le slug au template
+    }
+
+    return render(request, "store/products.html", context)
 def add_to_cart(request, slug):
     user = request.user
 
