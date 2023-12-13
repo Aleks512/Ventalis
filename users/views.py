@@ -12,21 +12,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ConsultantCreationForm, CustomerCreationForm
 
 def home(request):
-    user_agent = request.META.get('HTTP_USER_AGENT')
-    print('user agent: ',user_agent)
-    ip_address = request.META.get('REMOTE_ADDR')
-    print('IP adresse',ip_address)
-    my_cookie_csrf = request.COOKIES.get('csrftoken')
-    print("MY CSRF COOKIE : ",my_cookie_csrf)
-    my_cookie_sessionid = request.COOKIES.get('sessionid')
-    print("MY SESSION ID COOKIE : ", my_cookie_sessionid)
-    content_type=request.META['CONTENT_TYPE']
-    print("cintent-tyoe", content_type)
-    user = request.user
-    if user.is_authenticated:
-        print(user.__dict__)
-    else:
-        print("No user is currently logged in.")
     return render(request, 'home.html')
 
 def presentation(request):
