@@ -229,7 +229,7 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 # Custom setting. To email
 RECIPIENT_ADDRESS = env('RECIPIENT_ADDRESS')
 
-
+CSRF_COOKIE_SECURE = True
 ALLOWED_HOSTS = ['*']  # Autoriser les demandes de localhost
 
 CORS_ALLOWED_ORIGINS = [
