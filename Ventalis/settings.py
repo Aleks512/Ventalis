@@ -230,21 +230,25 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 RECIPIENT_ADDRESS = env('RECIPIENT_ADDRESS')
 
 CSRF_COOKIE_SECURE = True
-ALLOWED_HOSTS = ['*']  # Autoriser les demandes de localhost
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=[])
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',  # Autoriser les origines sur le port 3000
-    'http://localhost:8080',  # Autoriser les origines sur le port 8080
-]
+CORS_ALLOWED_ORIGINS = env.list('DJANGO_CORS_ORIGINS', default=[])
 
 CORS_ALLOWED_METHODS = [
-    'POST',  # Autoriser la méthode POST
-    'GET',   # Autoriser la méthode GET (si nécessaire)
-    'PUT',   # Autoriser la méthode PUT (si nécessaire)
-    'PATCH', # Autoriser la méthode PATCH (si nécessaire)
+    'POST',
+    'GET',
+    'PUT',
+    'PATCH',
     "OPTIONS",
-
 ]
 CORS_ALLOW_HEADERS = [
-    '*',
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
 ]
