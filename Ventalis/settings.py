@@ -196,6 +196,9 @@ AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN', default=None)
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = False
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
 
 # Configurations spécifiques pour les fichiers statiques et médias
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
