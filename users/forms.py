@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 from store.models import Category
 from .models import Consultant, Customer
-from .validators import ContainsLetterValidator, ContainsNumberValidator, ContainsSpecialCharacterValidator, MinimumLengthValidator
+#from .validators import ContainsLetterValidator, ContainsNumberValidator, ContainsSpecialCharacterValidator, MinimumLengthValidator
 
 
 class ConsultantCreationForm(UserCreationForm):

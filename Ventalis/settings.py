@@ -135,29 +135,29 @@ SPECTACULAR_SETTINGS = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'users.validators.ContainsLetterValidator',
+        'NAME': 'users.validators.PasswordValidator',
     },
-    {
-        'NAME': 'users.validators.ContainsNumberValidator',
-    },
-    {
-        'NAME': 'users.validators.ContainsSpecialCharacterValidator',
-    },
-    {
-        'NAME': 'users.validators.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # {
+    #     'NAME': 'users.validators.ContainsNumberValidator',
+    # },
+    # {
+    #     'NAME': 'users.validators.ContainsSpecialCharacterValidator',
+    # },
+    # {
+    #     'NAME': 'users.validators.MinimumLengthValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # },
 ]
 
 
@@ -239,9 +239,9 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 CSRF_COOKIE_SAMESITE = 'Strict'
 X_FRAME_OPTIONS = 'DENY'
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-SECURE_SSL_REDIRECT = True
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+# SECURE_SSL_REDIRECT = True
 
 
 
