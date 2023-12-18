@@ -112,7 +112,6 @@ class OrderItem(models.Model):
         SHIPPED = 'S', _('Expédié')
         DELIVERED = 'D', _('Livré')
         RETURNED = 'R', _('Retourné')
-        # Ajoutez d'autres statuts au besoin
 
     status = models.CharField(
         max_length=2,

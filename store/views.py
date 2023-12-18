@@ -129,8 +129,6 @@ def checkout(request):
                 address_instance.address_type = 'S'
                 address_instance.default = True
                 address_instance.save()
-                print(address_form.has_changed())
-                print(address_form.is_bound)
                 # Continue with your checkout logic here
                 return redirect('checkout')  # Redirect to the checkout page or another page
         else:
@@ -142,10 +140,8 @@ def checkout(request):
     else:
         return HttpResponseForbidden("You are not authorized to access this page.")
 
+
 # Fonction de vérification pour s'assurer que l'utilisateur est un consultant$
-
-
-
 def is_consultant(user):
     return user.is_authenticated and user.is_employee
 
