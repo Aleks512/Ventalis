@@ -44,7 +44,7 @@
             <tr>
               <td>{{ order_item.product.name }}</td>
               <td>{{ order_item.quantity }}</td>
-              <td>{{ order_item.get_total | floatformat }} €</td>
+              <td>{{ order_item.get_total | intcomma }} €</td>
               <td>{{ order_item.date_added | date:"Y-m-d H:i:s" }}</td>
               <td>
                 {% if order_item.status %}
@@ -80,7 +80,7 @@
             <tr>
               <td>{{ order_item.product.name }}</td>
               <td>{{ order_item.quantity }}</td>
-              <td>{{ order_item.get_total }}</td>
+              <td>{{ order_item.get_total | intcomma }} €</td>
               <td>{{ order_item.date_added | date:"Y-m-d H:i:s" }}</td>
               <td>
                 {% if order_item.status %}

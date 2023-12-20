@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block content %}
   {% if clients %}
@@ -35,7 +36,7 @@
                         <td>{{ client.first_name }}</td>
                         <td>{{ client.last_name }}</td>
                         <td>{{ client.email }}</td>
-                        <td>{{ item.price }} €</td>
+                        <td>{{ item.price | intcomma }} €</td>
                         <td class="d-sm-table-cell">
                           {% if item.ordered %}
                             Commandé

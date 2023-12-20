@@ -9,13 +9,13 @@
     {% for consultant, clients in consultant_clients %}
       <div class="card mb-4 shadow">
         <div class="card-header">
-          <h5 class="mb-0">{{ consultant.get_full_name }} (Matricule: {{ consultant.matricule }})</h5>
+          <h5 class="mb-0">{{ consultant.first_name }} {{ consultant.last_name |upper }} (Matricule: {{ consultant.matricule }})</h5>
         </div>
         <div class="card-body">
           {% if clients %}
             <ol class="list-group">
               {% for client in clients %}
-                <li class="list-group-item">{{ client.company }} {{ client.first_name }} {{ client.last_name }} {{ client.email }}</li>
+                <li class="list-group-item">{{ client.company }} - {{ client.first_name }} {{ client.last_name|upper }} - contact : {{ client.email }}</li>
               {% endfor %}
             </ol>
           {% else %}
