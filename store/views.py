@@ -45,6 +45,7 @@ def products(request):
     }
 
     return render(request, "store/products.html", context)
+@login_required()
 def add_to_cart(request, slug):
     user = request.user
 
@@ -103,7 +104,7 @@ def cart(request):
         context = {'items': items, 'order': order, 'cartItems': cartItems}
         return render(request, 'store/cart.html', context)
     else:
-        return HttpResponseForbidden("You are not authorized to access this page.")
+        return HttpResponseForbidden("Vous n'êtes pas autorisé à accéder à cette page.")
 
 @login_required()
 def checkout(request):
@@ -138,7 +139,7 @@ def checkout(request):
         context = {'items': items, 'order': order, 'cartItems': cartItems, 'address_form': address_form, 'existing_address': existing_address}
         return render(request, 'store/checkout.html', context)
     else:
-        return HttpResponseForbidden("You are not authorized to access this page.")
+        return HttpResponseForbidden("Vous n'êtes pas autorisé à accéder à cette page.")
 
 
 # Fonction de vérification pour s'assurer que l'utilisateur est un consultant$

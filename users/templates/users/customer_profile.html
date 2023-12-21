@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% load humanize %}
+
+
 {% block content %}
   <h2>Vos commandes</h2>
 
@@ -18,7 +21,7 @@
             <p class="card-text">Date Added: {{ order_item.date_added|date:"Y-m-d H:i:s" }}</p>
             <p class="card-text">Status: {{ order_item.get_status_display }}</p>
             {% if order_item.comment %}
-            <p class="card-text">Commentaire de votre consultant: {{ order_item.order.comment }}</p>
+            <p class="card-text">Commentaire de votre consultant: {{ order_item.comment }}</p>
             {% else %}
             <p class="card-text">Pas de commentaire de votre consultant</p>
             {% endif %}
@@ -43,7 +46,7 @@
           <div class="card-body">
             <h5 class="card-title">{{ order_item.product.name }}</h5>
             <p class="card-text">Quantity: {{ order_item.quantity }}</p>
-            <p class="card-text">Price: {{ order_item.get_total | floatformat }} €</p>
+            <p class="card-text">Price: {{ order_item.get_total | intcomma }} €</p>
             <p class="card-text">Date Added: {{ order_item.date_added|date:"Y-m-d H:i:s" }}</p>
             <p class="card-text">Status: {{ order_item.get_status_display }}</p>
           </div>
