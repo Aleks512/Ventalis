@@ -11,7 +11,8 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from api import consultant_views, customer_views
 from api.consultant_views import OrderItemUpdateView, ConsultantOrderItemsView
 from api.customer_views import ViewCustomerConsultant
-from api.message_views import CustomerApiMessageViewSet, ApiMessageCreateView, ConsultantApiMessageViewSet
+from api.message_views import CustomerApiMessageViewSet, ApiMessageCreateView, ConsultantApiMessageViewSet, \
+    MessagesWrittenByCustomerApiMessageViewSet, ConsultatReadApiMessageViewSet, CustomerApiMessageCreateView
 
 router = DefaultRouter()
 # router.register(r'newusers', views.NewUserViewSet)
@@ -32,9 +33,14 @@ urlpatterns = ([
     path('consultant-orderitem-update/<int:pk>/', OrderItemUpdateView.as_view(), name='orderitem_update'),
 
     path('consultant-create-message/', ApiMessageCreateView.as_view(), name='consultant-create-message'),
-    path('consultant-messages/', ConsultantApiMessageViewSet.as_view({'get': 'list'}),name='consultant-messages'),
+    path('consultant-sent-messages/', ConsultantApiMessageViewSet.as_view({'get': 'list'}),name='consultant-sent-messages'),
+    path('consultant-read-messages/', ConsultatReadApiMessageViewSet.as_view({'get': 'list'}), name='consultant-read-messages'),
 
-    path('customer-messages/', CustomerApiMessageViewSet.as_view({'get': 'list'}), name='customer-messages'),
+    path('customer-create-message/', CustomerApiMessageCreateView.as_view(), name='customer-create-message'),
+    path('customer-sent-messages/', MessagesWrittenByCustomerApiMessageViewSet.as_view({'get': 'list'}),name='customer-sent-messages'),
+    path('customer-read-messages/', CustomerApiMessageViewSet.as_view({'get': 'list'}), name='customer-read-messages'),
+
+
     path('customer-consultant/', ViewCustomerConsultant.as_view(), name='view-customer-consultant'),
 
     path('customer-orderitems/', customer_views.OrderItemListAPIView.as_view(), name='order_item_list'),
