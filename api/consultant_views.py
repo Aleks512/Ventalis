@@ -4,8 +4,11 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from .autorisations import IsAuthenticatedAndConsultant, IsAuthenticatedAndCustomer
 from store.models import OrderItem
 from users.models import Customer
-from .consultant_serializers import OrderItemUpdateSerializer
-from .serializers import OrderItemSerializer
+from .consultant_serializers import OrderItemUpdateSerializer, OrderItemSerializer
+#from .customer_serializers import OrderItemSerializerForCustomer
+
+
+#from .serializers import OrderItemSerializer
 
 
 class ConsultantOrderItemsView(generics.ListAPIView):
@@ -24,7 +27,7 @@ class ConsultantOrderItemsView(generics.ListAPIView):
 
     def get_queryset(self):
         authenticated_consultant = self.request.user
-        queryset = OrderItem.objects.filter(customer__consultant_applied=authenticated_consultant)
+        queryset = OrderItem.objects.filter(customer__consultant_applied=authenticated_consultant, ordered=True)
         return queryset
 
 class OrderItemUpdateView(generics.UpdateAPIView):
