@@ -55,12 +55,6 @@ for category_data in categories_data:
 
 
 
-
-
-
-
-
-
 from store.models import Product, Category
 from decimal import Decimal
 

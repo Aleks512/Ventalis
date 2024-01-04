@@ -238,7 +238,7 @@ def process_order(request):
     if request.user.is_authenticated:
         customer = request.user.customer
 
-        # Utilisez select_for_update pour verrouiller la commande pendant la transaction
+        # Utiliser select_for_update pour verrouiller la commande pendant la transaction
         order = Order.objects.select_for_update().filter(customer=customer, completed=False).first()
 
         if not order:
@@ -257,10 +257,10 @@ def process_order(request):
             item.ordered = True
             item.save()
 
-        # Effectuez d'autres opérations nécessaires liées au traitement de la commande
+        # Effectuer d'autres opérations nécessaires liées au traitement de la commande
 
     messages.success(request, 'Votre commande a été passée avec succès. Merci!')
-    # Redirigez vers la page 'products' ou l'endroit où vous souhaitez rediriger après le traitement de la commande
+    # Rediriger vers la page 'products' après la commande
     return redirect('products')
 
 @login_required()

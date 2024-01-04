@@ -29,7 +29,7 @@
                     <h5>{{ request.user.customer.company }}</h5>
                     <p class="card-text">{{ existing_address }}</p>
                     <!-- Add Edit button to open modal /Trigger/Open The Modal -->
-                    <button id="myBtn" class="custom-button btn btn-primary">Edit</button>
+                    <button id="myBtn" class="custom-button btn btn-primary">Editer</button>
                 <hr>
                 {% else %}
                     <!-- Address Form -->
@@ -44,19 +44,19 @@
                                     <p>Vous n'avez pas encore fourni d'adresse</p>
                                     <hr>
                                     <div class="form-field">
-                                        <input class="form-control" type="text" name="street" placeholder="Street..">
+                                        <input class="form-control" type="text" name="street" placeholder="Rue..">
                                     </div>
                                     <div class="form-field">
-                                        <input class="form-control" type="text" name="city" placeholder="City..">
+                                        <input class="form-control" type="text" name="city" placeholder="Ville..">
                                     </div>
                                     <div class="form-field">
-                                        <input class="form-control" type="text" name="zipcode" placeholder="Postal Code..">
+                                        <input class="form-control" type="text" name="zipcode" placeholder="Code Postal..">
                                     </div>
                                     <div class="form-field">
-                                        <input class="form-control" type="text" name="country" placeholder="Country..">
+                                        <input class="form-control" type="text" name="country" placeholder="Pays..">
                                     </div>
                                     <hr>
-                                    <button id="form-button" class="btn btn-success btn-block" type="submit">Save</button>
+                                    <button id="form-button" class="btn btn-success btn-block custom-button" type="submit">Enregistrer</button>
                                     <hr>
                                 </div>
                             </div>
