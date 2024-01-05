@@ -25,7 +25,7 @@ Ventalis Project is an eco-conscious B2B e-commerce platform designed to promote
   - Filter products by category.
   - Submit inquiries or requests through a contact form.
   - Register for an account if they are a professional client.
-  - Reset passwords (including the "forgot password" feature) etc
+  
 
 ### Consultant
 - **Role**: Consultants are registered users responsible for assisting clients with their eco-friendly product choices.
@@ -57,4 +57,5 @@ Ventalis Project is an eco-conscious B2B e-commerce platform designed to promote
   - Proceed with online payment for their orders (fake of course).
   - Empty their shopping cart.
   - Access their personal space, organized by completed and ongoing orders.
+  - eset passwords (including the "forgot password" feature) etc
   - To chat with the other members (admin, consultants or clients) of Ventalis etc
