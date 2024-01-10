@@ -18,7 +18,11 @@ class CustomAccountManager(BaseUserManager):
     """
     def _create_user(self, email, password = None, **extra_fields):
         """
-        Create and save a user with the given email and password.
+        Creates and saves a user with the given email and password.
+        :param email: Email address of the user
+        :param password: Password for the user
+        :param extra_fields: Additional fields for the user
+        :return: The newly created user object
         """
         if not email:
             raise ValueError('The Email field must be set')
@@ -31,7 +35,11 @@ class CustomAccountManager(BaseUserManager):
 
     def create_superuser(self, email, password, **extra_fields):
         """
-        Create and save a SuperUser with the given email and password.
+        Creates and saves a superuser with the given email and password.
+        :param email: Email address of the superuser
+        :param password: Password for the superuser
+        :param extra_fields: Additional fields for the superuser
+        :return: The newly created superuser object
         """
         extra_fields.setdefault("first_name", "Administrateur")
         extra_fields.setdefault('is_staff', True)
@@ -49,6 +57,9 @@ ADDRESS_CHOICES = (
     ('S', 'Shipping'),
 )
 class NewUser(AbstractBaseUser, PermissionsMixin):
+    """
+    Custom user model extending AbstractBaseUser with email as the primary identifier.
+    """
     email = models.EmailField(_('Email'),unique=True, blank=False, max_length=255)
     first_name = models.CharField(_("Prénom"), max_length=100)
     last_name = models.CharField(_("Nom de famille"), max_length=50)
@@ -65,6 +76,10 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     def __str__(self):
+        """
+         String representation of the user, returning their email address.
+         :return: Email address of the user
+         """
         return self.email
 
     class Meta:
@@ -72,10 +87,17 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
 
 
 class Consultant(NewUser):
+    """
+    Consultant model extending NewUser, representing a consultant in the system.
+    """
     MATRICULE_LENGTH = 5
     matricule = models.CharField(_("Matricule"),max_length=MATRICULE_LENGTH, unique=True)
 
     def generate_random_matricule(self):
+        """
+        Generates a random matricule for a consultant.
+        :return: A unique random matricule
+        """
         while True:
             matricule = ''.join(random.choices(string.ascii_uppercase + string.digits, k=self.MATRICULE_LENGTH))
             if not Consultant.objects.filter(matricule=matricule).exists():
@@ -117,6 +139,9 @@ class Consultant(NewUser):
     #     return reverse('consultant-home', kwargs={'matricule': self.matricule})
 
 class Customer(NewUser):
+    """
+    Customer model extending NewUser, representing a customer in the system.
+    """
     consultant_applied = models.ForeignKey('Consultant', on_delete=models.CASCADE, null=True, related_name='clients')
 
     class Meta:
@@ -124,6 +149,10 @@ class Customer(NewUser):
         ordering = ('-date_joined',)
 
     def assign_consultant_to_client(self):
+        """
+        Assigns a consultant to the customer if not already assigned.
+        :return: Assigned consultant object
+        """
         if not self.consultant_applied:
             consultant = Consultant.objects.annotate(num_clients=models.Count('clients')).order_by('num_clients').first()
             self.consultant_applied = consultant
@@ -138,6 +167,9 @@ class Customer(NewUser):
         super().save(*args, **kwargs)
 
 class Address(models.Model):
+    """
+    Address model for storing address details of users.
+    """
     user = models.ForeignKey(Customer, verbose_name=_("Client"), on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(Order, verbose_name=_("Commande"), on_delete=models.CASCADE, blank=True, null=True)
     street = models.CharField(_("Street"), max_length=100)
@@ -149,6 +181,10 @@ class Address(models.Model):
     default = models.BooleanField(default=False)
 
     def __str__(self):
+        """
+        String representation of the address.
+        :return: Full address as a string
+        """
         return f"{self.street}, {self.city}, {self.country} {self.zipcode}"
 
     class Meta:

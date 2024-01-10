@@ -3,5 +3,6 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/dumps/my_fixture.json" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/my_fixture.json" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/requirements.txt" charset="UTF-8" />
   </component>
 </project>

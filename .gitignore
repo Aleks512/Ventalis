@@ -158,6 +158,7 @@ dumps
 schema.yml
 .coverage
 htmlcov
+docs/build/
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
