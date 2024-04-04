@@ -5,7 +5,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from users.models import Customer, Consultant
 from .autorisations import IsAuthenticatedAndConsultant, IsAuthenticatedAndCustomer
 from .message_serializers import MessageReadSerializer, ApiMessageSerializer, CustomerCreateApiMessageSerializer
-from .models import ApiMessage, ApiMessageWrittenByCustomer
+from .models import ApiMessage
 
 
 class ConsultantApiMessageViewSet(viewsets.GenericViewSet):
@@ -109,7 +109,7 @@ class MessagesWrittenByCustomerApiMessageViewSet(viewsets.GenericViewSet):
     def get_queryset(self):
         # Ensure the user has a customer profile
         customer = self.request.user.customer
-        return ApiMessageWrittenByCustomer.objects.filter(sender=customer)
+        return ApiMessage.objects.filter(sender=customer)
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -141,12 +141,12 @@ class ConsultatReadApiMessageViewSet(viewsets.ReadOnlyModelViewSet):
 
 class CustomerApiMessageCreateView(generics.CreateAPIView):
     """
-    API endpoint that allows messages to be created.
+    API endpoint that allows the Customer to create the messages to consultant.
 
     The authenticated customer can send messages to consultants using this endpoint.
 
     * Requires token authentication.
-    * Only accessible to authenticated consultants.
+    * Only accessible to authenticated customers.
     """
     serializer_class = CustomerCreateApiMessageSerializer
     authentication_classes = [JWTAuthentication]

@@ -1,13 +1,13 @@
 from rest_framework import serializers
 from users.models import NewUser, Consultant, Customer
 from store.models import Order
-from .models import ApiMessage, ApiMessageWrittenByCustomer
+from .models import ApiMessage
 
 
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id', 'first_name', 'last_name', 'email','company']  
+        fields = ['id', 'first_name', 'last_name', 'email','company']
 
 class CustomerEmailSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,7 +39,7 @@ class ForCustomerMessageReadSerializer(serializers.ModelSerializer):
     receiver_email = serializers.EmailField(source='receiver.email')
 
     class Meta:
-        model = ApiMessageWrittenByCustomer
+        model = ApiMessage
         fields = ['id', 'sender_email', 'receiver_email', 'content', 'timestamp']
 
 
@@ -65,7 +65,7 @@ class CustomerCreateApiMessageSerializer(serializers.ModelSerializer):
     receiver_email = serializers.EmailField(write_only=True)
 
     class Meta:
-        model = ApiMessageWrittenByCustomer
+        model = ApiMessage
         fields = ['receiver_email', 'content', 'timestamp']
 
     def create(self, validated_data):
@@ -77,4 +77,4 @@ class CustomerCreateApiMessageSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {'receiver_email': 'Le destinataire avec l’adresse e-mail spécifiée n’existe pas.'})
 
-        return ApiMessageWrittenByCustomer.objects.create(receiver=receiver, **validated_data)
+        return ApiMessage.objects.create(receiver=receiver, **validated_data)
