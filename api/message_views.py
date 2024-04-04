@@ -60,7 +60,7 @@ class CustomerApiMessageViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ApiMessageCreateView(generics.CreateAPIView):
     """
-    API endpoint that allows messages to be created.
+    API endpoint that allows the consultant to create messages.
 
     The authenticated consultant can send messages to customers using this endpoint.
 
@@ -153,17 +153,6 @@ class CustomerApiMessageCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticatedAndCustomer]
 
     def perform_create(self, serializer):
-        # Set the sender as the authenticated consultant
-        sender = self.request.user.customer
-
-        # Get the receiver_email from the serializer data
-        receiver_email = self.request.data.get('receiver_email', None)
-
-        # Check if the receiver email exists in the database
-        try:
-            receiver = Consultant.objects.get(email=receiver_email)
-        except Consultant.DoesNotExist:
-            raise serializers.ValidationError({'receiver_email': 'Le destinataire avec l’adresse e-mail spécifiée n’existe pas'})
-
-        # Update the created message with the sender and receiver
-        serializer.save(sender=sender)
+        print("L'utilisateur est authentifié:", self.request.user.is_authenticated)
+        print("Attribut 'customer' présent:", hasattr(self.request.user, 'customer'))
+        serializer.save(sender=self.request.user)
