@@ -43,7 +43,7 @@ class ForCustomerMessageReadSerializer(serializers.ModelSerializer):
         fields = ['id', 'sender_email', 'receiver_email', 'content', 'timestamp']
 
 
-class ApiMessageSerializer(serializers.ModelSerializer):
+class ConsultantCreateApiMessageSerializer(serializers.ModelSerializer):
     receiver_email = serializers.EmailField(write_only=True)
 
     class Meta:

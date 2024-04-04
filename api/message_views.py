@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from users.models import Customer, Consultant
 from .autorisations import IsAuthenticatedAndConsultant, IsAuthenticatedAndCustomer
-from .message_serializers import MessageReadSerializer, ApiMessageSerializer, CustomerCreateApiMessageSerializer
+from .message_serializers import MessageReadSerializer, ConsultantCreateApiMessageSerializer, CustomerCreateApiMessageSerializer
 from .models import ApiMessage
 
 
@@ -67,25 +67,15 @@ class ApiMessageCreateView(generics.CreateAPIView):
     * Requires token authentication.
     * Only accessible to authenticated consultants.
     """
-    serializer_class = ApiMessageSerializer
+    serializer_class = ConsultantCreateApiMessageSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedAndConsultant]
 
+
     def perform_create(self, serializer):
-        # Set the sender as the authenticated consultant
-        sender = self.request.user.consultant
-
-        # Get the receiver_email from the serializer data
-        receiver_email = self.request.data.get('receiver_email', None)
-
-        # Check if the receiver email exists in the database
-        try:
-            receiver = Customer.objects.get(email=receiver_email)
-        except Customer.DoesNotExist:
-            raise serializers.ValidationError({'receiver_email': 'Le destinataire avec l’adresse e-mail spécifiée n’existe pas'})
-
-        # Update the created message with the sender and receiver
-        serializer.save(sender=sender)
+        #print("L'utilisateur est authentifié:", self.request.user.is_authenticated)
+        #print("Attribut 'consultant' présent:", hasattr(self.request.user, 'consultant'))
+        serializer.save(sender=self.request.user)
 
 
 ###################################################################
@@ -153,6 +143,6 @@ class CustomerApiMessageCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticatedAndCustomer]
 
     def perform_create(self, serializer):
-        print("L'utilisateur est authentifié:", self.request.user.is_authenticated)
-        print("Attribut 'customer' présent:", hasattr(self.request.user, 'customer'))
+        #print("L'utilisateur est authentifié:", self.request.user.is_authenticated)
+        #print("Attribut 'customer' présent:", hasattr(self.request.user, 'customer'))
         serializer.save(sender=self.request.user)
