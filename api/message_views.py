@@ -1,15 +1,11 @@
-from rest_framework import viewsets, permissions, status, generics
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.exceptions import NotFound, PermissionDenied
-from users.models import Customer, NewUser, Consultant
-from .models import ApiMessage, ApiMessageWrittenByCustomer
-from .message_serializers import MessageReadSerializer, ApiMessageSerializer, CustomerCreateApiMessageSerializer
 from rest_framework import serializers
+from rest_framework import viewsets, generics
+from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from users.models import Customer, Consultant
 from .autorisations import IsAuthenticatedAndConsultant, IsAuthenticatedAndCustomer
+from .message_serializers import MessageReadSerializer, ApiMessageSerializer, CustomerCreateApiMessageSerializer
+from .models import ApiMessage, ApiMessageWrittenByCustomer
 
 
 class ConsultantApiMessageViewSet(viewsets.GenericViewSet):
