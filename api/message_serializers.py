@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from users.models import NewUser, Consultant, Customer
-from store.models import Order
+from users.models import Consultant, Customer
 from .models import ApiMessage
 
 
@@ -70,7 +69,7 @@ class CustomerCreateApiMessageSerializer(serializers.ModelSerializer):
         fields = ['receiver_email', 'content', 'timestamp']
 
     def create(self, validated_data):
-        receiver_email = validated_data.pop('receiver_email')
+        receiver_email = validated_data.pop('receiver_email', None)
 
         try:
             receiver = Consultant.objects.get(email=receiver_email)

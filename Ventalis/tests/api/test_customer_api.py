@@ -21,7 +21,7 @@ class TestConsultantsList:
 
 class TestCustomerEndpoints:
     endpoint = '/customer-consultant/'
-    endpoint2 = '/customer-messages/'
+    endpoint2 = '/customer-read-messages/'
     order_items_endpoint = '/customer-orderitems/'
 
     def test_get_consultant_for_customer(self, customer_factory):

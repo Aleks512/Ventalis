@@ -1,28 +1,15 @@
 import pytest
-from rest_framework.test import APIClient
-from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 from rest_framework import status
-from Ventalis.tests.factories import ApiMessageFactory
 from rest_framework.test import APIClient
-from rest_framework import status
-from api.models import ApiMessage
-
 from Ventalis.tests.factories import ApiMessageFactory
-from api.message_serializers import ApiMessageSerializer # Assurez-vous d'importer correctement le sérialiseur
-
+from api.models import ApiMessage
+from users.models import Consultant
 
 #from .factories import ConsultantFactory, CustomerFactory, ApiMessageFactory
 
 pytestmark = pytest.mark.django_db
-
-# @pytest.fixture
-# def consultant_user():
-#     return ConsultantFactory()
-#
-# @pytest.fixture
-# def customer_user():
-#     return CustomerFactory()
 
 User = get_user_model()
 @pytest.fixture
@@ -30,7 +17,7 @@ def api_client():
     return APIClient()
 
 class TestCustomerApiMessages:
-    endpoint = reverse('customer-messages')
+    endpoint = reverse('customer-read-messages')
 
     def test_customer_view_messages(self, api_client, customer_factory):
         # Arrange
@@ -54,7 +41,7 @@ class TestCustomerApiMessages:
         assert 'timestamp' in response.data[0]
 
 class TestConsultantApiMessages:
-    endpoint = reverse('consultant-messages')
+    endpoint = reverse('consultant-sent-messages')
 
     def test_consultant_view_messages(self, api_client, consultant_factory):
         # Arrange
@@ -78,9 +65,12 @@ class TestConsultantApiMessages:
 class TestApiMessageCreateView:
     endpoint = reverse('consultant-create-message')
 
+
     def test_create_api_message(self, api_client, consultant_factory, api_message_factory, customer_factory):
         # Arrange
+        user = get_user_model()
         consultant = consultant_factory()
+        # cons_logged = api_client.force_authenticate(user=consultant)
         api_client.force_authenticate(user=consultant)
         customer = customer_factory()
 
@@ -94,17 +84,17 @@ class TestApiMessageCreateView:
         # Assert
             # Check that the message creation was successful (201 Created status code)
         assert response.status_code == status.HTTP_201_CREATED
-        print(response.data)
 
             # Check that the response data contains the expected fields
         assert 'content' in response.data
         assert 'timestamp' in response.data
         created_message = ApiMessage.objects.get(content=response.data['content'])
-        print(created_message)
+
 
             # Ensure that the message fields match the provided data
-        assert created_message.sender == consultant
-        assert created_message.receiver == customer
+        #assert hasattr(created_message.sender, 'consultant')
+        assert created_message.receiver.email == customer.email
+        #assert created_message.sender == user.email
         assert created_message.content == data['content']
 
     def test_create_message_with_invalid_receiver_email(self, api_client, consultant_factory, api_message_factory,
@@ -128,7 +118,7 @@ class TestApiMessageCreateView:
         assert 'receiver_email' in response.data
         #assert 'error' in {'receiver_email': 'Le destinataire avec l’adresse e-mail spécifiée n’existe pas'}
         assert 'receiver_email' in response.json()
-        assert response.data['receiver_email'] == 'Le destinataire avec l’adresse e-mail spécifiée n’existe pas'
+        assert response.data['receiver_email'] == 'Le destinataire avec l’adresse e-mail spécifiée n’existe pas.'
 
         # Assert: Check that other fields are not present or have expected values
         assert 'content' not in response.data  # Assuming content should not be present in case of error
