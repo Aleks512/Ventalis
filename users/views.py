@@ -46,12 +46,12 @@ def signup(request):
 #         form = ConsultantCreationForm()
 #     return render(request, 'users/consultant_list.html', {'form': form})
 
-
+# FIXME: Ajouter l'authentification pour l" dministrateur
 class CustomerListView(ListView):
     model = Customer
     context_object_name = "customers"
 
-
+# FIXME: Ajouter l'authentification pour l" dministrateur
 def customers_relations(request):
     employees = Consultant.objects.all().order_by('-date_joined')
     consultant_clients = []  # Create a list to store clients for each consultant
@@ -63,6 +63,7 @@ def customers_relations(request):
     customers = Customer.objects.all()
     return render(request, 'users/customer_list.html', context={'consultant_clients': consultant_clients, 'customers': customers})
 
+# FIXME: Ajouter l'authentification pour l" dministrateur
 class NewUserListView(ListView):
     model = NewUser
     context_object_name = "users"
@@ -73,11 +74,12 @@ class WebAppLoginView(LoginView):
             return redirect('home')
         return super().get(request, *args, **kwargs)
 
+# FIXME: Ajouter l'authentification pour l" customer
 @login_required
 def customer_profile(request):
     # Assuming the user is authenticated, retrieve their customer profile
-    ordered_items = OrderItem.objects.filter(customer=request.user.customer, ordered=True).order_by("status")
-    not_ordered_items = OrderItem.objects.filter(customer=request.user.customer, ordered=False).order_by("status")
+    ordered_items = OrderItem.objects.filter(customer=request.user, ordered=True).order_by("status")
+    not_ordered_items = OrderItem.objects.filter(customer=request.user, ordered=False).order_by("status")
 
     context = {
         "ordered_items": ordered_items,
@@ -141,7 +143,8 @@ def customer_profile(request):
 #         context['consultants'] = [self.object]  # Utilisez une liste pour rendre l'objet itérable
 #         return context
 
-
+# FIXME: Ajouter l'authentification pour l" dministrateur
+# FIXME: Ajouter success message ou error message
 class ConsultantCreateView(View):
     template_name = 'users/consultant_list.html'
     form_class = ConsultantCreationForm
@@ -172,6 +175,8 @@ class ConsultantCreateView(View):
 
         return render(request, self.template_name, {'form': form, 'consultants': consultants})
 
+# FIXME: Ajouter l'authentification pour l" dministrateur
+# FIXME: Ajouter success message ou error message
 class ConsultantDeleteView(DeleteView):
     model = Consultant
     template_name = 'users/consultant_list.html'

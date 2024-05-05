@@ -2,19 +2,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather&family=Montserrat&display=swap');
 
 :root {
-    --primary-color: #009042;
-    --primary2-color: #0D9C43;
+    --primary-color: #27b547;
     --primary3-color: #1AA845;
-    --primary4-color: #27b547;
-    --primary5-color: springgreen;
+    --primary5-color: #00FF7FFF;
     --customblack-color: #000000;
-  --secondary-color: #777;
+  --secondary-color: #525151;
   --background-color: white;
 
-  --custom-button-bg: #009042;
+  --custom-button-bg: #27b547;
   --custom-button-text: #000000;
   --custom-button-hover-bg: #000000;
-  --custom-button-hover-text: #009042;
+  --custom-button-hover-text: #00FF7FFF;
 
 }
 
@@ -97,10 +95,6 @@ main {
 .navbar-toggler{
     color: #0c4128;
 }
-/* Custom CSS rules */
-.navbar-toggler-icon {
-  color: #0b5ed7;
-}
 
 /* Default Bootstrap CSS rules */
 .navbar-dark .navbar-toggler-icon {
@@ -139,6 +133,15 @@ main {
   color: var(--custom-button-hover-text) !important;
 }
 
+
+.editer{
+    border:none;
+    color:var(--primary-color);
+    background-color: transparent;
+    text-decoration: none;
+    margin:1em;
+}
+
 .modal-supprimer{
     border:none;
     color:red;
@@ -146,13 +149,6 @@ main {
     text-decoration: none;
     margin:1em;
 
-}
-.editer{
-    border:none;
-    color:var(--primary4-color);
-    background-color: transparent;
-    text-decoration: none;
-    margin:1em;
 }
 
 /*------------------------------------BTN--------------------------------------------*/
@@ -167,12 +163,13 @@ main {
   color: var(--custom-button-hover-text) !important;
 }
 
+/*------------------------------------BTN MODAL-------------------------------------------*/
 .\F78B {
-    /* Ajoutez vos styles personnalisés ici */
+
     border: none;
     background-color: transparent;
     color: red;
-    /* Autres styles personnalisés... */
+
 }
 
 /*------------------------------------MESSAGERIE--------------------------------------------*/
