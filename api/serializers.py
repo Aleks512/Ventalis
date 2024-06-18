@@ -3,6 +3,12 @@ from users.models import NewUser, Consultant, Customer
 from store.models import Product, Order, OrderItem
 from messagerie.models import ThreadModel, MessageModel
 
+
+from rest_framework import serializers
+
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
+
 class NewUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewUser

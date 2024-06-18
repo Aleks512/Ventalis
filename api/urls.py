@@ -6,10 +6,12 @@ from rest_framework_simplejwt.views import (
 )
 #from .admin_views import get_all_consultants
 from .admin_views import AllConsultantsView, ConsultantCreateView, ConsultantDetailView, ConsultantDeleteView
+from .views import LogoutView
 
 urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/logout/', LogoutView.as_view(), name='token_blacklist'),
     #path('api-consultants/', get_all_consultants, name='get_all_consultants'),
     path('api-consultants/', AllConsultantsView.as_view(), name='show-consultants'),
     path('api-create-consultant/', ConsultantCreateView.as_view(), name='create-consultant'),
