@@ -10,7 +10,7 @@ from django.urls import reverse
 pytestmark = pytest.mark.django_db
 
 class TestRetrieveProducts:
-    endpoint = reverse('products')  # Assurez-vous que le nom de l'URL est correct
+    endpoint = reverse('products')
 
     def test_display_products_and_selected_categories(self, client, product_factory, category_factory):
         # Arrange

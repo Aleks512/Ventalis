@@ -1,0 +1,17 @@
+@startuml
+left to right direction
+
+
+rectangle Consultant-Desktop {
+
+
+  ConsultantAuth --> (Authentification)
+  ConsultantAuth --> (Contacter ses Clients)
+  ConsultantAuth --> (Consulter leurs Commandes)
+  ConsultantAuth --> (Consulter les Messages reçues -- Fonctionnalité proposée et ajoutée)
+  ConsultantAuth --> (Consulter les Messages envoyés -- Fonctionnalité proposée et ajoutée)
+
+
+}
+
+@enduml

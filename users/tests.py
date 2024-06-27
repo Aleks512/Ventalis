@@ -1,12 +1,9 @@
 from unittest.mock import patch
-
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-
 from .models import Consultant, Customer
 from faker import Faker
-
 from django.contrib.auth.hashers import make_password
 
 
@@ -19,7 +16,6 @@ class ModelTest(TestCase):
         password = 'testpass123'
         user = get_user_model().objects._create_user(email=email, password=password)
         self.assertEqual(user.email, email)
-        #self.assertEqual(user.password, password) # ne marche pas à cause de hachage
         self.assertTrue(user.check_password(password))
         self.assertFalse(user.is_superuser)
         self.assertFalse(user.is_staff)
@@ -31,7 +27,6 @@ class ModelTest(TestCase):
         password = 'testpass123'
         user = get_user_model().objects.create_superuser(email=email, password=password)
         self.assertEqual(user.email, email)
-        #self.assertEqual(user.password, password) # ne marche pas à cause de hachage
         self.assertTrue(user.check_password(password))
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
@@ -135,17 +130,6 @@ class ConsultantModelTest(TestCase):
         # Vérifiez que get_full_name retourne le nom complet attendu
         expected_full_name = 'John Doe'
         self.assertEqual(full_name, expected_full_name)
-
-
-    # def test_get_absolute_url(self):
-    #     consultant = Consultant(matricule='12345')
-    #     url = consultant.get_absolute_url()
-    #
-    #     # Vérifiez que get_absolute_url retourne l'URL attendue
-    #     expected_url = reverse('consultant-home', kwargs={'matricule': '12345'})
-    #     self.assertEqual(url, expected_url)
-
-
 
 class CustomerCreationTest(TestCase):
     def test_customer_creation(self):
@@ -258,7 +242,7 @@ class CustomerAssignmentTest(TestCase):
             password=make_password('azerty123')
         )
 
-        # Vérifiez que le client a été attribué automatiquement à un consultant
+        # Vérifie que le client a été correctement créé
         self.assertIsNotNone(customer2.consultant_applied)
 
 

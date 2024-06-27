@@ -70,7 +70,7 @@
         <div class="card shadow mt-4 ">
             <div class="card-body" id="payment-info" {% if order.need_shipping_address %}style="display:none"{% endif %}>
                 <h2 class="card-title">Commander</h2>
-                <!-- Ajoutez le lien vers process_order sans slug -->
+                <!-- Ajouter le lien vers process_order sans slug -->
                 <a href="{% url 'process-order' %}" class="btn btn-primary custom-button">Payer</a>
                 <p class="card-text">Adresse enregistrée, étape suivante : paiement</p>
                 <hr>

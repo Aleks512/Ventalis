@@ -9,7 +9,6 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
 from django.db.models.signals import pre_save
-from django.db import IntegrityError
 
 
 class Category(models.Model):
@@ -17,6 +16,7 @@ class Category(models.Model):
     slug = models.SlugField(_("Slug"), max_length=255, blank=True)
 
     class Meta:
+        """Meta definition for Category."""
         verbose_name = _("Catégorie")
         verbose_name_plural = _("Categories")
     def __str__(self):
@@ -66,8 +66,6 @@ class Product(models.Model):
     def display_1000_units_price(self):
         return self.price * 1000
 
-
-
 class Order(models.Model):
     customer = models.ForeignKey('users.Customer', verbose_name=_("Client"), on_delete=models.CASCADE)
     transactionId = models.CharField(max_length=20, blank=True, null=True)
@@ -102,7 +100,7 @@ class Order(models.Model):
         total = sum([item.quantity for item in orderitems])
         return total
 
-    def get_transaction_id(self):
+    def get_transaction_id(self):  # Generate a random transaction ID
         return ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
 
 class OrderItem(models.Model):

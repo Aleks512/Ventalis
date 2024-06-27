@@ -96,6 +96,7 @@ class OrderItemDeleteView(DeleteView):
 
 @login_required
 def cart(request):
+
     if request.user.is_client:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, completed=False)
@@ -107,29 +108,28 @@ def cart(request):
         return HttpResponseForbidden("Vous n'êtes pas autorisé à accéder à cette page.")
 
 @login_required()
+# Checkout view function to handle the checkout process
 def checkout(request):
+    # Vérifier si l'utilisateur est un client
     if request.user.is_client:
         customer = request.user.customer
-        # # Vérifier si une commande non complétée existe déjà pour le client
-        # order = Order.objects.filter(customer=customer, completed=False).first()
-
         # Si aucune commande n'existe, créer une nouvelle commande
         order, created = Order.objects.get_or_create(customer=customer, completed=False)
-        items = OrderItem.objects.filter(order=order)
+        items = OrderItem.objects.filter(order=order) #
         # Check if the user has an existing address
-        user_addresses = Address.objects.filter(user=customer)
-        existing_address = None
+        user_addresses = Address.objects.filter(user=customer) #
+        existing_address = None #
         if user_addresses.exists():
             existing_address = user_addresses.first()
         if request.method == 'POST':
             address_form = AddressForm(request.POST, instance=existing_address)
-            if address_form.is_valid():
-                address_instance = address_form.save(commit=False)
-                address_instance.user = customer
-                address_instance.order = order
-                address_instance.address_type = 'S'
-                address_instance.default = True
-                address_instance.save()
+            if address_form.is_valid(): #  "address_form.is_valid()" vérifie si les données soumises sont valides
+                address_instance = address_form.save(commit=False)  # Save the form data to the database
+                address_instance.user = customer # Set the user for the address
+                address_instance.order = order # Set the order for the address
+                address_instance.address_type = 'S' # Set the address type to 'Shipping'
+                address_instance.default = True # Set the address as the default shipping address
+                address_instance.save() # Save the address instance
                 # Continue with your checkout logic here
                 return redirect('checkout')  # Redirect to the checkout page or another page
         else:
@@ -245,7 +245,7 @@ def process_order(request):
             # Si la commande n'existe pas, créez-en une nouvelle
             order = Order.objects.create(customer=customer)
 
-        # Mettez à jour la commande avec la nouvelle transactionId et marquez-la comme complétée
+        # Mettre à jour la commande avec la nouvelle transactionId et marquez-la comme complétée
         order.transactionId = transaction_id
         order.completed = True
         order.save()

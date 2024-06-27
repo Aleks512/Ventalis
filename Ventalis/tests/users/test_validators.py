@@ -2,7 +2,7 @@ import pytest
 from django.core.exceptions import ValidationError
 from users.validators import PasswordValidator
 
-# Notez que les cas de test ont été ajustés pour séparer les attentes : None pour les validations réussies
+# Test de la fonction de validation de mot de passe de l'application
 @pytest.mark.parametrize("password,expected_exception", [
     ("Short1!", ValidationError),
     ("longpasswordwithoutdigits!", ValidationError),

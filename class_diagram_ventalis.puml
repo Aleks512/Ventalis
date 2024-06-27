@@ -1,0 +1,176 @@
+@startuml
+
+class ApiApimessage {
+    +id : BigAutoField
+    +content : TextField
+    +timestamp : DateTimeField
+    +receiver : ForeignKey
+    +sender : ForeignKey
+    --
+    +__str__() : str
+}
+
+class Consultant {
+    +newuser_ptr : OneToOneField
+    +matricule : CharField
+    --
+    +generate_random_matricule() : str
+    +generate_email() : str
+    +save(*args, **kwargs) : void
+    +get_full_name() : str
+    +get_clients_count() : int
+}
+
+class Customer {
+    +newuser_ptr : OneToOneField
+    +consultant_applied : ForeignKey
+    --
+    +assign_consultant_to_client() : Consultant
+    +save(*args, **kwargs) : void
+}
+
+class MessageModel {
+    +id : BigAutoField
+    +body : CharField
+    +image : ImageField
+    +date : DateTimeField
+    +is_read : BooleanField
+    +receiver_user : ForeignKey
+    +sender_user : ForeignKey
+    +thread : ForeignKey
+}
+
+class ThreadModel {
+    +id : BigAutoField
+    +has_unread : BooleanField
+    +receiver : ForeignKey
+    +user : ForeignKey
+}
+
+class StoreCategory {
+    +id : BigAutoField
+    +name : CharField
+    +slug : CharField
+    --
+    +__str__() : str
+    +get_absolute_url() : str
+    +save(*args, **kwargs) : void
+}
+
+class StoreOrder {
+    +id : BigAutoField
+    +transactionid : CharField
+    +date_ordered : DateTimeField
+    +completed : BooleanField
+    +comment : TextField
+    +customer : ForeignKey
+    --
+    +__str__() : str
+    +has_high_quantity_items() : bool
+    +need_shipping_address() : bool
+    +get_cart_total() : float
+    +get_cart_items() : int
+    +get_transaction_id() : str
+}
+
+class StoreOrderitem {
+    +id : BigAutoField
+    +status : CharField
+    +ordered : BooleanField
+    +quantity : IntegerField
+    +comment : TextField
+    +date_added : DateTimeField
+    +customer : ForeignKey
+    +order : ForeignKey
+    +product : ForeignKey
+    --
+    +__str__() : str
+    +get_total() : float
+    +get_total_discount_price() : float
+    +get_absolute_url() : str
+}
+
+class StoreOrderitemstatushistory {
+    +id : BigAutoField
+    +status : CharField
+    +comment : TextField
+    +date_modified : DateTimeField
+    +consultant : ForeignKey
+    +customer : ForeignKey
+    +order_item : ForeignKey
+    --
+    +create_order_item_status_history(sender, instance, **kwargs) : void
+}
+
+class StoreProduct {
+    +id : BigAutoField
+    +name : CharField
+    +description : TextField
+    +price : DecimalField
+    +discount_price : DecimalField
+    +image : CharField
+    +created_at : DateTimeField
+    +slug : CharField
+    +updated : DateTimeField
+    +category : ForeignKey
+    +created_by : ForeignKey
+    --
+    +imageURL() : str
+    +save(*args, **kwargs) : void
+    +get_absolute_url() : str
+    +__str__() : str
+    +display_1000_units_price() : float
+}
+
+class UsersAddress {
+    +id : BigAutoField
+    +street : CharField
+    +city : CharField
+    +country : CharField
+    +zipcode : CharField
+    +date_added : DateTimeField
+    +address_type : CharField
+    +default : BooleanField
+    +order : ForeignKey
+    +user : ForeignKey
+}
+
+class UsersNewuser {
+    +id : BigAutoField
+    +password : CharField
+    +last_login : DateTimeField
+    +email : CharField
+    +first_name : CharField
+    +last_name : CharField
+    +company : CharField
+    +is_active : BooleanField
+    +is_staff : BooleanField
+    +is_client : BooleanField
+    +is_employee : BooleanField
+    +is_superuser : BooleanField
+    +date_joined : DateTimeField
+}
+
+' Relations
+
+UsersNewuser <|-- Consultant
+UsersNewuser <|-- Customer
+UsersNewuser "1" --> "0..*" ApiApimessage : receiver
+UsersNewuser "1" --> "0..*" ApiApimessage : sender
+ThreadModel "1" --> "0..*" MessageModel : thread
+UsersNewuser "1" --> "0..*" ThreadModel : receiver
+UsersNewuser "1" --> "0..*" ThreadModel : user
+UsersNewuser "1" --> "0..*" MessageModel : sender_user
+UsersNewuser "1" --> "0..*" MessageModel : receiver_user
+Customer "1" --> "0..*" StoreOrder : customer
+StoreOrder "1" --> "0..*" StoreOrderitem : order
+StoreProduct "1" --> "0..*" StoreOrderitem : product
+Consultant "1" --> "0..*" StoreOrderitemstatushistory : consultant
+Customer "1" --> "0..*" StoreOrderitemstatushistory : customer
+StoreOrderitem "1" --> "0..*" StoreOrderitemstatushistory : order_item
+StoreCategory "1" --> "0..*" StoreProduct : category
+UsersNewuser "1" --> "0..*" StoreProduct : created_by
+StoreOrder "1" --> "0..*" UsersAddress : order
+Customer "1" --> "0..*" UsersAddress : user
+
+@enduml
