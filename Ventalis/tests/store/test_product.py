@@ -5,6 +5,9 @@ from store.models import Category, Product, Order, OrderItem, OrderItemStatusHis
 
 @pytest.mark.django_db
 def test_new_product(product_factory):
+    """
+    Test the creation of a new product
+    """
     product = product_factory()
     print(product.name)
     print(product.price)

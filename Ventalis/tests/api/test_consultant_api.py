@@ -2,10 +2,10 @@ import pytest
 from django.urls import reverse
 from rest_framework.test import APIClient
 from Ventalis.tests.factories import ApiMessageFactory
-pytestmark = pytest.mark.django_db
-@pytest.fixture
-def apimessage_factory():
-    return ApiMessageFactory()
+pytestmark = pytest.mark.django_db # Permet d'exécuter les tests dans une base de données de test
+@pytest.fixture # Permet de créer une instance de ApiMessageFactory
+def apimessage_factory(): # Crée une instance de ApiMessageFactory
+    return ApiMessageFactory() # Retourne une instance de ApiMessageFactory
 class TestConsultantEndpoints:
     endpoint_messages = '/consultant-read-messages/'
     order_items_endpoint = '/consultant-orderitems/'
@@ -51,10 +51,10 @@ class TestConsultantEndpoints:
 
         data = response.json()
 
-        # Vérifiez la présence d'au moins une commande dans la réponse
+        # Vérifier la présence d'au moins une commande dans la réponse
         if len(data) >= 1:
 
-        # Vérifiez les propriétés de la première commande dans la liste
+        # Vérifier les propriétés de la première commande dans la liste
             first_order = data[0]
             assert 'id' in first_order
             assert 'customer' in first_order

@@ -63,10 +63,10 @@ class TestCustomerEndpoints:
 
         data = response.json()
 
-        # Vérifiez la présence d'au moins une commande dans la réponse
+        # Vérifier la présence d'au moins une commande dans la réponse
         assert len(data) >= 1
 
-        # Vérifiez les propriétés de la première commande dans la liste
+        # Vérifier les propriétés de la première commande dans la liste
         first_order = data[0]
         assert 'id' in first_order
         assert 'product' in first_order

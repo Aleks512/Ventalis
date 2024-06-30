@@ -74,7 +74,7 @@ class WebAppLoginView(LoginView):
             return redirect('home')
         return super().get(request, *args, **kwargs)
 
-# FIXME: Ajouter l'authentification pour l" customer
+
 @login_required
 def customer_profile(request):
     # Assuming the user is authenticated, retrieve their customer profile
@@ -150,33 +150,34 @@ class ConsultantCreateView(View):
     form_class = ConsultantCreationForm
 
     def get(self, request, *args, **kwargs):
-        consultants = Consultant.objects.all()
-        consultant_id = request.GET.get('pk')
-        form = self.form_class()
+        """
+        GET method for ConsultantCreateView to render the form and list of consultants
+        """
+        consultants = Consultant.objects.all() # Get all consultants
+        consultant_id = request.GET.get('pk') # Get the consultant ID from the query string
+        form = self.form_class()    # Create a new form instance
 
-        if consultant_id:
-            consultant = get_object_or_404(Consultant,pk=consultant_id)
-            form = self.form_class(instance=consultant)
-
-        return render(request, self.template_name, {'form': form, 'consultants': consultants})
-
-    def post(self, request, *args, **kwargs):
-        consultant_id = request.GET.get('pk')
-        consultants = Consultant.objects.all()
-        form = self.form_class(request.POST)
-
-        if consultant_id:
-            category = get_object_or_404(Consultant, pk=consultant_id)
-            form = self.form_class(request.POST, instance=category)
-
-        if form.is_valid():
-            form.save()
-            return redirect('consultants')
+        if consultant_id:  # If the consultant ID is present in the query string
+            consultant = get_object_or_404(Consultant,pk=consultant_id) # Get the consultant object
+            form = self.form_class(instance=consultant) # Create a form instance with the consultant object
 
         return render(request, self.template_name, {'form': form, 'consultants': consultants})
 
-# FIXME: Ajouter l'authentification pour l" dministrateur
-# FIXME: Ajouter success message ou error message
+    def post(self, request, *args, **kwargs): # POST method for ConsultantCreateView to save the form data
+        consultant_id = request.GET.get('pk') # Get the consultant ID from the query string
+        consultants = Consultant.objects.all() # Get all consultants
+        form = self.form_class(request.POST) # Create a form instance with the POST data
+
+        if consultant_id: # If the consultant ID is present in the query string
+            category = get_object_or_404(Consultant, pk=consultant_id) # Get the consultant object
+            form = self.form_class(request.POST, instance=category) # Create a form instance with the consultant object
+
+        if form.is_valid(): # If the form is valid
+            form.save() # Save the form data
+            return redirect('consultants') # Redirect to the consultants list view
+
+        return render(request, self.template_name, {'form': form, 'consultants': consultants})
+
 class ConsultantDeleteView(DeleteView):
     model = Consultant
     template_name = 'users/consultant_list.html'
@@ -186,7 +187,7 @@ class ConsultantDeleteView(DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Consultants"
-        context['consultants'] = [self.object]  # Utilisez une liste pour rendre l'objet itérable
+        context['consultants'] = [self.object]  # Utiliser une liste pour rendre l'objet itérable
         return context
 
 

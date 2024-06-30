@@ -97,12 +97,12 @@ class OrderItemDeleteView(DeleteView):
 @login_required
 def cart(request):
 
-    if request.user.is_client:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, completed=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items()
-        context = {'items': items, 'order': order, 'cartItems': cartItems}
+    if request.user.is_client: # Vérifier si l'utilisateur est un client
+        customer = request.user.customer # Récupérer l'objet client
+        order, created = Order.objects.get_or_create(customer=customer, completed=False) #
+        items = order.orderitem_set.all() # # Récupérer tous les articles de commande pour la commande en cours
+        cartItems = order.get_cart_items() # # Récupérer le nombre total d'articles dans le panier
+        context = {'items': items, 'order': order, 'cartItems': cartItems} # Préparer le contexte pour le template
         return render(request, 'store/cart.html', context)
     else:
         return HttpResponseForbidden("Vous n'êtes pas autorisé à accéder à cette page.")
@@ -118,11 +118,11 @@ def checkout(request):
         items = OrderItem.objects.filter(order=order) #
         # Check if the user has an existing address
         user_addresses = Address.objects.filter(user=customer) #
-        existing_address = None #
-        if user_addresses.exists():
-            existing_address = user_addresses.first()
-        if request.method == 'POST':
-            address_form = AddressForm(request.POST, instance=existing_address)
+        existing_address = None # Initialize the existing address variable
+        if user_addresses.exists(): # Check if the user has any addresses
+            existing_address = user_addresses.first() # Get the first address
+        if request.method == 'POST': # Check if the request method is POST
+            address_form = AddressForm(request.POST, instance=existing_address)  # Create a new AddressForm instance
             if address_form.is_valid(): #  "address_form.is_valid()" vérifie si les données soumises sont valides
                 address_instance = address_form.save(commit=False)  # Save the form data to the database
                 address_instance.user = customer # Set the user for the address
@@ -217,6 +217,7 @@ def update_cart_item_quantity(request, item_id, action):
     })
 
 @login_required
+@transaction.atomic
 def edit_address(request, address_id):
     address = Address.objects.get(pk=address_id)
 
@@ -231,37 +232,43 @@ def edit_address(request, address_id):
     return render(request, 'store/edit_address.html', {'form': form})
 
 
+@login_required
 @transaction.atomic
 def process_order(request):
+    if not request.user.is_client:
+        messages.info(request, "Vous n'êtes pas autorisé à accéder à cette page. Seuls les clients peuvent passer des commandes.")
+        return redirect('home')
+
     transaction_id = datetime.datetime.now().timestamp()
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
+    customer = request.user.customer
 
-        # Utiliser select_for_update pour verrouiller la commande pendant la transaction
-        order = Order.objects.select_for_update().filter(customer=customer, completed=False).first()
+    # Récupérer toutes les commandes incomplètes pour le client
+    incomplete_orders = Order.objects.select_for_update().filter(customer=customer, completed=False)
 
-        if not order:
-            # Si la commande n'existe pas, créez-en une nouvelle
-            order = Order.objects.create(customer=customer)
+    if not incomplete_orders.exists():
+        # Si aucune commande incomplète n'existe, renvoyer une erreur
+        messages.error(request, "Aucune commande en cours n'a été trouvée.")
+        return redirect('cart')  # Rediriger vers le panier
 
+    for order in incomplete_orders:
         # Mettre à jour la commande avec la nouvelle transactionId et marquez-la comme complétée
         order.transactionId = transaction_id
         order.completed = True
         order.save()
+        print(f"Order {order.id} updated with transaction ID {transaction_id} and marked as completed.")
 
-        # Set the status of each OrderItem to 'En traitement'
+        # Mettre à jour le statut de chaque OrderItem à 'En traitement'
         items = order.orderitem_set.all()
         for item in items:
             item.status = OrderItem.Status.PROCESSING
             item.ordered = True
             item.save()
-
-        # Effectuer d'autres opérations nécessaires liées au traitement de la commande
+            print(f"OrderItem {item.id} for order {order.id} updated to status 'Processing'.")
 
     messages.success(request, 'Votre commande a été passée avec succès. Merci!')
-    # Rediriger vers la page 'products' après la commande
     return redirect('products')
+
 
 @login_required()
 def consultant_profile(request):

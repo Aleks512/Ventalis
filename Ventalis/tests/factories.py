@@ -130,9 +130,9 @@ class AddressFactory(factory.django.DjangoModelFactory):
 
 
 class ApiMessageFactory(factory.django.DjangoModelFactory):
-    sender = factory.SubFactory(ConsultantFactory)
-    receiver = factory.SubFactory(CustomerFactory)
-    content = factory.Faker('paragraph')  # Utilisez Faker pour générer du contenu de paragraphe aléatoire
+    sender = factory.SubFactory(NewUserFactory)
+    receiver = factory.SubFactory(NewUserFactory)
+    content = factory.Faker('paragraph')  # Utiliser Faker pour générer du contenu de paragraphe aléatoire
     timestamp = factory.LazyFunction(timezone.now)
     class Meta:
         model = ApiMessage
