@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
-<div class="container h-100">
+<div class="container h-100 d-flex flex-column" style="height: calc(100% - 56px);">
     <div class="row">
         <div class="card col-md-12 mt-5 p-3 shadow-sm">
             {% if thread.receiver == request.user %}
@@ -13,29 +12,31 @@
         </div>
     </div>
 
-    {% if message_list.count == 0 %}
-        <div class="row my-5">
-            <div class="col-md-12">
-                <p class="empty-text">No Messages</p>
-            </div>
-        </div>
-    {% else %}
-        {% for message in message_list %}
-            <div class="row">
-                <div class="col-md-12 my-1">
-                    {% if message.sender_user == request.user %}
-                        <div class="sent-message my-3">
-                            <p><b>@{{ message.sender_user }}</b> écrit {{ message.body }}</p>
-                        </div>
-                    {% else %}
-                        <div class="received-message my-3">
-                            <p><b>{{ message.sender_user }}</b> écrit {{ message.body }}</p>
-                        </div>
-                    {% endif %}
+    <div class="flex-grow-1 overflow-auto my-3" style="flex-grow: 1; overflow: auto;">
+        {% if message_list.count == 0 %}
+            <div class="row my-5">
+                <div class="col-md-12">
+                    <p class="empty-text">No Messages</p>
                 </div>
             </div>
-        {% endfor %}
-    {% endif %}
+        {% else %}
+            {% for message in message_list %}
+                <div class="row">
+                    <div class="col-md-12 my-1 d-flex {% if message.sender_user == request.user %} justify-content-end {% else %} justify-content-start {% endif %}">
+                        {% if message.sender_user == request.user %}
+                            <div class="my-3 p-2" style="background-color: #27B547; max-width: 60%; width: auto; border-radius: 10px">
+                                <p><b>@{{ message.sender_user }}</b> écrit {{ message.body }}</p>
+                            </div>
+                        {% else %}
+                            <div class="my-3 p-2" style="background-color: #f2f2f2; max-width: 60%; width: auto;border-radius: 10px">
+                                <p><b>{{ message.sender_user }}</b> écrit {{ message.body }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
 
     <div class="row">
         <div class="card col-md-12 p-3 shadow-sm">

@@ -78,8 +78,8 @@ class WebAppLoginView(LoginView):
 @login_required
 def customer_profile(request):
     # Assuming the user is authenticated, retrieve their customer profile
-    ordered_items = OrderItem.objects.filter(customer=request.user, ordered=True).order_by("status")
-    not_ordered_items = OrderItem.objects.filter(customer=request.user, ordered=False).order_by("status")
+    ordered_items = OrderItem.objects.filter(customer=request.user, ordered=True).order_by("status", "-date_added")
+    not_ordered_items = OrderItem.objects.filter(customer=request.user, ordered=False).order_by("status", "-date_added")
 
     context = {
         "ordered_items": ordered_items,
